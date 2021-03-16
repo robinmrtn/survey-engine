@@ -42,6 +42,5 @@ public class DateRangeTest {
         Assertions.assertFalse(dateRange.isBetween(dateBeforeRange));
         Assertions.assertFalse(dateRange.isBetween(dateAfterRange));
 
-
     }
 }
