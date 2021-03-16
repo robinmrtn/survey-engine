@@ -36,11 +36,11 @@ public class SurveyControllerMockMvcWithContextTest {
     @Test
     @DisplayName("GET /survey/1 - success")
     public void canRetrieveByIWhenExists() throws Exception {
-        given(surveyService.getSurveyById(1L))
+        given(surveyService.getSurveyById(2L))
                 .willReturn(Optional.of(new Survey("This is a small survey")));
 
         MockHttpServletResponse response = mvc.perform(
-                get("/survey/1")
+                get("/survey/2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 

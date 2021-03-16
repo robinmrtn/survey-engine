@@ -19,9 +19,8 @@ public class SurveyController {
     }
 
     @GetMapping("/{id}")
-    public Survey getSurveyById(@PathVariable long id) {
-        //return new Survey("Test 3");
-        return surveyService.getSurveyById(1L).orElse(new Survey("this is not a survey"));
+    public Optional<Survey> getSurveyById(@PathVariable long id) {
+        return surveyService.getSurveyById(id);
     }
 
 }

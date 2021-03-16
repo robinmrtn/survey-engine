@@ -2,6 +2,7 @@ package com.roal.jsurvey.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.jsurvey.entity.Survey;
+import com.roal.jsurvey.exception.NonExistingSurveyException;
 import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,31 +35,48 @@ public class SurveyControllerStandaloneTest {
     @InjectMocks
     private SurveyController surveyController;
 
+    // This object will be magically initialized by the initFields method below.
     private JacksonTester<Survey> jsonSurvey;
 
     @BeforeEach
     public void setup() {
         JacksonTester.initFields(this, new ObjectMapper());
 
-        mvc = MockMvcBuilders.standaloneSetup(surveyController).build();
+        mvc = MockMvcBuilders.standaloneSetup(surveyController)
+                .setControllerAdvice(new SurveyExceptionHandler())
+                .build();
     }
 
     @Test
-    @DisplayName("Can retrieve by id when exists")
+    @DisplayName("GET /survey/2 - success")
     public void canRetrieveByIWhenExists() throws Exception {
 
-        given(surveyService.getSurveyById(1L))
+        given(surveyService.getSurveyById(2L))
                 .willReturn(Optional.of(new Survey("This is a small survey")));
 
         MockHttpServletResponse response = mvc.perform(
-                get("/survey/1")
+                get("/survey/2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(jsonSurvey.write(new Survey("This is a small survey")).getJson(), response.getContentAsString());
+    }
 
+    @Test
+    @DisplayName("GET /survey/2 - 404")
+    public void cannotRetrieveByIdWhenNotExists() throws Exception {
 
+        given(surveyService.getSurveyById(2L))
+                .willThrow(new NonExistingSurveyException());
+
+        MockHttpServletResponse response = mvc.perform(
+                get("/survey/2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertTrue(response.getContentAsString().isEmpty());
 
     }
 }
