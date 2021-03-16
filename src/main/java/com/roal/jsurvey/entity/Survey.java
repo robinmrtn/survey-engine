@@ -4,13 +4,7 @@ public class Survey {
 
     private String description;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    private DateRange dateRange;
 
     public Survey() {
     }
@@ -19,5 +13,12 @@ public class Survey {
         this.description = description;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 }
