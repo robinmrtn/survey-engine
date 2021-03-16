@@ -76,7 +76,7 @@ public class SurveyControllerStandaloneTest {
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
-        assertFalse(response.getContentAsString().isEmpty());
+        assertTrue(response.getContentAsString().isEmpty());
 
     }
 }
