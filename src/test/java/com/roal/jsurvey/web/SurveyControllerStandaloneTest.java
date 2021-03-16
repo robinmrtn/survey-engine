@@ -52,7 +52,7 @@ public class SurveyControllerStandaloneTest {
     public void canRetrieveByIWhenExists() throws Exception {
 
         given(surveyService.getSurveyById(2L))
-                .willReturn(Optional.of(new Survey("This is a large survey")));
+                .willReturn(Optional.of(new Survey("This is a small survey")));
 
         MockHttpServletResponse response = mvc.perform(
                 get("/survey/2")
@@ -60,7 +60,7 @@ public class SurveyControllerStandaloneTest {
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(jsonSurvey.write(new Survey("This is a large survey")).getJson(), response.getContentAsString());
+        assertEquals(jsonSurvey.write(new Survey("This is a small survey")).getJson(), response.getContentAsString());
     }
 
     @Test
