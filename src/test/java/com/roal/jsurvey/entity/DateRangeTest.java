@@ -21,9 +21,9 @@ public class DateRangeTest {
     public void dateIsInRange() {
         DateRange dateRange = DateRange.of(LocalDate.of(2021, 1, 1), LocalDate.of(2022, 2, 2));
 
-        LocalDate dateEqualsStartDate = LocalDate.of(2021,1,1);
-        LocalDate dateInRange = LocalDate.of(2021,6,1);
-        LocalDate dateEqualsEndDate = LocalDate.of(2022,2,2);
+        LocalDate dateEqualsStartDate = LocalDate.of(2021, 1, 1);
+        LocalDate dateInRange = LocalDate.of(2021, 6, 1);
+        LocalDate dateEqualsEndDate = LocalDate.of(2022, 2, 2);
 
         Assertions.assertTrue(dateRange.isBetween(dateEqualsStartDate));
         Assertions.assertTrue(dateRange.isBetween(dateInRange));
@@ -41,6 +41,7 @@ public class DateRangeTest {
 
         Assertions.assertFalse(dateRange.isBetween(dateBeforeRange));
         Assertions.assertFalse(dateRange.isBetween(dateAfterRange));
+
 
     }
 }
