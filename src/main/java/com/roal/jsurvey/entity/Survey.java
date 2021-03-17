@@ -1,5 +1,6 @@
 package com.roal.jsurvey.entity;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Survey {
@@ -7,7 +8,7 @@ public class Survey {
     private String description;
 
     private DateRange dateRange;
-    private List<SurveyPage> surveyPageList;
+    private List<SurveyPage> surveyPageList = new LinkedList<>();
 
     public Survey() {
     }
@@ -24,4 +25,11 @@ public class Survey {
         this.description = description;
     }
 
+    public void addSurveyPage(SurveyPage surveyPage) {
+        surveyPageList.add(surveyPage);
+    }
+
+    public List<SurveyPage> getSurveyPageList() {
+        return surveyPageList;
+    }
 }

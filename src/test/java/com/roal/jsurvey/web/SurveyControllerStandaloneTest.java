@@ -1,7 +1,9 @@
 package com.roal.jsurvey.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.roal.jsurvey.entity.OpenQuestion;
 import com.roal.jsurvey.entity.Survey;
+import com.roal.jsurvey.entity.SurveyPage;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,5 +80,28 @@ public class SurveyControllerStandaloneTest {
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertTrue(response.getContentAsString().isEmpty());
 
+    }
+
+    @Test
+    @DisplayName("GET /survey/2 - success with Page and OpenQuestion")
+    public void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
+
+        var expectedSurvey = new Survey("This is a survey");
+        var firstSurveyPage = new SurveyPage();
+        var openQuestion = new OpenQuestion("This is an open question");
+        openQuestion.setPosition(1);
+        firstSurveyPage.setPosition(1);
+        firstSurveyPage.addSurveyElement(openQuestion);
+        expectedSurvey.addSurveyPage(firstSurveyPage);
+
+        given(surveyService.getSurveyById(2))
+                .willReturn(Optional.of(expectedSurvey));
+
+        MockHttpServletResponse response = mvc.perform(get("/survey/2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(jsonSurvey.write(expectedSurvey).getJson(), response.getContentAsString());
     }
 }
