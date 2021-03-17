@@ -2,7 +2,7 @@ package com.roal.jsurvey.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.jsurvey.entity.Survey;
-import com.roal.jsurvey.exception.NonExistingSurveyException;
+import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -68,7 +68,7 @@ public class SurveyControllerStandaloneTest {
     public void cannotRetrieveByIdWhenNotExists() throws Exception {
 
         given(surveyService.getSurveyById(2L))
-                .willThrow(new NonExistingSurveyException());
+                .willThrow(new SurveyNotFoundException());
 
         MockHttpServletResponse response = mvc.perform(
                 get("/survey/2")
