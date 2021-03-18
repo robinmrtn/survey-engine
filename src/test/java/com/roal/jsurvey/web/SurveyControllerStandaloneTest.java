@@ -53,7 +53,7 @@ public class SurveyControllerStandaloneTest {
     @DisplayName("GET /survey/2 - success")
     public void canRetrieveByIWhenExists() throws Exception {
 
-        given(surveyService.getSurveyById(2L))
+        given(surveyService.findSurveyById(2L))
                 .willReturn(Optional.of(new Survey("This is a small survey")));
 
         MockHttpServletResponse response = mvc.perform(
@@ -69,7 +69,7 @@ public class SurveyControllerStandaloneTest {
     @DisplayName("GET /survey/2 - 404")
     public void cannotRetrieveByIdWhenNotExists() throws Exception {
 
-        given(surveyService.getSurveyById(2L))
+        given(surveyService.findSurveyById(2L))
                 .willThrow(new SurveyNotFoundException());
 
         MockHttpServletResponse response = mvc.perform(
@@ -94,7 +94,7 @@ public class SurveyControllerStandaloneTest {
         firstSurveyPage.addSurveyElement(openQuestion);
         expectedSurvey.addSurveyPage(firstSurveyPage);
 
-        given(surveyService.getSurveyById(2))
+        given(surveyService.findSurveyById(2))
                 .willReturn(Optional.of(expectedSurvey));
 
         MockHttpServletResponse response = mvc.perform(get("/survey/2")
