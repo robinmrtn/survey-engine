@@ -1,14 +1,23 @@
 package com.roal.jsurvey.entity;
 
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
+@Entity
 public class Survey {
+
+    @Id
+    @GeneratedValue
+    private long id;
 
     private String description;
 
     private DateRange dateRange;
-    private List<SurveyPage> surveyPageList = new LinkedList<>();
+
+    @OneToMany()
+    @JoinColumn(name = "survey_id")
+    private List<SurveyPage> surveyPages = new LinkedList<>();
 
     public Survey() {
     }
@@ -26,10 +35,10 @@ public class Survey {
     }
 
     public void addSurveyPage(SurveyPage surveyPage) {
-        surveyPageList.add(surveyPage);
+        surveyPages.add(surveyPage);
     }
 
-    public List<SurveyPage> getSurveyPageList() {
-        return surveyPageList;
+    public List<SurveyPage> getSurveyPages() {
+        return surveyPages;
     }
 }

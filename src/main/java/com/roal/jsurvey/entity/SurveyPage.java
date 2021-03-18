@@ -1,19 +1,28 @@
 package com.roal.jsurvey.entity;
 
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
+@Entity
 public class SurveyPage {
 
+    @Id
+    @GeneratedValue
+    private long id;
+
     private int position;
-    private List<SurveyElement> surveyElementList = new LinkedList<>();
+
+    @OneToMany()
+    @JoinColumn(name = "surveypage_id")
+    private List<OpenQuestion> surveyElements = new LinkedList<>();
 
 
     public SurveyPage() {
     }
 
-    public List<SurveyElement> getSurveyElementList() {
-        return surveyElementList;
+    public List<OpenQuestion> getSurveyElements() {
+        return surveyElements;
     }
 
     public int getPosition() {
@@ -24,7 +33,7 @@ public class SurveyPage {
         this.position = position;
     }
 
-    public void addSurveyElement(SurveyElement surveyElement) {
-        surveyElementList.add(surveyElement);
+    public void addSurveyElement(OpenQuestion surveyElement) {
+        surveyElements.add(surveyElement);
     }
 }
