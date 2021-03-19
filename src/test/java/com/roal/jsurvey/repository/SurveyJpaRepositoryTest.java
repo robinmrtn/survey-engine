@@ -8,8 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
@@ -17,6 +18,9 @@ public class SurveyJpaRepositoryTest {
 
     @Autowired
     private SurveyRepository surveyRepository;
+
+    @Autowired
+    private TestEntityManager testEntityManager;
 
     @Test
     @DisplayName("Test insert single Survey")
@@ -31,8 +35,18 @@ public class SurveyJpaRepositoryTest {
 
         surveyRepository.save(survey);
 
-        assertEquals(1, surveyRepository.findAll().size());
-        assertEquals(survey, surveyRepository.findAll().get(0));
+        testEntityManager.flush();
+        // clears persistence context
+        // all entities are now detached and can be fetched again
+        testEntityManager.clear();
+     //   survey.getSurveyPages().forEach(SurveyPage::getSurveyElements);
+
+        var recievedSurvey = surveyRepository.findById(survey.getId());
+
+        assertTrue( recievedSurvey.isPresent());
+        recievedSurvey.get().getSurveyPages().get(0).getSurveyElements();
+        assertEquals(survey, recievedSurvey.get());
+        assertNotSame(survey, recievedSurvey.get());
 
         surveyRepository.deleteById(survey.getId());
 
