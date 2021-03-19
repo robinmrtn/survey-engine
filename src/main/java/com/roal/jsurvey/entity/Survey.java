@@ -17,7 +17,7 @@ public class Survey {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
-    private final List<SurveyPage> surveyPages = new LinkedList<>();
+    private List<SurveyPage> surveyPages = new LinkedList<>();
 
     public Survey() {
     }
