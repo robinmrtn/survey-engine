@@ -12,18 +12,12 @@ public class DateRange {
     public DateRange() {
     }
 
-    private DateRange(LocalDate startDate, LocalDate endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public static DateRange of(LocalDate startDate, LocalDate endDate) {
-
+    public DateRange(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start Date has to be before End Date");
         }
-
-        return new DateRange(startDate, endDate);
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public LocalDate getStartDate() {

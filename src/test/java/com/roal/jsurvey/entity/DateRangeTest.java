@@ -12,14 +12,14 @@ public class DateRangeTest {
     @DisplayName("startDateIsAfterEndDate - Exception")
     public void startDateIsAfterEndDate() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            DateRange dateRange = DateRange.of(LocalDate.of(2022, 1, 1), LocalDate.of(2021, 2, 2));
+            DateRange dateRange = new DateRange(LocalDate.of(2022, 1, 1), LocalDate.of(2021, 2, 2));
         });
     }
 
     @Test
     @DisplayName("dateIsInRange")
     public void dateIsInRange() {
-        DateRange dateRange = DateRange.of(LocalDate.of(2021, 1, 1), LocalDate.of(2022, 2, 2));
+        DateRange dateRange = new DateRange(LocalDate.of(2021, 1, 1), LocalDate.of(2022, 2, 2));
 
         LocalDate dateEqualsStartDate = LocalDate.of(2021, 1, 1);
         LocalDate dateInRange = LocalDate.of(2021, 6, 1);
@@ -34,7 +34,7 @@ public class DateRangeTest {
     @Test
     @DisplayName("dateIsNotInRange")
     public void dateIsNotInRange() {
-        DateRange dateRange = DateRange.of(LocalDate.of(2021, 1, 1), LocalDate.of(2022, 2, 2));
+        DateRange dateRange = new DateRange(LocalDate.of(2021, 1, 1), LocalDate.of(2022, 2, 2));
 
         LocalDate dateBeforeRange = LocalDate.of(2020, 12, 31);
         LocalDate dateAfterRange = LocalDate.of(2022, 2, 3);
