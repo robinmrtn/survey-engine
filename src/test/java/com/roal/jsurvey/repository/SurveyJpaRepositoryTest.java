@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @DataJpaTest
@@ -25,7 +24,7 @@ public class SurveyJpaRepositoryTest {
         Survey survey = new Survey("This is a Survey");
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion("This is an open question?");
-       var closedQuestion = new ClosedQuestion("This is a closed question?");
+        var closedQuestion = new ClosedQuestion("This is a closed question?");
         firstSurveyPage.addSurveyElement(openQuestion);
         firstSurveyPage.addSurveyElement(closedQuestion);
         survey.addSurveyPage(firstSurveyPage);

@@ -17,7 +17,7 @@ public class Survey {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
-    private List<SurveyPage> surveyPages = new LinkedList<>();
+    private final List<SurveyPage> surveyPages = new LinkedList<>();
 
     public Survey() {
     }
@@ -44,5 +44,27 @@ public class Survey {
 
     public long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Survey survey = (Survey) o;
+
+        if (id != survey.id) return false;
+        if (description != null ? !description.equals(survey.description) : survey.description != null) return false;
+        if (dateRange != null ? !dateRange.equals(survey.dateRange) : survey.dateRange != null) return false;
+        return surveyPages != null ? surveyPages.equals(survey.surveyPages) : survey.surveyPages == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (dateRange != null ? dateRange.hashCode() : 0);
+        result = 31 * result + (surveyPages != null ? surveyPages.hashCode() : 0);
+        return result;
     }
 }
