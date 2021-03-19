@@ -6,8 +6,11 @@ import java.time.LocalDate;
 @Embeddable
 public class DateRange {
 
-    private final LocalDate startDate;
-    private final LocalDate endDate;
+    private  LocalDate startDate;
+    private  LocalDate endDate;
+
+    public DateRange() {
+    }
 
     private DateRange(LocalDate startDate, LocalDate endDate) {
         this.startDate = startDate;

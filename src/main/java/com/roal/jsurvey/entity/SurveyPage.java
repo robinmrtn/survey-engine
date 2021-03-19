@@ -13,15 +13,14 @@ public class SurveyPage {
 
     private int position;
 
-    @OneToMany()
-    @JoinColumn(name = "surveypage_id")
-    private List<OpenQuestion> surveyElements = new LinkedList<>();
+    @OneToMany(targetEntity = AbstractSurveyElement.class, cascade = CascadeType.ALL, mappedBy = "surveyPage")
+    private List<AbstractSurveyElement> surveyElements = new LinkedList<>();
 
 
     public SurveyPage() {
     }
 
-    public List<OpenQuestion> getSurveyElements() {
+    public List<AbstractSurveyElement> getSurveyElements() {
         return surveyElements;
     }
 
@@ -33,7 +32,8 @@ public class SurveyPage {
         this.position = position;
     }
 
-    public void addSurveyElement(OpenQuestion surveyElement) {
+    public void addSurveyElement(AbstractSurveyElement surveyElement) {
         surveyElements.add(surveyElement);
     }
+
 }

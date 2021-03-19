@@ -6,21 +6,22 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class OpenQuestion extends AbstractSurveyElement implements SurveyElement{
-
+public class ClosedQuestion extends AbstractSurveyElement implements SurveyElement{
 
     private String question;
     private int position;
 
-    public OpenQuestion() {
+
+
+    public ClosedQuestion() {
     }
 
-    public OpenQuestion(String question) {
+    public ClosedQuestion(String question) {
         this.question = question;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public String getQuestion() {
+        return question;
     }
 
     @Override
@@ -28,7 +29,4 @@ public class OpenQuestion extends AbstractSurveyElement implements SurveyElement
         return position;
     }
 
-    public String getQuestion() {
-        return question;
-    }
 }

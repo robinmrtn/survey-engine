@@ -15,7 +15,7 @@ public class Survey {
 
     private DateRange dateRange;
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
     private List<SurveyPage> surveyPages = new LinkedList<>();
 
@@ -40,5 +40,9 @@ public class Survey {
 
     public List<SurveyPage> getSurveyPages() {
         return surveyPages;
+    }
+
+    public long getId() {
+        return id;
     }
 }
