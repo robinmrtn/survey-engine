@@ -1,15 +1,22 @@
 package com.roal.jsurvey.entity;
 
-import javax.persistence.*;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class AbstractSurveyElement  {
-    @Id
-    @GeneratedValue
+import java.util.Objects;
+
+public abstract class AbstractSurveyElement {
+
     private long id;
 
-    @ManyToOne
-    private SurveyPage surveyPage;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractSurveyElement that = (AbstractSurveyElement) o;
+        return id == that.id;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

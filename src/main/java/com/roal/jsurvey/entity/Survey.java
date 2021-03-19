@@ -1,23 +1,22 @@
 package com.roal.jsurvey.entity;
 
-import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@Document
 public class Survey {
 
-    @Id
-    @GeneratedValue
-    private long id;
+    private final List<SurveyPage> surveyPages = new ArrayList<>();
 
     private String description;
 
     private DateRange dateRange;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "survey_id")
-    private List<SurveyPage> surveyPages = new LinkedList<>();
+    @Id
+    private String id;
 
     public Survey() {
     }
@@ -42,7 +41,7 @@ public class Survey {
         return surveyPages;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -50,21 +49,12 @@ public class Survey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Survey survey = (Survey) o;
-
-        if (id != survey.id) return false;
-        if (description != null ? !description.equals(survey.description) : survey.description != null) return false;
-        if (dateRange != null ? !dateRange.equals(survey.dateRange) : survey.dateRange != null) return false;
-        return surveyPages != null ? surveyPages.equals(survey.surveyPages) : survey.surveyPages == null;
+        return Objects.equals(id, survey.id) && Objects.equals(description, survey.description) && Objects.equals(surveyPages, survey.surveyPages);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (dateRange != null ? dateRange.hashCode() : 0);
-        result = 31 * result + (surveyPages != null ? surveyPages.hashCode() : 0);
-        return result;
+        return Objects.hash(id, description, surveyPages);
     }
 }

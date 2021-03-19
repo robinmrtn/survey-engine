@@ -1,23 +1,29 @@
 package com.roal.jsurvey.entity;
 
-import javax.persistence.*;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-@Entity
+
 public class SurveyPage {
 
-    @Id
-    @GeneratedValue
+
     private long id;
 
     private int position;
 
-    @OneToMany(targetEntity = AbstractSurveyElement.class, cascade = CascadeType.ALL, mappedBy = "surveyPage")
+
     private List<AbstractSurveyElement> surveyElements = new LinkedList<>();
 
 
     public SurveyPage() {
+    }
+
+    public SurveyPage(long id, int position, List<AbstractSurveyElement> surveyElements) {
+        this.id = id;
+        this.position = position;
+        this.surveyElements = surveyElements;
     }
 
     public List<AbstractSurveyElement> getSurveyElements() {
@@ -36,4 +42,17 @@ public class SurveyPage {
         surveyElements.add(surveyElement);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SurveyPage that = (SurveyPage) o;
+        return id == that.id && position == that.position && Objects.equals(surveyElements, that.surveyElements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, position, surveyElements);
+    }
 }

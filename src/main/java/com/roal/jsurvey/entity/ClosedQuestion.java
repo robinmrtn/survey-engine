@@ -1,9 +1,6 @@
 package com.roal.jsurvey.entity;
 
-import javax.persistence.Entity;
 
-
-@Entity
 public class ClosedQuestion extends AbstractSurveyElement implements SurveyElement{
 
     private String question;

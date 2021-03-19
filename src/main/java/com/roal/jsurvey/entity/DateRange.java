@@ -1,9 +1,9 @@
 package com.roal.jsurvey.entity;
 
-import javax.persistence.Embeddable;
+
 import java.time.LocalDate;
 
-@Embeddable
+
 public class DateRange {
 
     private  LocalDate startDate;
