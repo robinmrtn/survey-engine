@@ -1,9 +1,6 @@
 package com.roal.jsurvey.repository;
 
-import com.roal.jsurvey.entity.ClosedQuestion;
-import com.roal.jsurvey.entity.OpenQuestion;
-import com.roal.jsurvey.entity.Survey;
-import com.roal.jsurvey.entity.SurveyPage;
+import com.roal.jsurvey.entity.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +26,11 @@ public class SurveyJpaRepositoryTest {
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
-        firstSurveyPage.addSurveyElement(openQuestion);
-        firstSurveyPage.addSurveyElement(closedQuestion);
+        var opqPosition = new SurveyPagePosition(1, openQuestion);
+        var clqPosition = new SurveyPagePosition(2, closedQuestion);
+        firstSurveyPage.addSurveyElement(opqPosition);
+        firstSurveyPage.addSurveyElement(clqPosition);
+
         survey.addSurveyPage(firstSurveyPage);
 
         surveyRepository.save(survey);
@@ -39,12 +39,12 @@ public class SurveyJpaRepositoryTest {
         // clears persistence context
         // all entities are now detached and can be fetched again
         testEntityManager.clear();
-     //   survey.getSurveyPages().forEach(SurveyPage::getSurveyElements);
+        //   survey.getSurveyPages().forEach(SurveyPage::getSurveyElements);
 
         var recievedSurvey = surveyRepository.findById(survey.getId());
 
         assertTrue( recievedSurvey.isPresent());
-        recievedSurvey.get().getSurveyPages().get(0).getSurveyElements();
+
         assertEquals(survey, recievedSurvey.get());
         assertNotSame(survey, recievedSurvey.get());
 

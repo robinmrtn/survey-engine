@@ -1,8 +1,9 @@
 package com.roal.jsurvey.entity;
 
 import javax.persistence.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class SurveyPage {
@@ -13,15 +14,15 @@ public class SurveyPage {
 
     private int position;
 
-    @OneToMany(targetEntity = AbstractSurveyElement.class, cascade = CascadeType.ALL, mappedBy = "surveyPage")
-    private List<AbstractSurveyElement> surveyElements = new LinkedList<>();
-
+    @OneToMany(targetEntity = SurveyPagePosition.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "survey_page_id")
+    private final List<SurveyPagePosition> surveyPagePositions = new ArrayList<>();
 
     public SurveyPage() {
     }
 
-    public List<AbstractSurveyElement> getSurveyElements() {
-        return surveyElements;
+    public List<SurveyPagePosition> getSurveyPagePositions() {
+        return surveyPagePositions;
     }
 
     public int getPosition() {
@@ -32,8 +33,20 @@ public class SurveyPage {
         this.position = position;
     }
 
-    public void addSurveyElement(AbstractSurveyElement surveyElement) {
-        surveyElements.add(surveyElement);
+    public void addSurveyElement(SurveyPagePosition surveyElement) {
+        surveyPagePositions.add(surveyElement);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SurveyPage that = (SurveyPage) o;
+        return id == that.id && position == that.position && Objects.equals(surveyPagePositions, that.surveyPagePositions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, position, surveyPagePositions);
+    }
 }
