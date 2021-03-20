@@ -1,9 +1,9 @@
 package com.roal.jsurvey.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 public class SurveyPage {
@@ -16,12 +16,12 @@ public class SurveyPage {
 
     @OneToMany(targetEntity = SurveyPagePosition.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "survey_page_id")
-    private final List<SurveyPagePosition> surveyPagePositions = new ArrayList<>();
+    private final Set<SurveyPagePosition> surveyPagePositions = new TreeSet<>();
 
     public SurveyPage() {
     }
 
-    public List<SurveyPagePosition> getSurveyPagePositions() {
+    public Set<SurveyPagePosition> getSurveyPagePositions() {
         return surveyPagePositions;
     }
 
