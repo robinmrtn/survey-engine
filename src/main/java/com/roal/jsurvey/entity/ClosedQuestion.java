@@ -9,7 +9,6 @@ public class ClosedQuestion extends AbstractSurveyElement {
 
     private String question;
 
-
     public ClosedQuestion() {
     }
 
@@ -17,7 +16,6 @@ public class ClosedQuestion extends AbstractSurveyElement {
         this.question = question;
 
     }
-
 
     public ClosedQuestion(String question) {
         this.question = question;
