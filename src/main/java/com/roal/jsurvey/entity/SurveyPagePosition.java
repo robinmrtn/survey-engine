@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class SurveyPagePosition {
+public class SurveyPagePosition implements Comparable<SurveyPagePosition> {
 
     @Id
     @GeneratedValue
@@ -12,7 +12,7 @@ public class SurveyPagePosition {
 
     private int position;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private AbstractSurveyElement surveyElement;
 
     public SurveyPagePosition() {
@@ -52,5 +52,10 @@ public class SurveyPagePosition {
     @Override
     public int hashCode() {
         return Objects.hash(id, position, surveyElement);
+    }
+
+    @Override
+    public int compareTo(SurveyPagePosition o) {
+        return Integer.compare(this.position, o.getPosition());
     }
 }
