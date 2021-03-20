@@ -1,9 +1,7 @@
 package com.roal.jsurvey.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.roal.jsurvey.entity.OpenQuestion;
-import com.roal.jsurvey.entity.Survey;
-import com.roal.jsurvey.entity.SurveyPage;
+import com.roal.jsurvey.entity.*;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +20,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(MockitoExtension.class)
 public class SurveyControllerStandaloneTest {
@@ -86,22 +85,25 @@ public class SurveyControllerStandaloneTest {
     @DisplayName("GET /survey/2 - success with Page and OpenQuestion")
     public void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
 
-        var expectedSurvey = new Survey("This is a survey");
+        Survey survey = new Survey("This is a Survey");
         var firstSurveyPage = new SurveyPage();
-        var openQuestion = new OpenQuestion("This is an open question");
-        openQuestion.setPosition(1);
-        firstSurveyPage.setPosition(1);
-        firstSurveyPage.addSurveyElement(openQuestion);
-        expectedSurvey.addSurveyPage(firstSurveyPage);
+        var openQuestion = new OpenQuestion("This is an open question?");
+        var closedQuestion = new ClosedQuestion("This is a closed question?");
+        // var opqPosition = new SurveyPagePosition(1, openQuestion);
+        var clqPosition = new SurveyPagePosition(2, closedQuestion);
+        // firstSurveyPage.addSurveyElement(opqPosition);
+        firstSurveyPage.addSurveyElement(clqPosition);
+
+        survey.addSurveyPage(firstSurveyPage);
 
         given(surveyService.findSurveyById(2))
-                .willReturn(Optional.of(expectedSurvey));
+                .willReturn(Optional.of(survey));
 
         MockHttpServletResponse response = mvc.perform(get("/survey/2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(jsonSurvey.write(expectedSurvey).getJson(), response.getContentAsString());
+        assertEquals(jsonSurvey.write(survey).getJson(), response.getContentAsString());
     }
 }
