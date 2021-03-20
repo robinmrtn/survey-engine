@@ -39,14 +39,13 @@ public class SurveyJpaRepositoryTest {
         // clears persistence context
         // all entities are now detached and can be fetched again
         testEntityManager.clear();
-        //   survey.getSurveyPages().forEach(SurveyPage::getSurveyElements);
 
-        var recievedSurvey = surveyRepository.findById(survey.getId());
+        var receivedSurvey = surveyRepository.findById(survey.getId());
 
-        assertTrue( recievedSurvey.isPresent());
+        assertTrue(receivedSurvey.isPresent());
 
-        assertEquals(survey, recievedSurvey.get());
-        assertNotSame(survey, recievedSurvey.get());
+        assertEquals(survey, receivedSurvey.get());
+        assertNotSame(survey, receivedSurvey.get());
 
         surveyRepository.deleteById(survey.getId());
 
