@@ -5,8 +5,6 @@ import com.roal.jsurvey.service.SurveyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/survey")
 public class SurveyController {
@@ -18,7 +16,8 @@ public class SurveyController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Survey> getSurveyById(@PathVariable long id) {
+    public Survey getSurveyById(@PathVariable long id) {
+
         return surveyService.findSurveyById(id);
     }
 

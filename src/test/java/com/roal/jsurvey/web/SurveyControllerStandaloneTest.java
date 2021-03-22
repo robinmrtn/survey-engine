@@ -2,6 +2,7 @@ package com.roal.jsurvey.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.jsurvey.entity.*;
+import com.roal.jsurvey.exception.SurveyExceptionHandler;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -54,7 +53,7 @@ public class SurveyControllerStandaloneTest {
     public void canRetrieveByIWhenExists() throws Exception {
 
         given(surveyService.findSurveyById(2L))
-                .willReturn(Optional.of(new Survey("This is a small survey")));
+                .willReturn(new Survey("This is a small survey"));
 
         MockHttpServletResponse response = mvc.perform(
                 get("/survey/2")
@@ -98,7 +97,7 @@ public class SurveyControllerStandaloneTest {
         survey.addSurveyPage(firstSurveyPage);
 
         given(surveyService.findSurveyById(2))
-                .willReturn(Optional.of(survey));
+                .willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(get("/survey/2")
                 .accept(MediaType.APPLICATION_JSON))
@@ -120,7 +119,7 @@ public class SurveyControllerStandaloneTest {
         firstSurveyPage.addSurveyElement(opqPosition);
         survey.addSurveyPage(firstSurveyPage);
 
-        given(surveyService.findSurveyById(2)).willReturn(Optional.of(survey));
+        given(surveyService.findSurveyById(2)).willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(post("/survey/2")
                 .contentType(MediaType.APPLICATION_JSON).content(""))

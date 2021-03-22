@@ -1,6 +1,7 @@
 package com.roal.jsurvey.service;
 
 import com.roal.jsurvey.entity.Survey;
+import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.repository.SurveyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,10 +31,10 @@ public class SurveyServiceTest {
 
         given(surveyRepository.findById(2)).willReturn(Optional.of(survey));
 
-        Optional<Survey> returnedSurvey = surveyService.findSurveyById(2);
+        Survey returnedSurvey = surveyService.findSurveyById(2);
 
-        assertTrue(returnedSurvey.isPresent());
-        assertSame(returnedSurvey.get(), survey);
+        assertNotNull(returnedSurvey);
+        assertSame(returnedSurvey, survey);
 
     }
 
@@ -44,9 +45,7 @@ public class SurveyServiceTest {
 
         given(surveyRepository.findById(3)).willReturn(Optional.empty());
 
-        Optional<Survey> returnedSurvey = surveyService.findSurveyById(3);
-
-        assertFalse(returnedSurvey.isPresent());
+        assertThrows(SurveyNotFoundException.class, () -> surveyService.findSurveyById(3));
 
     }
 }

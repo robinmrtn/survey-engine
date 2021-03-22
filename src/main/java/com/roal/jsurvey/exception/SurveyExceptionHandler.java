@@ -1,6 +1,5 @@
-package com.roal.jsurvey.web;
+package com.roal.jsurvey.exception;
 
-import com.roal.jsurvey.exception.SurveyNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
