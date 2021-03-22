@@ -12,11 +12,15 @@ public class OpenQuestion extends AbstractSurveyElement {
     public OpenQuestion() {
     }
 
+
     public OpenQuestion(String question) {
         this.question = question;
     }
 
-
+    public OpenQuestion(long id, String question) {
+        this.question = question;
+        this.id = id;
+    }
 
     public String getQuestion() {
         return question;

@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
 public class SurveyControllerStandaloneTest {
@@ -73,7 +74,7 @@ public class SurveyControllerStandaloneTest {
 
         MockHttpServletResponse response = mvc.perform(
                 get("/survey/2")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
@@ -105,5 +106,39 @@ public class SurveyControllerStandaloneTest {
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(jsonSurvey.write(survey).getJson(), response.getContentAsString());
+    }
+
+    @Test
+    @DisplayName("POST /survey/2 - success")
+    void canCreateNewSurveyResponseForExistingSurvey() throws Exception {
+
+        Survey survey = new Survey("This is a Survey");
+        var firstSurveyPage = new SurveyPage();
+        var openQuestion = new OpenQuestion(9, "This is an open question?");
+        var opqPosition = new SurveyPagePosition(1, openQuestion);
+
+        firstSurveyPage.addSurveyElement(opqPosition);
+        survey.addSurveyPage(firstSurveyPage);
+
+        given(surveyService.findSurveyById(2)).willReturn(Optional.of(survey));
+
+        MockHttpServletResponse response = mvc.perform(post("/survey/2")
+                .contentType(MediaType.APPLICATION_JSON).content(""))
+                .andReturn().getResponse();
+
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+    }
+
+    @Test
+    @DisplayName("POST /survey/2 - failed")
+    void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
+
+        given(surveyService.findSurveyById(2)).willThrow(new SurveyNotFoundException());
+
+        MockHttpServletResponse response = mvc.perform(post("/survey/2")
+                .contentType(MediaType.APPLICATION_JSON).content(""))
+                .andReturn().getResponse();
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
     }
 }

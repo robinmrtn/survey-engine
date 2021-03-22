@@ -26,8 +26,8 @@ public class SurveyJpaRepositoryTest {
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
-        var opqPosition = new SurveyPagePosition(1, openQuestion);
-        var clqPosition = new SurveyPagePosition(2, closedQuestion);
+        var opqPosition = new SurveyPagePosition(2, openQuestion);
+        var clqPosition = new SurveyPagePosition(1, closedQuestion);
         firstSurveyPage.addSurveyElement(opqPosition);
         firstSurveyPage.addSurveyElement(clqPosition);
 

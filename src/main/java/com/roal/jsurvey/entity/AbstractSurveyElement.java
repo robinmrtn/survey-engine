@@ -7,7 +7,7 @@ import javax.persistence.*;
 public abstract class AbstractSurveyElement {
     @Id
     @GeneratedValue
-    private long id;
+    protected long id;
 
     @OneToOne
     private SurveyPagePosition surveyPagePosition;
