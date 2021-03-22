@@ -1,5 +1,6 @@
 package com.roal.jsurvey.web;
 
+import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.Survey;
 import com.roal.jsurvey.service.SurveyService;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class SurveyController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurvey(@PathVariable long id) {
+    public void postSurvey(@PathVariable long id, @RequestBody SurveyResponseDto surveyResponseDto) {
         surveyService.findSurveyById(id);
 
     }

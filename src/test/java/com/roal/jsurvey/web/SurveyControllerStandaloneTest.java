@@ -1,6 +1,8 @@
 package com.roal.jsurvey.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.roal.jsurvey.dto.ElementResponseDto;
+import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.*;
 import com.roal.jsurvey.exception.SurveyExceptionHandler;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
@@ -18,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,6 +42,10 @@ public class SurveyControllerStandaloneTest {
 
     // This object will be magically initialized by the initFields method below.
     private JacksonTester<Survey> jsonSurvey;
+
+    private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
+    private JacksonTester<ElementResponseDto> jsonElementResponseDto;
+
 
     @BeforeEach
     public void setup() {
@@ -119,10 +127,14 @@ public class SurveyControllerStandaloneTest {
         firstSurveyPage.addSurveyElement(opqPosition);
         survey.addSurveyPage(firstSurveyPage);
 
+        List<ElementResponseDto> elementResponseDtos = List.of(new ElementResponseDto(9, "This is an answer!"));
+
+        var responseDto = new SurveyResponseDto(2, elementResponseDtos);
+
         given(surveyService.findSurveyById(2)).willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(post("/survey/2")
-                .contentType(MediaType.APPLICATION_JSON).content(""))
+                .contentType(MediaType.APPLICATION_JSON).content(jsonSurveyResponseDto.write(responseDto).getJson()))
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
