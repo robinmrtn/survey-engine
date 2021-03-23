@@ -25,7 +25,7 @@ public class SurveyController {
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurvey(@PathVariable long id, @RequestBody SurveyResponseDto surveyResponseDto) {
-        surveyService.findSurveyById(id);
+        surveyService.insertSurveyResponseDto(surveyResponseDto);
 
     }
 }
