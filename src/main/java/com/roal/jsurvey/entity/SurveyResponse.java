@@ -2,6 +2,7 @@ package com.roal.jsurvey.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class SurveyResponse {
@@ -13,7 +14,7 @@ public class SurveyResponse {
     @ManyToOne
     Survey survey;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     List<ElementResponse> elementResponses;
 
     public SurveyResponse() {
@@ -47,5 +48,18 @@ public class SurveyResponse {
 
     public void setElementResponses(List<ElementResponse> elementResponses) {
         this.elementResponses = elementResponses;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SurveyResponse that = (SurveyResponse) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
