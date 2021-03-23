@@ -1,9 +1,6 @@
 package com.roal.jsurvey.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class ElementResponse {
@@ -14,6 +11,9 @@ public class ElementResponse {
 
     @ManyToOne
     SurveyResponse surveyResponse;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    AbstractSurveyElement element;
 
     String value;
 
@@ -48,6 +48,14 @@ public class ElementResponse {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public AbstractSurveyElement getElement() {
+        return element;
+    }
+
+    public void setElement(AbstractSurveyElement element) {
+        this.element = element;
     }
 
 }
