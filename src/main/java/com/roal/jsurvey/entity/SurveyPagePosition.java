@@ -12,7 +12,7 @@ public class SurveyPagePosition implements Comparable<SurveyPagePosition> {
 
     private int position;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AbstractSurveyElement surveyElement;
 
     public SurveyPagePosition() {
@@ -46,12 +46,12 @@ public class SurveyPagePosition implements Comparable<SurveyPagePosition> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SurveyPagePosition that = (SurveyPagePosition) o;
-        return id == that.id && position == that.position && Objects.equals(surveyElement, that.surveyElement);
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, position, surveyElement);
+        return Objects.hash(id);
     }
 
     @Override

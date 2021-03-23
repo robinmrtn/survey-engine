@@ -3,6 +3,7 @@ package com.roal.jsurvey.entity;
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Survey {
@@ -48,15 +49,14 @@ public class Survey {
 
     @Override
     public boolean equals(Object o) {
-        return true;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Survey survey = (Survey) o;
+        return id == survey.id;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (dateRange != null ? dateRange.hashCode() : 0);
-        result = 31 * result + (surveyPages != null ? surveyPages.hashCode() : 0);
-        return result;
+        return Objects.hash(id);
     }
 }
