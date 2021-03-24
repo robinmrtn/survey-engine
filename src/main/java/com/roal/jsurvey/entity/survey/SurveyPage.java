@@ -1,4 +1,6 @@
-package com.roal.jsurvey.entity;
+package com.roal.jsurvey.entity.survey;
+
+import com.roal.jsurvey.entity.AbstractSurveyElement;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -14,15 +16,15 @@ public class SurveyPage {
 
     private int position;
 
-    @OneToMany(targetEntity = SurveyPagePosition.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "survey_page_id")
-    private final List<SurveyPagePosition> surveyPagePositions = new LinkedList<>();
+    @OneToMany(targetEntity = AbstractSurveyElement.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "surveyPage")
+    //@JoinColumn(name = "survey_page_id")
+    private final List<AbstractSurveyElement> surveyPageElement = new LinkedList<>();
 
     public SurveyPage() {
     }
 
-    public List<SurveyPagePosition> getSurveyPagePositions() {
-        return surveyPagePositions;
+    public List<AbstractSurveyElement> getSurveyPageElement() {
+        return surveyPageElement;
     }
 
     public int getPosition() {
@@ -33,8 +35,8 @@ public class SurveyPage {
         this.position = position;
     }
 
-    public void addSurveyElement(SurveyPagePosition surveyElement) {
-        surveyPagePositions.add(surveyElement);
+    public void addSurveyElement(AbstractSurveyElement surveyElement) {
+        surveyPageElement.add(surveyElement);
     }
 
     @Override

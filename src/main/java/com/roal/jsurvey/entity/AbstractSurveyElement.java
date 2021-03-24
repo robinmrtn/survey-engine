@@ -1,5 +1,7 @@
 package com.roal.jsurvey.entity;
 
+import com.roal.jsurvey.entity.survey.SurveyPage;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,8 +12,10 @@ public abstract class AbstractSurveyElement {
     @GeneratedValue
     protected long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private SurveyPagePosition surveyPagePosition;
+    protected int position;
+
+    @ManyToOne
+    SurveyPage surveyPage;
 
     public long getId() {
         return id;
@@ -19,6 +23,14 @@ public abstract class AbstractSurveyElement {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override

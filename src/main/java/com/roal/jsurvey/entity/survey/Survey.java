@@ -1,4 +1,4 @@
-package com.roal.jsurvey.entity;
+package com.roal.jsurvey.entity.survey;
 
 import javax.persistence.*;
 import java.util.LinkedList;

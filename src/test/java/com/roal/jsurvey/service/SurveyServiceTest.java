@@ -1,6 +1,8 @@
 package com.roal.jsurvey.service;
 
-import com.roal.jsurvey.entity.Survey;
+import com.roal.jsurvey.dto.ElementResponseDto;
+import com.roal.jsurvey.dto.SurveyResponseDto;
+import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.repository.SurveyRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,6 +50,18 @@ public class SurveyServiceTest {
         given(surveyRepository.findById(3)).willReturn(Optional.empty());
 
         assertThrows(SurveyNotFoundException.class, () -> surveyService.findSurveyById(3));
+    }
+
+    @Test
+    @DisplayName("test insert Survey Response DTO")
+    void testInsertSurveyResponseDto() {
+
+        var surveyResponseDto = new SurveyResponseDto();
+        List<ElementResponseDto> elementResponseDtos = new ArrayList<>();
+        elementResponseDtos.add(new ElementResponseDto(9, "This is an answer"));
+        surveyResponseDto.setElementResponseDtos(elementResponseDtos);
 
     }
+
+
 }

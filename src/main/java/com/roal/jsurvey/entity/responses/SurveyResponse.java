@@ -1,4 +1,7 @@
-package com.roal.jsurvey.entity;
+package com.roal.jsurvey.entity.responses;
+
+import com.roal.jsurvey.entity.AbstractElementResponse;
+import com.roal.jsurvey.entity.survey.Survey;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,12 +18,12 @@ public class SurveyResponse {
     Survey survey;
 
     @OneToMany(cascade = CascadeType.ALL)
-    List<ElementResponse> elementResponses;
+    List<AbstractElementResponse> elementResponses;
 
     public SurveyResponse() {
     }
 
-    public SurveyResponse(long id, Survey survey, List<ElementResponse> elementResponses) {
+    public SurveyResponse(long id, Survey survey, List<AbstractElementResponse> elementResponses) {
         this.id = id;
         this.survey = survey;
         this.elementResponses = elementResponses;
@@ -42,11 +45,11 @@ public class SurveyResponse {
         this.survey = survey;
     }
 
-    public List<ElementResponse> getElementResponses() {
+    public List<AbstractElementResponse> getElementResponses() {
         return elementResponses;
     }
 
-    public void setElementResponses(List<ElementResponse> elementResponses) {
+    public void setElementResponses(List<AbstractElementResponse> elementResponses) {
         this.elementResponses = elementResponses;
     }
 

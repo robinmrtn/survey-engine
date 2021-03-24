@@ -1,6 +1,12 @@
 package com.roal.jsurvey.repository;
 
-import com.roal.jsurvey.entity.*;
+import com.roal.jsurvey.entity.AbstractSurveyElement;
+import com.roal.jsurvey.entity.questions.ClosedQuestion;
+import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
+import com.roal.jsurvey.entity.responses.SurveyResponse;
+import com.roal.jsurvey.entity.survey.Survey;
+import com.roal.jsurvey.entity.survey.SurveyPage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -33,10 +39,8 @@ public class SurveyResponseJpaRepositoryTest {
 
         var closedQuestion = new ClosedQuestion("This is a closed question?");
 
-        var opqPosition = new SurveyPagePosition(2, openQuestion);
-        var clqPosition = new SurveyPagePosition(1, closedQuestion);
-        firstSurveyPage.addSurveyElement(opqPosition);
-        firstSurveyPage.addSurveyElement(clqPosition);
+        firstSurveyPage.addSurveyElement(openQuestion);
+        firstSurveyPage.addSurveyElement(closedQuestion);
 
         survey.addSurveyPage(firstSurveyPage);
 
@@ -48,16 +52,16 @@ public class SurveyResponseJpaRepositoryTest {
 
         var receivedSurvey = surveyRepository.getOne(surveyId);
 
-        AbstractSurveyElement firstElement = receivedSurvey.getSurveyPages().get(0).getSurveyPagePositions().get(0).getSurveyElement();
-        AbstractSurveyElement secondElement = receivedSurvey.getSurveyPages().get(0).getSurveyPagePositions().get(1).getSurveyElement();
+        AbstractSurveyElement firstElement = receivedSurvey.getSurveyPages().get(0).getSurveyPageElement().get(0);
+        AbstractSurveyElement secondElement = receivedSurvey.getSurveyPages().get(0).getSurveyPageElement().get(1);
 
         assertTrue(firstElement instanceof OpenQuestion);
         assertTrue(secondElement instanceof ClosedQuestion);
 
         var response = new SurveyResponse();
         response.setSurvey(receivedSurvey);
-        var elementResponse1 = new ElementResponse();
-        elementResponse1.setElement(firstElement);
+        var elementResponse1 = new OpenQuestionResponse();
+        elementResponse1.setElement((OpenQuestion) firstElement);
         elementResponse1.setValue("This is an answer!");
         response.setElementResponses(List.of(elementResponse1));
 

@@ -1,6 +1,9 @@
 package com.roal.jsurvey.repository;
 
-import com.roal.jsurvey.entity.*;
+import com.roal.jsurvey.entity.questions.ClosedQuestion;
+import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.survey.Survey;
+import com.roal.jsurvey.entity.survey.SurveyPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +28,10 @@ public class SurveyJpaRepositoryTest {
         Survey survey = new Survey("This is a Survey");
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion("This is an open question?");
-        var closedQuestion = new ClosedQuestion("This is a closed question?");
-        var opqPosition = new SurveyPagePosition(2, openQuestion);
-        var clqPosition = new SurveyPagePosition(1, closedQuestion);
-        firstSurveyPage.addSurveyElement(opqPosition);
-        firstSurveyPage.addSurveyElement(clqPosition);
+        // var closedQuestion = new ClosedQuestion("This is a closed question?");
+
+        firstSurveyPage.addSurveyElement(openQuestion);
+        // firstSurveyPage.addSurveyElement(closedQuestion);
 
         survey.addSurveyPage(firstSurveyPage);
 
@@ -53,4 +55,26 @@ public class SurveyJpaRepositoryTest {
 
     }
 
+    @Test
+    void testGetAbstractElementByElementId() {
+        Survey survey = new Survey("This is a Survey");
+        var firstSurveyPage = new SurveyPage();
+        var openQuestion = new OpenQuestion("This is an open question?");
+
+        var closedQuestion = new ClosedQuestion("This is a closed question?");
+
+        firstSurveyPage.addSurveyElement(openQuestion);
+        firstSurveyPage.addSurveyElement(closedQuestion);
+
+        survey.addSurveyPage(firstSurveyPage);
+
+        surveyRepository.save(survey);
+
+        testEntityManager.flush();
+        // clears persistence context
+        // all entities are now detached and can be fetched again
+        testEntityManager.clear();
+
+
+    }
 }

@@ -1,4 +1,6 @@
-package com.roal.jsurvey.entity;
+package com.roal.jsurvey.entity.questions;
+
+import com.roal.jsurvey.entity.AbstractSurveyElement;
 
 import javax.persistence.Entity;
 import java.util.Objects;

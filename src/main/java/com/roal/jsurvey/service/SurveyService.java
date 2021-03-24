@@ -1,7 +1,7 @@
 package com.roal.jsurvey.service;
 
 import com.roal.jsurvey.dto.SurveyResponseDto;
-import com.roal.jsurvey.entity.Survey;
+import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.repository.SurveyRepository;
 import org.springframework.stereotype.Service;
