@@ -1,5 +1,6 @@
 package com.roal.jsurvey.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 
 import javax.persistence.*;
@@ -14,8 +15,17 @@ public abstract class AbstractSurveyElement {
 
     protected int position;
 
-    @ManyToOne
-    SurveyPage surveyPage;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    protected SurveyPage surveyPage;
+
+    public SurveyPage getSurveyPage() {
+        return surveyPage;
+    }
+
+    public void setSurveyPage(SurveyPage surveyPage) {
+        this.surveyPage = surveyPage;
+    }
 
     public long getId() {
         return id;
