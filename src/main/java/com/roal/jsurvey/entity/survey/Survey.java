@@ -1,7 +1,7 @@
 package com.roal.jsurvey.entity.survey;
 
 import javax.persistence.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,11 +16,34 @@ public class Survey {
 
     private DateRange dateRange;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "survey_id")
-    private final List<SurveyPage> surveyPages = new LinkedList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "survey", orphanRemoval = true)
+    private List<SurveyPage> surveyPages = new ArrayList<>();
 
     public Survey() {
+    }
+
+    public Survey(long id, String description, DateRange dateRange, List<SurveyPage> surveyPages) {
+        this.id = id;
+        this.description = description;
+        this.dateRange = dateRange;
+        this.surveyPages = surveyPages;
+    }
+
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public DateRange getDateRange() {
+        return dateRange;
+    }
+
+    public void setDateRange(DateRange dateRange) {
+        this.dateRange = dateRange;
+    }
+
+    public void setSurveyPages(List<SurveyPage> surveyPages) {
+        this.surveyPages = surveyPages;
     }
 
     public Survey(String description) {
@@ -37,6 +60,7 @@ public class Survey {
 
     public void addSurveyPage(SurveyPage surveyPage) {
         surveyPages.add(surveyPage);
+        surveyPage.setSurvey(this);
     }
 
     public List<SurveyPage> getSurveyPages() {
