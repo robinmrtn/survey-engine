@@ -3,7 +3,10 @@ package com.roal.jsurvey.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.jsurvey.dto.ElementResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
-import com.roal.jsurvey.entity.*;
+import com.roal.jsurvey.entity.questions.ClosedQuestion;
+import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.survey.Survey;
+import com.roal.jsurvey.entity.survey.SurveyPage;
 import com.roal.jsurvey.exception.SurveyExceptionHandler;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.service.SurveyService;
@@ -21,13 +24,10 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
 public class SurveyControllerStandaloneTest {
@@ -97,10 +97,9 @@ public class SurveyControllerStandaloneTest {
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
-        // var opqPosition = new SurveyPagePosition(1, openQuestion);
-        var clqPosition = new SurveyPagePosition(2, closedQuestion);
-        // firstSurveyPage.addSurveyElement(opqPosition);
-        firstSurveyPage.addSurveyElement(clqPosition);
+
+        firstSurveyPage.addSurveyElement(openQuestion);
+
 
         survey.addSurveyPage(firstSurveyPage);
 
@@ -115,41 +114,5 @@ public class SurveyControllerStandaloneTest {
         assertEquals(jsonSurvey.write(survey).getJson(), response.getContentAsString());
     }
 
-    @Test
-    @DisplayName("POST /survey/2 - success")
-    void canCreateNewSurveyResponseForExistingSurvey() throws Exception {
 
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
-        var openQuestion = new OpenQuestion(9, "This is an open question?");
-        var opqPosition = new SurveyPagePosition(1, openQuestion);
-
-        firstSurveyPage.addSurveyElement(opqPosition);
-        survey.addSurveyPage(firstSurveyPage);
-
-        List<ElementResponseDto> elementResponseDtos = List.of(new ElementResponseDto(9, "This is an answer!"));
-
-        var responseDto = new SurveyResponseDto(2, elementResponseDtos);
-
-        given(surveyService.findSurveyById(2)).willReturn(survey);
-
-        MockHttpServletResponse response = mvc.perform(post("/survey/2")
-                .contentType(MediaType.APPLICATION_JSON).content(jsonSurveyResponseDto.write(responseDto).getJson()))
-                .andReturn().getResponse();
-
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-    }
-
-    @Test
-    @DisplayName("POST /survey/2 - failed")
-    void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
-
-        given(surveyService.findSurveyById(2)).willThrow(new SurveyNotFoundException());
-
-        MockHttpServletResponse response = mvc.perform(post("/survey/2")
-                .contentType(MediaType.APPLICATION_JSON).content(""))
-                .andReturn().getResponse();
-
-        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
-    }
 }
