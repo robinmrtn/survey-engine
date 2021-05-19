@@ -1,17 +1,25 @@
 package com.roal.jsurvey.dto;
 
-public class ElementResponseDto {
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-    private long elementId;
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = OpenQuestionResponseDto.class, name = "opq"),
+        @JsonSubTypes.Type(value = ClosedQuestionResponseDto.class, name = "clq"),
+})
+public abstract class ElementResponseDto {
 
-    private String value;
+    protected long elementId;
 
-    public ElementResponseDto() {
+    protected ElementResponseDto(long elementId) {
+        this.elementId = elementId;
     }
 
-    public ElementResponseDto(long elementId, String value) {
-        this.elementId = elementId;
-        this.value = value;
+    public ElementResponseDto() {
     }
 
     public long getElementId() {
@@ -22,11 +30,5 @@ public class ElementResponseDto {
         this.elementId = elementId;
     }
 
-    public String getValue() {
-        return value;
-    }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
 }
