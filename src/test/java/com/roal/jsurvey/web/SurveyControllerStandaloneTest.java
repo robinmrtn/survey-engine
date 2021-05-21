@@ -57,14 +57,14 @@ public class SurveyControllerStandaloneTest {
     }
 
     @Test
-    @DisplayName("GET /survey/2 - success")
+    @DisplayName("GET /surveys/2 - success")
     public void canRetrieveByIWhenExists() throws Exception {
 
         given(surveyService.findSurveyById(2L))
                 .willReturn(new Survey("This is a small survey"));
 
         MockHttpServletResponse response = mvc.perform(
-                get("/survey/2")
+                get("/surveys/2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -73,14 +73,14 @@ public class SurveyControllerStandaloneTest {
     }
 
     @Test
-    @DisplayName("GET /survey/2 - 404")
+    @DisplayName("GET /surveys/2 - 404")
     public void cannotRetrieveByIdWhenNotExists() throws Exception {
 
         given(surveyService.findSurveyById(2L))
                 .willThrow(new SurveyNotFoundException());
 
         MockHttpServletResponse response = mvc.perform(
-                get("/survey/2")
+                get("/surveys/2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -90,7 +90,7 @@ public class SurveyControllerStandaloneTest {
     }
 
     @Test
-    @DisplayName("GET /survey/2 - success with Page and OpenQuestion")
+    @DisplayName("GET /surveys/2 - success with Page and OpenQuestion")
     public void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
 
         Survey survey = new Survey("This is a Survey");
@@ -106,7 +106,7 @@ public class SurveyControllerStandaloneTest {
         given(surveyService.findSurveyById(2))
                 .willReturn(survey);
 
-        MockHttpServletResponse response = mvc.perform(get("/survey/2")
+        MockHttpServletResponse response = mvc.perform(get("/surveys/2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 

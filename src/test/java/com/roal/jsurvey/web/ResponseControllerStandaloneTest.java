@@ -8,11 +8,13 @@ import com.roal.jsurvey.entity.questions.OpenQuestion;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import com.roal.jsurvey.exception.SurveyExceptionHandler;
+import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +36,9 @@ public class ResponseControllerStandaloneTest {
 
     @InjectMocks
     private ResponseController responseController;
+
+    @Mock
+    private SurveyService surveyService;
 
     private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
     private JacksonTester<ElementResponseDto> jsonElementResponseDto;
@@ -60,7 +66,7 @@ public class ResponseControllerStandaloneTest {
 
         var responseDto = new SurveyResponseDto(elementResponseDtos);
 
-        //given(surveyService.findSurveyById(2)).willReturn(survey);
+        given(surveyService.findSurveyById(2)).willReturn(survey);
         String json = jsonSurveyResponseDto.write(responseDto).getJson();
         MockHttpServletResponse response = mvc.perform(post("/response/survey/2")
                 .contentType(MediaType.APPLICATION_JSON).content(jsonSurveyResponseDto.write(responseDto).getJson()))

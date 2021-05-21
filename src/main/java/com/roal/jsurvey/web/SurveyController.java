@@ -1,13 +1,12 @@
 package com.roal.jsurvey.web;
 
-import com.roal.jsurvey.dto.SurveyResponseDto;
-import com.roal.jsurvey.entity.Survey;
+import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.service.SurveyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/surveys")
 public class SurveyController {
 
     private final SurveyService surveyService;
@@ -24,8 +23,9 @@ public class SurveyController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurvey(@PathVariable long id, @RequestBody SurveyResponseDto surveyResponseDto) {
-        surveyService.insertSurveyResponseDto(surveyResponseDto);
+    public void postSurvey() {
+        // TODO: endpoint for creating new Surveys
+
 
     }
 }
