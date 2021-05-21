@@ -12,13 +12,13 @@ public class SurveyResponse {
 
     @Id
     @GeneratedValue
-    long id;
+    private long id;
 
     @ManyToOne
-    Survey survey;
+    private Survey survey;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    List<AbstractElementResponse> elementResponses;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyResponse")
+    private List<AbstractElementResponse> elementResponses;
 
     public SurveyResponse() {
     }

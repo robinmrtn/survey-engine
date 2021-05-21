@@ -26,5 +26,11 @@ public abstract class AbstractElementResponse {
         this.id = id;
     }
 
+    public SurveyResponse getSurveyResponse() {
+        return surveyResponse;
+    }
 
+    public void setSurveyResponse(SurveyResponse surveyResponse) {
+        this.surveyResponse = surveyResponse;
+    }
 }
