@@ -11,6 +11,11 @@ public class SurveyExceptionHandler {
     @ExceptionHandler(SurveyNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void handleSurveyNotFound() {
-
     }
+
+    @ExceptionHandler(InvalidDataFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handleInvalidData() {
+    }
+
 }

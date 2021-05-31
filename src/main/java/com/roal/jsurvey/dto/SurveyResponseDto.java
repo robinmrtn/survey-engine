@@ -4,15 +4,12 @@ import java.util.List;
 
 public class SurveyResponseDto {
 
-    private long surveyId;
-
     private List<ElementResponseDto> elementResponseDtos;
 
     public SurveyResponseDto() {
     }
 
-    public SurveyResponseDto(long surveyId, List<ElementResponseDto> elementResponseDtos) {
-        this.surveyId = surveyId;
+    public SurveyResponseDto(List<ElementResponseDto> elementResponseDtos) {
         this.elementResponseDtos = elementResponseDtos;
     }
 
@@ -22,14 +19,6 @@ public class SurveyResponseDto {
 
     public void setElementResponseDtos(List<ElementResponseDto> elementResponseDtos) {
         this.elementResponseDtos = elementResponseDtos;
-    }
-
-    public long getSurveyId() {
-        return surveyId;
-    }
-
-    public void setSurveyId(long surveyId) {
-        this.surveyId = surveyId;
     }
 
 
