@@ -21,10 +21,12 @@ public class SurveyPage {
     @ManyToOne
     private Survey survey;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "surveyPage")
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "surveyPage")
     private Set<AbstractSurveyElement> surveyPageElements = new TreeSet<>();
 
+
     public SurveyPage() {
+        // needed by Hibernate
     }
 
     public SurveyPage(long id, int position, Set<AbstractSurveyElement> surveyPageElement) {
@@ -41,10 +43,6 @@ public class SurveyPage {
         this.id = id;
     }
 
-    public void setSurveyPageElement(Set<AbstractSurveyElement> surveyPageElements) {
-        this.surveyPageElements = surveyPageElements;
-    }
-
     public Set<AbstractSurveyElement> getSurveyPageElements() {
         return surveyPageElements;
     }
@@ -55,10 +53,6 @@ public class SurveyPage {
 
     public void setPosition(int position) {
         this.position = position;
-    }
-
-    public void setSurveyPageElements(Set<AbstractSurveyElement> surveyPageElements) {
-        this.surveyPageElements = surveyPageElements;
     }
 
     public void addSurveyElement(AbstractSurveyElement surveyElement) {
