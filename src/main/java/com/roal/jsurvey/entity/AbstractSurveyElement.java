@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class AbstractSurveyElement {
+public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "element_seq")
     protected long id;
 
     protected int position;
@@ -44,15 +44,7 @@ public abstract class AbstractSurveyElement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AbstractSurveyElement that = (AbstractSurveyElement) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public int compareTo(AbstractSurveyElement o) {
+        return Integer.compare(this.position, o.getPosition());
     }
 }

@@ -8,12 +8,10 @@ import java.util.Objects;
 @Entity
 public class OpenQuestion extends AbstractSurveyElement {
 
-
     private String question;
 
     public OpenQuestion() {
     }
-
 
     public OpenQuestion(String question) {
         this.question = question;
@@ -33,11 +31,11 @@ public class OpenQuestion extends AbstractSurveyElement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OpenQuestion that = (OpenQuestion) o;
-        return Objects.equals(question, that.question);
+        return id == that.getId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(question);
+        return Objects.hash(id);
     }
 }

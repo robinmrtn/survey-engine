@@ -2,12 +2,11 @@ package com.roal.jsurvey.entity.survey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.jsurvey.entity.AbstractSurveyElement;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 public class SurveyPage {
@@ -23,12 +22,12 @@ public class SurveyPage {
     private Survey survey;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "surveyPage")
-    private List<AbstractSurveyElement> surveyPageElements = new LinkedList<>();
+    private Set<AbstractSurveyElement> surveyPageElements = new TreeSet<>();
 
     public SurveyPage() {
     }
 
-    public SurveyPage(long id, int position, List<AbstractSurveyElement> surveyPageElement) {
+    public SurveyPage(long id, int position, Set<AbstractSurveyElement> surveyPageElement) {
         this.id = id;
         this.position = position;
         this.surveyPageElements = surveyPageElement;
@@ -42,11 +41,11 @@ public class SurveyPage {
         this.id = id;
     }
 
-    public void setSurveyPageElement(List<AbstractSurveyElement> surveyPageElements) {
+    public void setSurveyPageElement(Set<AbstractSurveyElement> surveyPageElements) {
         this.surveyPageElements = surveyPageElements;
     }
 
-    public List<AbstractSurveyElement> getSurveyPageElements() {
+    public Set<AbstractSurveyElement> getSurveyPageElements() {
         return surveyPageElements;
     }
 
@@ -58,11 +57,11 @@ public class SurveyPage {
         this.position = position;
     }
 
-    public void setSurveyPageElements(List<AbstractSurveyElement> surveyPageElements) {
+    public void setSurveyPageElements(Set<AbstractSurveyElement> surveyPageElements) {
         this.surveyPageElements = surveyPageElements;
     }
 
-    public void addSurveyElement(OpenQuestion surveyElement) {
+    public void addSurveyElement(AbstractSurveyElement surveyElement) {
         surveyPageElements.add(surveyElement);
         surveyElement.setSurveyPage(this);
     }
