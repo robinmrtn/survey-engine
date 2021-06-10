@@ -1,6 +1,7 @@
 package com.roal.jsurvey.service;
 
 import com.roal.jsurvey.dto.ElementResponseDto;
+import com.roal.jsurvey.dto.OpenQuestionResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
@@ -18,7 +19,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class SurveyServiceTest {
 
@@ -38,7 +38,7 @@ public class SurveyServiceTest {
         Survey returnedSurvey = surveyService.findSurveyById(2);
 
         assertNotNull(returnedSurvey);
-        assertSame(returnedSurvey, survey);
+        assertSame(survey, returnedSurvey);
 
     }
 
@@ -58,7 +58,7 @@ public class SurveyServiceTest {
 
         var surveyResponseDto = new SurveyResponseDto();
         List<ElementResponseDto> elementResponseDtos = new ArrayList<>();
-        elementResponseDtos.add(new ElementResponseDto(9, "This is an answer"));
+        elementResponseDtos.add(new OpenQuestionResponseDto(9, "This is an answer"));
         surveyResponseDto.setElementResponseDtos(elementResponseDtos);
 
     }

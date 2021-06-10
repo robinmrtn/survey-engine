@@ -1,6 +1,7 @@
 package com.roal.jsurvey.web;
 
 import com.roal.jsurvey.dto.SurveyResponseDto;
+import com.roal.jsurvey.service.ResponseService;
 import com.roal.jsurvey.service.SurveyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/responses")
 public class ResponseController {
 
+    private final ResponseService responseService;
+
     private final SurveyService surveyService;
 
-    public ResponseController(SurveyService surveyService) {
+    public ResponseController(ResponseService responseService, SurveyService surveyService) {
+        this.responseService = responseService;
         this.surveyService = surveyService;
     }
 
@@ -20,6 +24,6 @@ public class ResponseController {
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurveyResponse(@PathVariable long id, @RequestBody SurveyResponseDto surveyResponseDto) {
         var survey = surveyService.findSurveyById(id);
-        surveyService.insertSurveyResponseDto(survey, surveyResponseDto);
+        responseService.insertSurveyResponseDto(survey, surveyResponseDto);
     }
 }

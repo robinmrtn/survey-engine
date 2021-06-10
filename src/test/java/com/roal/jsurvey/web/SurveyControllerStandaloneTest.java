@@ -69,7 +69,8 @@ public class SurveyControllerStandaloneTest {
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(jsonSurvey.write(new Survey("This is a small survey")).getJson(), response.getContentAsString());
+        assertEquals(jsonSurvey.write(new Survey("This is a small survey")).getJson(),
+                response.getContentAsString());
     }
 
     @Test
@@ -113,6 +114,5 @@ public class SurveyControllerStandaloneTest {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(jsonSurvey.write(survey).getJson(), response.getContentAsString());
     }
-
 
 }

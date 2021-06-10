@@ -1,6 +1,5 @@
 package com.roal.jsurvey.service;
 
-import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
 import com.roal.jsurvey.repository.SurveyRepository;
@@ -17,12 +16,5 @@ public class SurveyService {
 
     public Survey findSurveyById(long i) {
         return surveyRepository.findById(i).orElseThrow(SurveyNotFoundException::new);
-    }
-
-    public void insertSurveyResponseDto(SurveyResponseDto surveyResponseDto) {
-        /*
-        TODO: map DTOs to Entity-Objects and save in Repository
-
-         */
     }
 }
