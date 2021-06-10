@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
 @Component
 public final class ResponseDtoMapper {
 
-    public ResponseDtoMapper() {
-    }
-
     public SurveyResponse mapSurveyResponseDtoToSurveyResponse(Survey survey, SurveyResponseDto surveyResponseDto) {
 
         var surveyResponse = new SurveyResponse();
@@ -46,7 +43,8 @@ public final class ResponseDtoMapper {
         return surveyResponse;
     }
 
-    private ClosedQuestionResponse getClosedQuestionResponse(Survey survey, ClosedQuestionResponseDto elementResponseDto) {
+    private ClosedQuestionResponse getClosedQuestionResponse(Survey survey,
+                                                             ClosedQuestionResponseDto elementResponseDto) {
 
         var elementResponse = new ClosedQuestionResponse();
         AbstractSurveyElement surveyElement =
@@ -73,7 +71,8 @@ public final class ResponseDtoMapper {
         return elementResponse;
     }
 
-    private List<ClosedQuestionAnswer> getClosedQuestionAnswers(Survey survey, ClosedQuestionResponseDto elementResponseDto) {
+    private List<ClosedQuestionAnswer> getClosedQuestionAnswers(Survey survey,
+                                                                ClosedQuestionResponseDto elementResponseDto) {
 
         Set<Long> answerIds = elementResponseDto.getAnswers();
 
