@@ -1,6 +1,5 @@
 package com.roal.jsurvey.repository;
 
-import com.roal.jsurvey.entity.AbstractSurveyElement;
 import com.roal.jsurvey.entity.questions.ClosedQuestion;
 import com.roal.jsurvey.entity.questions.OpenQuestion;
 import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
@@ -18,7 +17,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-
 public class SurveyResponseJpaRepositoryTest {
 
     @Autowired
@@ -33,16 +31,7 @@ public class SurveyResponseJpaRepositoryTest {
 
     @Test
     void testInsertResponse() {
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
-        var openQuestion = new OpenQuestion("This is an open question?");
-
-        var closedQuestion = new ClosedQuestion("This is a closed question?");
-
-        firstSurveyPage.addSurveyElement(openQuestion);
-        firstSurveyPage.addSurveyElement(closedQuestion);
-
-        survey.addSurveyPage(firstSurveyPage);
+        Survey survey = getSurvey();
 
         surveyRepository.save(survey);
 
@@ -50,18 +39,13 @@ public class SurveyResponseJpaRepositoryTest {
 
         flushRepositories();
 
-        var receivedSurvey = surveyRepository.getOne(surveyId);
+        Optional<Survey> receivedSurvey = surveyRepository.findById(surveyId);
 
-        AbstractSurveyElement firstElement = receivedSurvey.getSurveyPages().get(0).getSurveyPageElement().get(0);
-        AbstractSurveyElement secondElement = receivedSurvey.getSurveyPages().get(0).getSurveyPageElement().get(1);
-
-        assertTrue(firstElement instanceof OpenQuestion);
-        assertTrue(secondElement instanceof ClosedQuestion);
+        assertTrue(receivedSurvey.isPresent());
 
         var response = new SurveyResponse();
-        response.setSurvey(receivedSurvey);
+        response.setSurvey(receivedSurvey.get());
         var elementResponse1 = new OpenQuestionResponse();
-        elementResponse1.setElement((OpenQuestion) firstElement);
         elementResponse1.setValue("This is an answer!");
         response.setElementResponses(List.of(elementResponse1));
 
@@ -77,6 +61,20 @@ public class SurveyResponseJpaRepositoryTest {
         assertEquals(response, byId.get());
         assertNotSame(response, byId.get());
 
+    }
+
+    private Survey getSurvey() {
+        Survey survey = new Survey("This is a Survey");
+        var firstSurveyPage = new SurveyPage();
+        var openQuestion = new OpenQuestion("This is an open question?");
+
+        var closedQuestion = new ClosedQuestion("This is a closed question?");
+
+        firstSurveyPage.addSurveyElement(openQuestion);
+        firstSurveyPage.addSurveyElement(closedQuestion);
+
+        survey.addSurveyPage(firstSurveyPage);
+        return survey;
     }
 
     private void flushRepositories() {

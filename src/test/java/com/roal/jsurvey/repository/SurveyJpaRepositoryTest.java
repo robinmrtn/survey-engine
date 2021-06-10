@@ -25,26 +25,18 @@ public class SurveyJpaRepositoryTest {
     @Test
     @DisplayName("Test insert single Survey")
     void testInsertSingleSurvey() {
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
-        var openQuestion = new OpenQuestion("This is an open question?");
-        // var closedQuestion = new ClosedQuestion("This is a closed question?");
-
-        firstSurveyPage.addSurveyElement(openQuestion);
-        // firstSurveyPage.addSurveyElement(closedQuestion);
-
-        survey.addSurveyPage(firstSurveyPage);
+        Survey survey = createSurvey();
 
         surveyRepository.save(survey);
 
-        testEntityManager.flush();
-        // clears persistence context
-        // all entities are now detached and can be fetched again
-        testEntityManager.clear();
+        flushRepository();
 
         var receivedSurvey = surveyRepository.findById(survey.getId());
 
         assertTrue(receivedSurvey.isPresent());
+
+        assertEquals(1, receivedSurvey.get().getSurveyPages().size());
+        assertEquals(1, receivedSurvey.get().getSurveyPages().get(0).getSurveyPageElements().size());
 
         assertEquals(survey, receivedSurvey.get());
         assertNotSame(survey, receivedSurvey.get());
@@ -55,26 +47,24 @@ public class SurveyJpaRepositoryTest {
 
     }
 
-    @Test
-    void testGetAbstractElementByElementId() {
+    private void flushRepository() {
+        testEntityManager.flush();
+        // clears persistence context
+        // all entities are now detached and can be fetched again
+        testEntityManager.clear();
+    }
+
+    private Survey createSurvey() {
         Survey survey = new Survey("This is a Survey");
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion("This is an open question?");
-
         var closedQuestion = new ClosedQuestion("This is a closed question?");
 
         firstSurveyPage.addSurveyElement(openQuestion);
         firstSurveyPage.addSurveyElement(closedQuestion);
 
         survey.addSurveyPage(firstSurveyPage);
-
-        surveyRepository.save(survey);
-
-        testEntityManager.flush();
-        // clears persistence context
-        // all entities are now detached and can be fetched again
-        testEntityManager.clear();
-
-
+        return survey;
     }
+
 }
