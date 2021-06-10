@@ -31,11 +31,7 @@ public class ResponseDtoMapperTest {
     void testDtoToEntityMapping() {
 
         Survey survey = getTestSurvey();
-        var surveyResponseDto = new SurveyResponseDto();
-        List<ElementResponseDto> elementResponseDtos = new ArrayList<>();
-        elementResponseDtos.add(new OpenQuestionResponseDto(9, "This is an answer"));
-        elementResponseDtos.add(new ClosedQuestionResponseDto(10, Set.of(22L)));
-        surveyResponseDto.setElementResponseDtos(elementResponseDtos);
+        SurveyResponseDto surveyResponseDto = getSurveyResponseDto();
         SurveyResponse surveyResponse = responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(survey, surveyResponseDto);
 
         List<AbstractElementResponse> elementResponses = surveyResponse.getElementResponses();
@@ -62,13 +58,23 @@ public class ResponseDtoMapperTest {
         assertEquals(1, ((ClosedQuestionResponse) closedQuestionResponse.get()).getAnswers().size());
     }
 
+    private SurveyResponseDto getSurveyResponseDto() {
+        var surveyResponseDto = new SurveyResponseDto();
+        List<ElementResponseDto> elementResponseDtos = new ArrayList<>();
+        elementResponseDtos.add(new OpenQuestionResponseDto(9, "This is an answer"));
+        elementResponseDtos.add(new ClosedQuestionResponseDto(10, Set.of(22L)));
+        surveyResponseDto.setElementResponseDtos(elementResponseDtos);
+        return surveyResponseDto;
+    }
+
     private Survey getTestSurvey() {
 
         Survey survey = new Survey("This is a Survey");
         var firstSurveyPage = new SurveyPage();
         var openQuestion = new OpenQuestion(9, "This is an open question?");
         var closedQuestion = new ClosedQuestion(10, "This is a closed question?");
-
+        openQuestion.setPosition(1);
+        closedQuestion.setPosition(2);
         var firstAnswer = new ClosedQuestionAnswer(21, closedQuestion, "First answer");
         var secondAnswer = new ClosedQuestionAnswer(22, closedQuestion, "Second answer");
         var thirdAnswer = new ClosedQuestionAnswer(23, closedQuestion, "Third answer");
