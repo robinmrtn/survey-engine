@@ -20,6 +20,7 @@ public class Survey {
     private List<SurveyPage> surveyPages = new ArrayList<>();
 
     public Survey() {
+        // needed by hibernate
     }
 
     public Survey(long id, String description, DateRange dateRange, List<SurveyPage> surveyPages) {
@@ -42,10 +43,6 @@ public class Survey {
         this.dateRange = dateRange;
     }
 
-    public void setSurveyPages(List<SurveyPage> surveyPages) {
-        this.surveyPages = surveyPages;
-    }
-
     public Survey(String description) {
         this.description = description;
     }
@@ -54,13 +51,15 @@ public class Survey {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Survey setDescription(String description) {
         this.description = description;
+        return this;
     }
 
-    public void addSurveyPage(SurveyPage surveyPage) {
+    public Survey addSurveyPage(SurveyPage surveyPage) {
         surveyPages.add(surveyPage);
         surveyPage.setSurvey(this);
+        return this;
     }
 
     public List<SurveyPage> getSurveyPages() {

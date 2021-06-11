@@ -1,7 +1,7 @@
 package com.roal.jsurvey.entity.survey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.roal.jsurvey.entity.AbstractSurveyElement;
+import com.roal.jsurvey.entity.questions.AbstractSurveyElement;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -21,9 +21,8 @@ public class SurveyPage {
     @ManyToOne
     private Survey survey;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "surveyPage")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "surveyPage", orphanRemoval = true)
     private Set<AbstractSurveyElement> surveyPageElements = new TreeSet<>();
-
 
     public SurveyPage() {
         // needed by Hibernate
@@ -55,9 +54,10 @@ public class SurveyPage {
         this.position = position;
     }
 
-    public void addSurveyElement(AbstractSurveyElement surveyElement) {
+    public SurveyPage addSurveyElement(AbstractSurveyElement surveyElement) {
         surveyPageElements.add(surveyElement);
         surveyElement.setSurveyPage(this);
+        return this;
     }
 
     public Survey getSurvey() {
@@ -80,4 +80,5 @@ public class SurveyPage {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

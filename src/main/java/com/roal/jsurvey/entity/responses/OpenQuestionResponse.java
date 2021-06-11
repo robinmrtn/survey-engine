@@ -1,6 +1,5 @@
 package com.roal.jsurvey.entity.responses;
 
-import com.roal.jsurvey.entity.AbstractElementResponse;
 import com.roal.jsurvey.entity.questions.OpenQuestion;
 
 import javax.persistence.Entity;
@@ -9,13 +8,13 @@ import javax.persistence.OneToOne;
 @Entity
 public class OpenQuestionResponse extends AbstractElementResponse {
 
-
     String value;
 
     @OneToOne
     OpenQuestion openQuestion;
 
     public OpenQuestionResponse() {
+        // needed by hibernate
     }
 
     public OpenQuestionResponse(String value, OpenQuestion openQuestion) {
@@ -31,6 +30,11 @@ public class OpenQuestionResponse extends AbstractElementResponse {
         this.value = value;
     }
 
-    public void setElement(OpenQuestion openQuestion) {
+    public OpenQuestion getOpenQuestion() {
+        return openQuestion;
+    }
+
+    public void setOpenQuestion(OpenQuestion openQuestion) {
+        this.openQuestion = openQuestion;
     }
 }

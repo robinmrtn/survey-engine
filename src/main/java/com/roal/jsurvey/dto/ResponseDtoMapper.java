@@ -1,10 +1,10 @@
 package com.roal.jsurvey.dto;
 
-import com.roal.jsurvey.entity.AbstractElementResponse;
-import com.roal.jsurvey.entity.AbstractSurveyElement;
+import com.roal.jsurvey.entity.questions.AbstractSurveyElement;
 import com.roal.jsurvey.entity.questions.ClosedQuestion;
 import com.roal.jsurvey.entity.questions.ClosedQuestionAnswer;
 import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.responses.AbstractElementResponse;
 import com.roal.jsurvey.entity.responses.ClosedQuestionResponse;
 import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;

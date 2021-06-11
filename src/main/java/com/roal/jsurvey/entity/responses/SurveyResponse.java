@@ -1,6 +1,5 @@
 package com.roal.jsurvey.entity.responses;
 
-import com.roal.jsurvey.entity.AbstractElementResponse;
 import com.roal.jsurvey.entity.survey.Survey;
 
 import javax.persistence.*;
@@ -21,6 +20,7 @@ public class SurveyResponse {
     private List<AbstractElementResponse> elementResponses;
 
     public SurveyResponse() {
+        // needed by hibernate
     }
 
     public SurveyResponse(long id, Survey survey, List<AbstractElementResponse> elementResponses) {

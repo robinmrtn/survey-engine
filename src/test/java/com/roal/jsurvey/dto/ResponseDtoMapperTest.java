@@ -1,9 +1,8 @@
 package com.roal.jsurvey.dto;
 
-import com.roal.jsurvey.entity.AbstractElementResponse;
-import com.roal.jsurvey.entity.questions.ClosedQuestion;
 import com.roal.jsurvey.entity.questions.ClosedQuestionAnswer;
 import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.responses.AbstractElementResponse;
 import com.roal.jsurvey.entity.responses.ClosedQuestionResponse;
 import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;
@@ -18,20 +17,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.roal.jsurvey.entity.questions.ClosedQuestion.ClosedQuestionBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-public class ResponseDtoMapperTest {
-
+class ResponseDtoMapperTest {
 
     ResponseDtoMapper responseDtoMapper = new ResponseDtoMapper();
 
     @Test
     void testDtoToEntityMapping() {
-
+        // Arrange
         Survey survey = getTestSurvey();
         SurveyResponseDto surveyResponseDto = getSurveyResponseDto();
+        // Act
         SurveyResponse surveyResponse = responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(survey, surveyResponseDto);
 
         List<AbstractElementResponse> elementResponses = surveyResponse.getElementResponses();
@@ -46,7 +46,7 @@ public class ResponseDtoMapperTest {
                 .filter(ClosedQuestionResponse.class::isInstance)
                 .filter(e -> ((ClosedQuestionResponse) e).getClosedQuestion().getId() == 10)
                 .findFirst();
-
+        // Assert
         assertTrue(openQuestionResponse.isPresent());
         assertTrue(openQuestionResponse.get() instanceof OpenQuestionResponse);
         assertEquals("This is an answer", ((OpenQuestionResponse) openQuestionResponse.get()).getValue());
@@ -69,23 +69,24 @@ public class ResponseDtoMapperTest {
 
     private Survey getTestSurvey() {
 
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
-        var openQuestion = new OpenQuestion(9, "This is an open question?");
-        var closedQuestion = new ClosedQuestion(10, "This is a closed question?");
-        openQuestion.setPosition(1);
-        closedQuestion.setPosition(2);
-        var firstAnswer = new ClosedQuestionAnswer(21, closedQuestion, "First answer");
-        var secondAnswer = new ClosedQuestionAnswer(22, closedQuestion, "Second answer");
-        var thirdAnswer = new ClosedQuestionAnswer(23, closedQuestion, "Third answer");
+        var openQuestion = new OpenQuestion(9, "This is an open question?")
+                .setPosition(1);
 
-        List<ClosedQuestionAnswer> closedAnswers = List.of(firstAnswer, secondAnswer, thirdAnswer);
+        var closedQuestion = new ClosedQuestionBuilder()
+                .setQuestion("This is a closed question?")
+                .setId(10)
+                .withAnswers()
+                .addAnswer(new ClosedQuestionAnswer(21, "First answer"))
+                .addAnswer(new ClosedQuestionAnswer(22, "Second answer"))
+                .addAnswer(new ClosedQuestionAnswer(23, "Third answer"))
+                .build()
+                .build();
 
-        closedQuestion.setAnswers(closedAnswers);
-        firstSurveyPage.addSurveyElement(openQuestion);
-        firstSurveyPage.addSurveyElement(closedQuestion);
-        survey.addSurveyPage(firstSurveyPage);
+        var firstSurveyPage = new SurveyPage()
+                .addSurveyElement(openQuestion)
+                .addSurveyElement(closedQuestion);
 
-        return survey;
+        return new Survey("This is a Survey")
+                .addSurveyPage(firstSurveyPage);
     }
 }

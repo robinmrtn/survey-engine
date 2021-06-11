@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(MockitoExtension.class)
-public class SurveyControllerStandaloneTest {
+class SurveyControllerStandaloneTest {
 
     private MockMvc mvc;
 
@@ -58,7 +58,7 @@ public class SurveyControllerStandaloneTest {
 
     @Test
     @DisplayName("GET /surveys/2 - success")
-    public void canRetrieveByIWhenExists() throws Exception {
+    void canRetrieveByIWhenExists() throws Exception {
 
         given(surveyService.findSurveyById(2L))
                 .willReturn(new Survey("This is a small survey"));
@@ -75,7 +75,7 @@ public class SurveyControllerStandaloneTest {
 
     @Test
     @DisplayName("GET /surveys/2 - 404")
-    public void cannotRetrieveByIdWhenNotExists() throws Exception {
+    void cannotRetrieveByIdWhenNotExists() throws Exception {
 
         given(surveyService.findSurveyById(2L))
                 .willThrow(new SurveyNotFoundException());
@@ -92,17 +92,16 @@ public class SurveyControllerStandaloneTest {
 
     @Test
     @DisplayName("GET /surveys/2 - success with Page and OpenQuestion")
-    public void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
+    void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
 
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
-        var openQuestion = new OpenQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
+        var openQuestion = new OpenQuestion("This is an open question?");
+        var firstSurveyPage = new SurveyPage()
+                .addSurveyElement(openQuestion)
+                .addSurveyElement(closedQuestion);
 
-        firstSurveyPage.addSurveyElement(openQuestion);
-
-
-        survey.addSurveyPage(firstSurveyPage);
+        Survey survey = new Survey("This is a Survey")
+                .addSurveyPage(firstSurveyPage);
 
         given(surveyService.findSurveyById(2))
                 .willReturn(survey);

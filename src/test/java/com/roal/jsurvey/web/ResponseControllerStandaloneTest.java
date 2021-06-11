@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @AutoConfigureJsonTesters
 @WebMvcTest(ResponseController.class)
-public class ResponseControllerStandaloneTest {
+class ResponseControllerStandaloneTest {
 
     @Autowired
     private MockMvc mvc;
@@ -86,11 +86,13 @@ public class ResponseControllerStandaloneTest {
     }
 
     private Survey getSurvey() {
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
+
         var openQuestion = new OpenQuestion(9, "This is an open question?");
-        firstSurveyPage.addSurveyElement(openQuestion);
-        survey.addSurveyPage(firstSurveyPage);
+        var firstSurveyPage = new SurveyPage()
+                .addSurveyElement(openQuestion);
+
+        Survey survey = new Survey("This is a Survey")
+                .addSurveyPage(firstSurveyPage);
         return survey;
     }
 
