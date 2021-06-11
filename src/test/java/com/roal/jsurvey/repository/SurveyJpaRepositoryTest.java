@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
-public class SurveyJpaRepositoryTest {
+class SurveyJpaRepositoryTest {
 
     @Autowired
     private SurveyRepository surveyRepository;
@@ -55,16 +55,16 @@ public class SurveyJpaRepositoryTest {
     }
 
     private Survey createSurvey() {
-        Survey survey = new Survey("This is a Survey");
-        var firstSurveyPage = new SurveyPage();
+
         var openQuestion = new OpenQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
 
-        firstSurveyPage.addSurveyElement(openQuestion);
-        firstSurveyPage.addSurveyElement(closedQuestion);
+        var firstSurveyPage = new SurveyPage()
+                .addSurveyElement(openQuestion)
+                .addSurveyElement(closedQuestion);
 
-        survey.addSurveyPage(firstSurveyPage);
-        return survey;
+        return new Survey("This is a Survey")
+                .addSurveyPage(firstSurveyPage);
     }
 
 }

@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
-public class SurveyServiceTest {
+class SurveyServiceTest {
 
     @Autowired
     private SurveyService surveyService;
@@ -37,7 +38,6 @@ public class SurveyServiceTest {
 
         Survey returnedSurvey = surveyService.findSurveyById(2);
 
-        assertNotNull(returnedSurvey);
         assertSame(survey, returnedSurvey);
 
     }

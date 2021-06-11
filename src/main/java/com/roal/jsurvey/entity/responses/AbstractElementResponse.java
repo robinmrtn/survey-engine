@@ -1,6 +1,4 @@
-package com.roal.jsurvey.entity;
-
-import com.roal.jsurvey.entity.responses.SurveyResponse;
+package com.roal.jsurvey.entity.responses;
 
 import javax.persistence.*;
 
@@ -14,9 +12,6 @@ public abstract class AbstractElementResponse {
 
     @ManyToOne
     SurveyResponse surveyResponse;
-
-//    @OneToOne(targetEntity = AbstractSurveyElement.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    protected AbstractSurveyElement element;
 
     public long getId() {
         return id;

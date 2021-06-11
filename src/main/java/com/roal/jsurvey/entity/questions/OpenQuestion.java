@@ -1,7 +1,5 @@
 package com.roal.jsurvey.entity.questions;
 
-import com.roal.jsurvey.entity.AbstractSurveyElement;
-
 import javax.persistence.Entity;
 import java.util.Objects;
 
@@ -11,6 +9,7 @@ public class OpenQuestion extends AbstractSurveyElement {
     private String question;
 
     public OpenQuestion() {
+        // needed by hibernate
     }
 
     public OpenQuestion(String question) {
@@ -37,5 +36,11 @@ public class OpenQuestion extends AbstractSurveyElement {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public OpenQuestion setPosition(int position) {
+        this.position = position;
+        return this;
     }
 }

@@ -1,4 +1,4 @@
-package com.roal.jsurvey.entity;
+package com.roal.jsurvey.entity.questions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.jsurvey.entity.survey.SurveyPage;
@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "element_seq")
@@ -39,12 +40,13 @@ public abstract class AbstractSurveyElement implements Comparable<AbstractSurvey
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
+    public abstract AbstractSurveyElement setPosition(int position);
+
 
     @Override
     public int compareTo(AbstractSurveyElement o) {
         return Integer.compare(this.position, o.getPosition());
     }
+
+
 }
