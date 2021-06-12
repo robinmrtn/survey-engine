@@ -3,7 +3,7 @@ package com.roal.jsurvey.web;
 import com.roal.jsurvey.dto.ElementResponseDto;
 import com.roal.jsurvey.dto.OpenQuestionResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
@@ -87,7 +87,7 @@ class ResponseControllerStandaloneTest {
 
     private Survey getSurvey() {
 
-        var openQuestion = new OpenQuestion(9, "This is an open question?");
+        var openQuestion = new OpenTextQuestion(9, "This is an open question?");
         var firstSurveyPage = new SurveyPage()
                 .addSurveyElement(openQuestion);
 

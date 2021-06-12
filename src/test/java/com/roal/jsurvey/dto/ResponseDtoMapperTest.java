@@ -1,10 +1,10 @@
 package com.roal.jsurvey.dto;
 
 import com.roal.jsurvey.entity.questions.ClosedQuestionAnswer;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
 import com.roal.jsurvey.entity.responses.AbstractElementResponse;
 import com.roal.jsurvey.entity.responses.ClosedQuestionResponse;
-import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
+import com.roal.jsurvey.entity.responses.OpenTextQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
@@ -38,8 +38,8 @@ class ResponseDtoMapperTest {
 
         Optional<AbstractElementResponse> openQuestionResponse = elementResponses
                 .stream()
-                .filter(OpenQuestionResponse.class::isInstance)
-                .filter(e -> ((OpenQuestionResponse) e).getOpenQuestion().getId() == 9)
+                .filter(OpenTextQuestionResponse.class::isInstance)
+                .filter(e -> ((OpenTextQuestionResponse) e).getOpenQuestion().getId() == 9)
                 .findFirst();
 
         Optional<AbstractElementResponse> closedQuestionResponse = elementResponses.stream()
@@ -48,8 +48,8 @@ class ResponseDtoMapperTest {
                 .findFirst();
         // Assert
         assertTrue(openQuestionResponse.isPresent());
-        assertTrue(openQuestionResponse.get() instanceof OpenQuestionResponse);
-        assertEquals("This is an answer", ((OpenQuestionResponse) openQuestionResponse.get()).getValue());
+        assertTrue(openQuestionResponse.get() instanceof OpenTextQuestionResponse);
+        assertEquals("This is an answer", ((OpenTextQuestionResponse) openQuestionResponse.get()).getAnswer());
 
         assertTrue(closedQuestionResponse.isPresent());
         assertTrue(closedQuestionResponse.get() instanceof ClosedQuestionResponse);
@@ -69,7 +69,7 @@ class ResponseDtoMapperTest {
 
     private Survey getTestSurvey() {
 
-        var openQuestion = new OpenQuestion(9, "This is an open question?")
+        var openQuestion = new OpenTextQuestion(9, "This is an open question?")
                 .setPosition(1);
 
         var closedQuestion = new ClosedQuestionBuilder()

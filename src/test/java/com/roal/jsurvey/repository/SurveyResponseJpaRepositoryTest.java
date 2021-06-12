@@ -1,8 +1,8 @@
 package com.roal.jsurvey.repository;
 
 import com.roal.jsurvey.entity.questions.ClosedQuestion;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
-import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
+import com.roal.jsurvey.entity.responses.OpenTextQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
@@ -45,8 +45,8 @@ class SurveyResponseJpaRepositoryTest {
 
         var response = new SurveyResponse();
         response.setSurvey(receivedSurvey.get());
-        var elementResponse1 = new OpenQuestionResponse();
-        elementResponse1.setValue("This is an answer!");
+        var elementResponse1 = new OpenTextQuestionResponse();
+        elementResponse1.setAnswer("This is an answer!");
         response.setElementResponses(List.of(elementResponse1));
 
         responseRepository.save(response);
@@ -65,7 +65,7 @@ class SurveyResponseJpaRepositoryTest {
 
     private Survey getSurvey() {
 
-        var openQuestion = new OpenQuestion("This is an open question?");
+        var openQuestion = new OpenTextQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
         var firstSurveyPage = new SurveyPage()
                 .addSurveyElement(openQuestion)

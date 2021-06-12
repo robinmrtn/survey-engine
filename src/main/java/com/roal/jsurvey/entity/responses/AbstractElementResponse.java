@@ -11,7 +11,7 @@ public abstract class AbstractElementResponse {
     protected long id;
 
     @ManyToOne
-    SurveyResponse surveyResponse;
+    private SurveyResponse surveyResponse;
 
     public long getId() {
         return id;

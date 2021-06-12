@@ -3,10 +3,10 @@ package com.roal.jsurvey.dto;
 import com.roal.jsurvey.entity.questions.AbstractSurveyElement;
 import com.roal.jsurvey.entity.questions.ClosedQuestion;
 import com.roal.jsurvey.entity.questions.ClosedQuestionAnswer;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
 import com.roal.jsurvey.entity.responses.AbstractElementResponse;
 import com.roal.jsurvey.entity.responses.ClosedQuestionResponse;
-import com.roal.jsurvey.entity.responses.OpenQuestionResponse;
+import com.roal.jsurvey.entity.responses.OpenTextQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.exception.InvalidDataFormatException;
@@ -29,7 +29,7 @@ public final class ResponseDtoMapper {
         for (ElementResponseDto elementResponseDto : surveyResponseDto.getElementResponseDtos()) {
 
             if (elementResponseDto instanceof OpenQuestionResponseDto) {
-                OpenQuestionResponse openQuestionResponse =
+                OpenTextQuestionResponse openQuestionResponse =
                         getOpenQuestionResponse(survey, (OpenQuestionResponseDto) elementResponseDto);
                 elementResponseList.add(openQuestionResponse);
             } else if (elementResponseDto instanceof ClosedQuestionResponseDto) {
@@ -59,14 +59,14 @@ public final class ResponseDtoMapper {
         return elementResponse;
     }
 
-    private OpenQuestionResponse getOpenQuestionResponse(Survey survey, OpenQuestionResponseDto elementResponseDto) {
+    private OpenTextQuestionResponse getOpenQuestionResponse(Survey survey, OpenQuestionResponseDto elementResponseDto) {
 
-        var elementResponse = new OpenQuestionResponse();
+        var elementResponse = new OpenTextQuestionResponse();
         AbstractSurveyElement surveyElement =
                 findSurveyElementById(survey, elementResponseDto.getElementId());
 
-        elementResponse.setValue(elementResponseDto.getValue());
-        elementResponse.setOpenQuestion((OpenQuestion) surveyElement);
+        elementResponse.setAnswer(elementResponseDto.getValue());
+        elementResponse.setOpenQuestion((OpenTextQuestion) surveyElement);
 
         return elementResponse;
     }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.jsurvey.dto.ElementResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.questions.ClosedQuestion;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import com.roal.jsurvey.exception.SurveyExceptionHandler;
@@ -95,7 +95,7 @@ class SurveyControllerStandaloneTest {
     void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
 
         var closedQuestion = new ClosedQuestion("This is a closed question?");
-        var openQuestion = new OpenQuestion("This is an open question?");
+        var openQuestion = new OpenTextQuestion("This is an open question?");
         var firstSurveyPage = new SurveyPage()
                 .addSurveyElement(openQuestion)
                 .addSurveyElement(closedQuestion);

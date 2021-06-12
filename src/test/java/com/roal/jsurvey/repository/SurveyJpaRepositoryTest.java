@@ -1,7 +1,7 @@
 package com.roal.jsurvey.repository;
 
 import com.roal.jsurvey.entity.questions.ClosedQuestion;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +56,7 @@ class SurveyJpaRepositoryTest {
 
     private Survey createSurvey() {
 
-        var openQuestion = new OpenQuestion("This is an open question?");
+        var openQuestion = new OpenTextQuestion("This is an open question?");
         var closedQuestion = new ClosedQuestion("This is a closed question?");
 
         var firstSurveyPage = new SurveyPage()

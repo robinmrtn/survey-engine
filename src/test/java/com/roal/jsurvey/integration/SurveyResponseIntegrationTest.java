@@ -4,7 +4,7 @@ import com.roal.jsurvey.dto.ElementResponseDto;
 import com.roal.jsurvey.dto.OpenQuestionResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.questions.AbstractSurveyElement;
-import com.roal.jsurvey.entity.questions.OpenQuestion;
+import com.roal.jsurvey.entity.questions.OpenTextQuestion;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import com.roal.jsurvey.repository.SurveyRepository;
@@ -35,7 +35,7 @@ class SurveyResponseIntegrationTest {
 
         Survey survey = createSurvey();
         long surveyId = survey.getId();
-        long openQuestionId = getSurveyElementId(survey, OpenQuestion.class, 0);
+        long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
                 restTemplate.postForEntity("/responses/surveys/" + surveyId,
@@ -49,7 +49,7 @@ class SurveyResponseIntegrationTest {
 
         Survey survey = createSurvey();
         long surveyId = survey.getId();
-        long openQuestionId = getSurveyElementId(survey, OpenQuestion.class, 0) + 1;
+        long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0) + 1;
 
         ResponseEntity<SurveyResponseDto> responseEntity =
                 restTemplate.postForEntity("/responses/surveys/" + surveyId,
@@ -70,7 +70,7 @@ class SurveyResponseIntegrationTest {
 
     private Survey createSurvey() {
 
-        var openQuestion = new OpenQuestion("This is an open question?")
+        var openQuestion = new OpenTextQuestion("This is an open question?")
                 .setPosition(1);
 
         var surveyPage = new SurveyPage()
