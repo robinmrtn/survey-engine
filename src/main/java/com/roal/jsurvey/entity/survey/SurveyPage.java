@@ -28,12 +28,6 @@ public class SurveyPage {
         // needed by Hibernate
     }
 
-    public SurveyPage(long id, int position, Set<AbstractSurveyElement> surveyPageElement) {
-        this.id = id;
-        this.position = position;
-        this.surveyPageElements = surveyPageElement;
-    }
-
     public long getId() {
         return id;
     }

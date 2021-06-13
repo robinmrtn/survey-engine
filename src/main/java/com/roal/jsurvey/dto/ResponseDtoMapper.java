@@ -8,6 +8,7 @@ import com.roal.jsurvey.entity.responses.AbstractElementResponse;
 import com.roal.jsurvey.entity.responses.ClosedQuestionResponse;
 import com.roal.jsurvey.entity.responses.OpenTextQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;
+import com.roal.jsurvey.entity.survey.Campaign;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.exception.InvalidDataFormatException;
 import org.springframework.stereotype.Component;
@@ -20,10 +21,11 @@ import java.util.stream.Collectors;
 @Component
 public final class ResponseDtoMapper {
 
-    public SurveyResponse mapSurveyResponseDtoToSurveyResponse(Survey survey, SurveyResponseDto surveyResponseDto) {
+    public SurveyResponse mapSurveyResponseDtoToSurveyResponse(Campaign campaign, SurveyResponseDto surveyResponseDto) {
 
         var surveyResponse = new SurveyResponse();
-        surveyResponse.setSurvey(survey);
+        surveyResponse.setCampaign(campaign);
+        var survey = campaign.getSurvey();
         List<AbstractElementResponse> elementResponseList = new ArrayList<>();
 
         for (ElementResponseDto elementResponseDto : surveyResponseDto.getElementResponseDtos()) {

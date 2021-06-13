@@ -12,7 +12,6 @@ public class ClosedQuestionResponseDto extends ElementResponseDto {
     }
 
     public ClosedQuestionResponseDto() {
-
     }
 
     public Set<Long> getAnswers() {

@@ -5,8 +5,10 @@ import com.roal.jsurvey.dto.OpenQuestionResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.questions.AbstractSurveyElement;
 import com.roal.jsurvey.entity.questions.OpenTextQuestion;
+import com.roal.jsurvey.entity.survey.Campaign;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
+import com.roal.jsurvey.repository.CampaignRepository;
 import com.roal.jsurvey.repository.SurveyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +32,19 @@ class SurveyResponseIntegrationTest {
     @Autowired
     private SurveyRepository surveyRepository;
 
+    @Autowired
+    private CampaignRepository campaignRepository;
+
     @Test
     void testPostResponseDto_Success() {
 
         Survey survey = createSurvey();
-        long surveyId = survey.getId();
+        Campaign campaign = createCompaign(survey);
+        long campaignId = campaign.getId();
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/responses/surveys/" + surveyId,
+                restTemplate.postForEntity("/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -48,14 +54,37 @@ class SurveyResponseIntegrationTest {
     void testPostResponseDto_WrongFormat() {
 
         Survey survey = createSurvey();
-        long surveyId = survey.getId();
+        Campaign campaign = createCompaign(survey);
+        long campaignId = campaign.getId();
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0) + 1;
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/responses/surveys/" + surveyId,
+                restTemplate.postForEntity("/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void testPostResponseDto_SurveyNoTFound() {
+
+        Survey survey = createSurvey();
+        Campaign campaign = createCompaign(survey);
+        long campaignId = campaign.getId();
+        long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
+
+        ResponseEntity<SurveyResponseDto> responseEntity =
+                restTemplate.postForEntity("/responses/campaigns/" + campaignId + 1,
+                        createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    private Campaign createCompaign(Survey survey) {
+        var campaign = new Campaign()
+                .setSurvey(survey);
+        campaignRepository.save(campaign);
+        return campaign;
     }
 
     private SurveyResponseDto createSurveyResponseDto(long openQuestionId) {
@@ -79,6 +108,7 @@ class SurveyResponseIntegrationTest {
         var survey = new Survey()
                 .setDescription("This is a Survey")
                 .addSurveyPage(surveyPage);
+
         return surveyRepository.save(survey);
     }
 

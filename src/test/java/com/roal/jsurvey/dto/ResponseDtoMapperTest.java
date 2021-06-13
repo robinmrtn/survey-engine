@@ -6,6 +6,7 @@ import com.roal.jsurvey.entity.responses.AbstractElementResponse;
 import com.roal.jsurvey.entity.responses.ClosedQuestionResponse;
 import com.roal.jsurvey.entity.responses.OpenTextQuestionResponse;
 import com.roal.jsurvey.entity.responses.SurveyResponse;
+import com.roal.jsurvey.entity.survey.Campaign;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import org.junit.jupiter.api.Test;
@@ -29,10 +30,10 @@ class ResponseDtoMapperTest {
     @Test
     void testDtoToEntityMapping() {
         // Arrange
-        Survey survey = getTestSurvey();
+        Campaign campaign = getTestCampaign();
         SurveyResponseDto surveyResponseDto = getSurveyResponseDto();
         // Act
-        SurveyResponse surveyResponse = responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(survey, surveyResponseDto);
+        SurveyResponse surveyResponse = responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(campaign, surveyResponseDto);
 
         List<AbstractElementResponse> elementResponses = surveyResponse.getElementResponses();
 
@@ -67,7 +68,7 @@ class ResponseDtoMapperTest {
         return surveyResponseDto;
     }
 
-    private Survey getTestSurvey() {
+    private Campaign getTestCampaign() {
 
         var openQuestion = new OpenTextQuestion(9, "This is an open question?")
                 .setPosition(1);
@@ -86,7 +87,9 @@ class ResponseDtoMapperTest {
                 .addSurveyElement(openQuestion)
                 .addSurveyElement(closedQuestion);
 
-        return new Survey("This is a Survey")
-                .addSurveyPage(firstSurveyPage);
+        return new Campaign()
+                .setSurvey(new Survey("This is a Survey")
+                        .addSurveyPage(firstSurveyPage));
+
     }
 }
