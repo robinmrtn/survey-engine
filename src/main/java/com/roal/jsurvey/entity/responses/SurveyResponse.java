@@ -1,5 +1,6 @@
 package com.roal.jsurvey.entity.responses;
 
+import com.roal.jsurvey.entity.survey.Campaign;
 import com.roal.jsurvey.entity.survey.Survey;
 
 import javax.persistence.*;
@@ -16,17 +17,14 @@ public class SurveyResponse {
     @ManyToOne
     private Survey survey;
 
+    @ManyToOne
+    private Campaign campaign;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyResponse")
     private List<AbstractElementResponse> elementResponses;
 
     public SurveyResponse() {
         // needed by hibernate
-    }
-
-    public SurveyResponse(long id, Survey survey, List<AbstractElementResponse> elementResponses) {
-        this.id = id;
-        this.survey = survey;
-        this.elementResponses = elementResponses;
     }
 
     public long getId() {
@@ -53,6 +51,10 @@ public class SurveyResponse {
         this.elementResponses = elementResponses;
     }
 
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,4 +67,6 @@ public class SurveyResponse {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }

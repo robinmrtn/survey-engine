@@ -12,9 +12,9 @@ public class Survey {
     @GeneratedValue
     private long id;
 
-    private String description;
+    private String title;
 
-    private DateRange dateRange;
+    private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "survey", orphanRemoval = true)
     private List<SurveyPage> surveyPages = new ArrayList<>();
@@ -23,24 +23,15 @@ public class Survey {
         // needed by hibernate
     }
 
-    public Survey(long id, String description, DateRange dateRange, List<SurveyPage> surveyPages) {
+    public Survey(long id, String title, List<SurveyPage> surveyPages) {
         this.id = id;
-        this.description = description;
-        this.dateRange = dateRange;
+        this.title = title;
         this.surveyPages = surveyPages;
     }
 
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public DateRange getDateRange() {
-        return dateRange;
-    }
-
-    public void setDateRange(DateRange dateRange) {
-        this.dateRange = dateRange;
     }
 
     public Survey(String description) {
@@ -81,5 +72,13 @@ public class Survey {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

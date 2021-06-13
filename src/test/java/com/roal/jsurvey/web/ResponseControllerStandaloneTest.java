@@ -4,11 +4,12 @@ import com.roal.jsurvey.dto.ElementResponseDto;
 import com.roal.jsurvey.dto.OpenQuestionResponseDto;
 import com.roal.jsurvey.dto.SurveyResponseDto;
 import com.roal.jsurvey.entity.questions.OpenTextQuestion;
+import com.roal.jsurvey.entity.survey.Campaign;
 import com.roal.jsurvey.entity.survey.Survey;
 import com.roal.jsurvey.entity.survey.SurveyPage;
 import com.roal.jsurvey.exception.SurveyNotFoundException;
+import com.roal.jsurvey.service.CampaignService;
 import com.roal.jsurvey.service.ResponseService;
-import com.roal.jsurvey.service.SurveyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,10 @@ class ResponseControllerStandaloneTest {
     private MockMvc mvc;
 
     @MockBean
-    private SurveyService surveyService;
+    private ResponseService responseService;
 
     @MockBean
-    private ResponseService responseService;
+    private CampaignService campaignService;
 
     @Autowired
     private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
@@ -47,16 +48,16 @@ class ResponseControllerStandaloneTest {
     private JacksonTester<ElementResponseDto> jsonElementResponseDto;
 
     @Test
-    @DisplayName("POST response/survey/2 - success")
+    @DisplayName("POST responses/campaigns/{id} - success")
     void canCreateNewSurveyResponseForExistingSurvey() throws Exception {
 
-        Survey survey = getSurvey();
+        Campaign campaign = getCampaign();
 
         SurveyResponseDto responseDto = getSurveyResponseDto();
 
-        given(surveyService.findSurveyById(2)).willReturn(survey);
+        given(campaignService.findCampaignById(2)).willReturn(campaign);
         String json = jsonSurveyResponseDto.write(responseDto).getJson();
-        MockHttpServletResponse response = mvc.perform(post("/responses/surveys/2")
+        MockHttpServletResponse response = mvc.perform(post("/responses/campaigns/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonSurveyResponseDto.write(responseDto).getJson()))
                 .andReturn().getResponse();
@@ -65,12 +66,12 @@ class ResponseControllerStandaloneTest {
     }
 
     @Test
-    @DisplayName("POST response/survey/2 - failed")
+    @DisplayName("POST responses/campaigns/{id} - failed")
     void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
 
-        given(surveyService.findSurveyById(3)).willThrow(new SurveyNotFoundException());
+        given(campaignService.findCampaignById(3)).willThrow(new SurveyNotFoundException());
 
-        MockHttpServletResponse response = mvc.perform(post("/responses/surveys/3")
+        MockHttpServletResponse response = mvc.perform(post("/responses/campaigns/3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonSurveyResponseDto.write(getSurveyResponseDto()).getJson()))
                 .andReturn().getResponse();
@@ -85,7 +86,7 @@ class ResponseControllerStandaloneTest {
         return new SurveyResponseDto(elementResponseDtos);
     }
 
-    private Survey getSurvey() {
+    private Campaign getCampaign() {
 
         var openQuestion = new OpenTextQuestion(9, "This is an open question?");
         var firstSurveyPage = new SurveyPage()
@@ -93,7 +94,7 @@ class ResponseControllerStandaloneTest {
 
         Survey survey = new Survey("This is a Survey")
                 .addSurveyPage(firstSurveyPage);
-        return survey;
+        return new Campaign().setSurvey(survey);
     }
 
 }
