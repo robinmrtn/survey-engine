@@ -1,6 +1,6 @@
-package com.roal.survey_engine.entity.responses;
+package com.roal.survey_engine.entity.response;
 
-import com.roal.survey_engine.entity.questions.OpenNumericQuestion;
+import com.roal.survey_engine.entity.question.OpenNumericQuestion;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;

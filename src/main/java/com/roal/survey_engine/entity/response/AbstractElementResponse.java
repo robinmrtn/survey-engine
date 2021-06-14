@@ -1,4 +1,4 @@
-package com.roal.survey_engine.entity.responses;
+package com.roal.survey_engine.entity.response;
 
 import javax.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.roal.survey_engine.entity.questions;
+package com.roal.survey_engine.entity.question;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;

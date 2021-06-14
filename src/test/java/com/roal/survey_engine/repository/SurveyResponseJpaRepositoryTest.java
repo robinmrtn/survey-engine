@@ -1,9 +1,9 @@
 package com.roal.survey_engine.repository;
 
-import com.roal.survey_engine.entity.questions.ClosedQuestion;
-import com.roal.survey_engine.entity.questions.OpenTextQuestion;
-import com.roal.survey_engine.entity.responses.OpenTextQuestionResponse;
-import com.roal.survey_engine.entity.responses.SurveyResponse;
+import com.roal.survey_engine.entity.question.ClosedQuestion;
+import com.roal.survey_engine.entity.question.OpenTextQuestion;
+import com.roal.survey_engine.entity.response.OpenTextQuestionResponse;
+import com.roal.survey_engine.entity.response.SurveyResponse;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.entity.survey.SurveyPage;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package com.roal.survey_engine.service;
 
-import com.roal.survey_engine.dto.ElementResponseDto;
-import com.roal.survey_engine.dto.OpenQuestionResponseDto;
-import com.roal.survey_engine.dto.SurveyResponseDto;
+import com.roal.survey_engine.dto.response.ElementResponseDto;
+import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
+import com.roal.survey_engine.dto.response.SurveyResponseDto;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.exception.SurveyNotFoundException;
 import com.roal.survey_engine.repository.SurveyRepository;

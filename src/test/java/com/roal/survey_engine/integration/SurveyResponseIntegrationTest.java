@@ -1,10 +1,10 @@
 package com.roal.survey_engine.integration;
 
-import com.roal.survey_engine.dto.ElementResponseDto;
-import com.roal.survey_engine.dto.OpenQuestionResponseDto;
-import com.roal.survey_engine.dto.SurveyResponseDto;
-import com.roal.survey_engine.entity.questions.AbstractSurveyElement;
-import com.roal.survey_engine.entity.questions.OpenTextQuestion;
+import com.roal.survey_engine.dto.response.ElementResponseDto;
+import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
+import com.roal.survey_engine.dto.response.SurveyResponseDto;
+import com.roal.survey_engine.entity.question.AbstractSurveyElement;
+import com.roal.survey_engine.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.entity.survey.SurveyPage;

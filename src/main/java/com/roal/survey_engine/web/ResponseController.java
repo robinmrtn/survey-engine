@@ -1,6 +1,6 @@
 package com.roal.survey_engine.web;
 
-import com.roal.survey_engine.dto.SurveyResponseDto;
+import com.roal.survey_engine.dto.response.SurveyResponseDto;
 import com.roal.survey_engine.service.CampaignService;
 import com.roal.survey_engine.service.ResponseService;
 import org.springframework.http.HttpStatus;

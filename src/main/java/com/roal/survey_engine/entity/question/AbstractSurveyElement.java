@@ -1,4 +1,4 @@
-package com.roal.survey_engine.entity.questions;
+package com.roal.survey_engine.entity.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.survey_engine.entity.survey.SurveyPage;

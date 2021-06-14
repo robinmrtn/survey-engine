@@ -1,7 +1,7 @@
-package com.roal.survey_engine.entity.responses;
+package com.roal.survey_engine.entity.response;
 
-import com.roal.survey_engine.entity.questions.ClosedQuestion;
-import com.roal.survey_engine.entity.questions.ClosedQuestionAnswer;
+import com.roal.survey_engine.entity.question.ClosedQuestion;
+import com.roal.survey_engine.entity.question.ClosedQuestionAnswer;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;

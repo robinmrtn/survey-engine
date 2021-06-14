@@ -1,7 +1,7 @@
 package com.roal.survey_engine.entity.survey;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.roal.survey_engine.entity.questions.AbstractSurveyElement;
+import com.roal.survey_engine.entity.question.AbstractSurveyElement;
 
 import javax.persistence.*;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.roal.survey_engine.dto;
+package com.roal.survey_engine.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

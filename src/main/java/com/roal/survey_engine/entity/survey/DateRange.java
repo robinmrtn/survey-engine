@@ -10,6 +10,7 @@ public class DateRange {
     private  LocalDate endDate;
 
     public DateRange() {
+        // needed by hibernate
     }
 
     public DateRange(LocalDate startDate, LocalDate endDate) {
@@ -18,14 +19,6 @@ public class DateRange {
         }
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
     }
 
     public boolean isBetween(LocalDate date) {

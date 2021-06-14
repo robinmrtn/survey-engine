@@ -1,8 +1,8 @@
 package com.roal.survey_engine.service;
 
-import com.roal.survey_engine.dto.ResponseDtoMapper;
-import com.roal.survey_engine.dto.SurveyResponseDto;
-import com.roal.survey_engine.entity.responses.SurveyResponse;
+import com.roal.survey_engine.dto.response.ResponseDtoMapper;
+import com.roal.survey_engine.dto.response.SurveyResponseDto;
+import com.roal.survey_engine.entity.response.SurveyResponse;
 import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.repository.ResponseRepository;
 import org.springframework.stereotype.Service;

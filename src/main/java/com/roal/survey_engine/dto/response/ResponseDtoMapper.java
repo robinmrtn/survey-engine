@@ -1,13 +1,13 @@
-package com.roal.survey_engine.dto;
+package com.roal.survey_engine.dto.response;
 
-import com.roal.survey_engine.entity.questions.AbstractSurveyElement;
-import com.roal.survey_engine.entity.questions.ClosedQuestion;
-import com.roal.survey_engine.entity.questions.ClosedQuestionAnswer;
-import com.roal.survey_engine.entity.questions.OpenTextQuestion;
-import com.roal.survey_engine.entity.responses.AbstractElementResponse;
-import com.roal.survey_engine.entity.responses.ClosedQuestionResponse;
-import com.roal.survey_engine.entity.responses.OpenTextQuestionResponse;
-import com.roal.survey_engine.entity.responses.SurveyResponse;
+import com.roal.survey_engine.entity.question.AbstractSurveyElement;
+import com.roal.survey_engine.entity.question.ClosedQuestion;
+import com.roal.survey_engine.entity.question.ClosedQuestionAnswer;
+import com.roal.survey_engine.entity.question.OpenTextQuestion;
+import com.roal.survey_engine.entity.response.AbstractElementResponse;
+import com.roal.survey_engine.entity.response.ClosedQuestionResponse;
+import com.roal.survey_engine.entity.response.OpenTextQuestionResponse;
+import com.roal.survey_engine.entity.response.SurveyResponse;
 import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.exception.InvalidDataFormatException;

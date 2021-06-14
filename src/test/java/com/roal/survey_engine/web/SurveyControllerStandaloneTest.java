@@ -1,10 +1,10 @@
 package com.roal.survey_engine.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.roal.survey_engine.dto.ElementResponseDto;
-import com.roal.survey_engine.dto.SurveyResponseDto;
-import com.roal.survey_engine.entity.questions.ClosedQuestion;
-import com.roal.survey_engine.entity.questions.OpenTextQuestion;
+import com.roal.survey_engine.dto.response.ElementResponseDto;
+import com.roal.survey_engine.dto.response.SurveyResponseDto;
+import com.roal.survey_engine.entity.question.ClosedQuestion;
+import com.roal.survey_engine.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.entity.survey.SurveyPage;
 import com.roal.survey_engine.exception.SurveyExceptionHandler;

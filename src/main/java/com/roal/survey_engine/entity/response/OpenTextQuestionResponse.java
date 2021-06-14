@@ -1,6 +1,6 @@
-package com.roal.survey_engine.entity.responses;
+package com.roal.survey_engine.entity.response;
 
-import com.roal.survey_engine.entity.questions.OpenTextQuestion;
+import com.roal.survey_engine.entity.question.OpenTextQuestion;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -13,11 +13,6 @@ public class OpenTextQuestionResponse extends AbstractOpenQuestionResponse<Strin
 
     public OpenTextQuestionResponse() {
         // needed by hibernate
-    }
-
-    public OpenTextQuestionResponse(String value, OpenTextQuestion openQuestion) {
-        this.answer = value;
-        this.openQuestion = openQuestion;
     }
 
     public OpenTextQuestion getOpenQuestion() {
