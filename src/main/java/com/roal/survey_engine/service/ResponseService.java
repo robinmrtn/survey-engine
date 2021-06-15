@@ -1,7 +1,7 @@
 package com.roal.survey_engine.service;
 
-import com.roal.survey_engine.dto.response.ResponseDtoMapper;
 import com.roal.survey_engine.dto.response.SurveyResponseDto;
+import com.roal.survey_engine.dto.response.mapping.ResponseDtoMapper;
 import com.roal.survey_engine.entity.response.SurveyResponse;
 import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.repository.ResponseRepository;

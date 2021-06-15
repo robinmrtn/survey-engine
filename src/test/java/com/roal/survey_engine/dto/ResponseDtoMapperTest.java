@@ -1,6 +1,10 @@
 package com.roal.survey_engine.dto;
 
-import com.roal.survey_engine.dto.response.*;
+import com.roal.survey_engine.dto.response.ClosedQuestionResponseDto;
+import com.roal.survey_engine.dto.response.ElementResponseDto;
+import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
+import com.roal.survey_engine.dto.response.SurveyResponseDto;
+import com.roal.survey_engine.dto.response.mapping.ResponseDtoMapper;
 import com.roal.survey_engine.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.entity.response.AbstractElementResponse;
