@@ -56,11 +56,9 @@ class SurveyResponseJpaRepositoryTest {
         flushRepositories();
 
         Optional<SurveyResponse> byId = responseRepository.findById(responseId);
-
-        assertTrue(byId.isPresent());
-        assertEquals(response, byId.get());
-        assertNotSame(response, byId.get());
-
+        assertAll(() -> assertTrue(byId.isPresent()),
+                () -> assertEquals(response, byId.get()),
+                () -> assertNotSame(response, byId.get()));
     }
 
     private Survey getSurvey() {
