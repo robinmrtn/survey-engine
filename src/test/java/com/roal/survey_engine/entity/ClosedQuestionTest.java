@@ -4,6 +4,7 @@ import com.roal.survey_engine.entity.question.ClosedQuestion;
 import com.roal.survey_engine.entity.question.ClosedQuestionAnswer;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ClosedQuestionTest {
@@ -19,9 +20,9 @@ class ClosedQuestionTest {
                 .build()
                 .build();
 
-        assertEquals(2, closedQuestion.getAnswers().size());
-        assertEquals("second answer", closedQuestion.getAnswers().get(1).getValue());
-        assertEquals("This is an open question", closedQuestion.getQuestion());
-        assertEquals(3, closedQuestion.getId());
+        assertAll(() -> assertEquals(2, closedQuestion.getAnswers().size()),
+                () -> assertEquals("second answer", closedQuestion.getAnswers().get(1).getValue()),
+                () -> assertEquals("This is an open question", closedQuestion.getQuestion()),
+                () -> assertEquals(3, closedQuestion.getId()));
     }
 }

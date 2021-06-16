@@ -23,7 +23,7 @@ class SurveyJpaRepositoryTest {
     private TestEntityManager testEntityManager;
 
     @Test
-    @DisplayName("Test insert single Survey")
+    @DisplayName("should persist and return survey when survey is saved in repository")
     void testInsertSingleSurvey() {
         Survey survey = createSurvey();
 
@@ -33,18 +33,28 @@ class SurveyJpaRepositoryTest {
 
         var receivedSurvey = surveyRepository.findById(survey.getId());
 
-        assertTrue(receivedSurvey.isPresent());
+        assertAll(() -> assertTrue(receivedSurvey.isPresent()),
+                () -> assertEquals(1, receivedSurvey.get().getSurveyPages().size()),
+                () -> assertEquals(1, receivedSurvey.get().getSurveyPages().get(0)
+                        .getSurveyPageElements().size()),
+                () -> assertEquals(survey, receivedSurvey.get()),
+                () -> assertNotSame(survey, receivedSurvey.get()));
+    }
 
-        assertEquals(1, receivedSurvey.get().getSurveyPages().size());
-        assertEquals(1, receivedSurvey.get().getSurveyPages().get(0).getSurveyPageElements().size());
+    @Test
+    @DisplayName("should remove Survey from repository when deleteById is called")
+    void shouldRemoveSurveyFromRepositoryWhenSurveyIsDeleted() {
+        Survey survey = createSurvey();
 
-        assertEquals(survey, receivedSurvey.get());
-        assertNotSame(survey, receivedSurvey.get());
+        surveyRepository.save(survey);
+
+        flushRepository();
+
+        var receivedSurvey = surveyRepository.findById(survey.getId());
 
         surveyRepository.deleteById(survey.getId());
 
         assertEquals(0, surveyRepository.findAll().size());
-
     }
 
     private void flushRepository() {
