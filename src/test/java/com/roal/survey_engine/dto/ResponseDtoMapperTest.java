@@ -24,8 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.roal.survey_engine.entity.question.ClosedQuestion.ClosedQuestionBuilder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ResponseDtoMapperTest {
@@ -53,15 +52,17 @@ class ResponseDtoMapperTest {
                 .filter(e -> ((ClosedQuestionResponse) e).getClosedQuestion().getId() == 10)
                 .findFirst();
         // Assert
-        assertTrue(openQuestionResponse.isPresent());
-        assertTrue(openQuestionResponse.get() instanceof OpenTextQuestionResponse);
-        assertEquals("This is an answer", ((OpenTextQuestionResponse) openQuestionResponse.get()).getAnswer());
 
-        assertTrue(closedQuestionResponse.isPresent());
-        assertTrue(closedQuestionResponse.get() instanceof ClosedQuestionResponse);
-        assertTrue(((ClosedQuestionResponse) closedQuestionResponse.get()).getAnswers()
-                .stream().allMatch(e -> e.getId() == 22L));
-        assertEquals(1, ((ClosedQuestionResponse) closedQuestionResponse.get()).getAnswers().size());
+        assertAll(() -> assertTrue(openQuestionResponse.isPresent()),
+                () -> assertTrue(openQuestionResponse.get() instanceof OpenTextQuestionResponse),
+                () -> assertEquals("This is an answer",
+                        ((OpenTextQuestionResponse) openQuestionResponse.get()).getAnswer()),
+                () -> assertTrue(closedQuestionResponse.isPresent()),
+                () -> assertTrue(closedQuestionResponse.get() instanceof ClosedQuestionResponse),
+                () -> assertTrue(((ClosedQuestionResponse) closedQuestionResponse.get()).getAnswers()
+                        .stream().allMatch(e -> e.getId() == 22L)),
+                () -> assertEquals(1,
+                        ((ClosedQuestionResponse) closedQuestionResponse.get()).getAnswers().size()));
     }
 
     private SurveyResponseDto getSurveyResponseDto() {
