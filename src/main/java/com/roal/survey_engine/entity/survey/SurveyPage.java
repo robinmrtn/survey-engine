@@ -44,8 +44,9 @@ public class SurveyPage {
         return position;
     }
 
-    public void setPosition(int position) {
+    public SurveyPage setPosition(int position) {
         this.position = position;
+        return this;
     }
 
     public SurveyPage addSurveyElement(AbstractSurveyElement surveyElement) {

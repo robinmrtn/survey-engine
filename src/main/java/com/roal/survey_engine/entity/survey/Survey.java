@@ -69,6 +69,11 @@ public class Survey {
         return id == survey.id;
     }
 
+    public Survey setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -78,7 +83,5 @@ public class Survey {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+
 }
