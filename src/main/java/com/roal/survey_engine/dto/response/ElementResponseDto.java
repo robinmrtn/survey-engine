@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = OpenQuestionResponseDto.class, name = "opq"),
         @JsonSubTypes.Type(value = ClosedQuestionResponseDto.class, name = "clq"),
+        @JsonSubTypes.Type(value = OpenNumericQuestionResponseDto.class, name = "opnq"),
 })
 public abstract class ElementResponseDto {
 

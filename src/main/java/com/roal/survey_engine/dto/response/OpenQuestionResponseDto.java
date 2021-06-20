@@ -1,7 +1,5 @@
 package com.roal.survey_engine.dto.response;
 
-import com.roal.survey_engine.entity.response.OpenTextQuestionResponse;
-
 public class OpenQuestionResponseDto extends ElementResponseDto {
 
     private String value;
@@ -23,9 +21,4 @@ public class OpenQuestionResponseDto extends ElementResponseDto {
         this.value = value;
     }
 
-    OpenTextQuestionResponse mapToEntity() {
-        var openTextQuestionResponse = new OpenTextQuestionResponse();
-        // some mapping
-        return openTextQuestionResponse;
-    }
 }

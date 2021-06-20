@@ -1,8 +1,10 @@
 package com.roal.survey_engine.web;
 
 import com.roal.survey_engine.dto.response.ElementResponseDto;
+import com.roal.survey_engine.dto.response.OpenNumericQuestionResponseDto;
 import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
 import com.roal.survey_engine.dto.response.SurveyResponseDto;
+import com.roal.survey_engine.entity.question.OpenNumericQuestion;
 import com.roal.survey_engine.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.entity.survey.Survey;
@@ -81,7 +83,8 @@ class ResponseControllerStandaloneTest {
 
     private SurveyResponseDto getSurveyResponseDto() {
         List<ElementResponseDto> elementResponseDtos =
-                List.of(new OpenQuestionResponseDto(9, "This is an answer!"));
+                List.of(new OpenQuestionResponseDto(9, "This is an answer!"),
+                        new OpenNumericQuestionResponseDto(14, 3.0));
 
         return new SurveyResponseDto(elementResponseDtos);
     }
@@ -89,8 +92,10 @@ class ResponseControllerStandaloneTest {
     private Campaign getCampaign() {
 
         var openQuestion = new OpenTextQuestion(9, "This is an open question?");
+        var openNumericQuestion = new OpenNumericQuestion(14, "This is an open numeric question");
         var firstSurveyPage = new SurveyPage()
-                .addSurveyElement(openQuestion);
+                .addSurveyElement(openQuestion)
+                .addSurveyElement(openNumericQuestion);
 
         Survey survey = new Survey("This is a Survey")
                 .addSurveyPage(firstSurveyPage);
