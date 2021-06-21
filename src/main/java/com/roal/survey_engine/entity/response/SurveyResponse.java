@@ -55,6 +55,10 @@ public class SurveyResponse {
         this.campaign = campaign;
     }
 
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
