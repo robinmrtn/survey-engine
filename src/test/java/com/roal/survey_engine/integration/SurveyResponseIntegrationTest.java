@@ -52,14 +52,7 @@ class SurveyResponseIntegrationTest {
                 restTemplate.postForEntity("/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
-        List<SurveyResponse> responses = responseRepository.findAllByCampaignId(campaignId);
-
-        assertAll(() -> assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode()),
-                () -> assertFalse(responses.isEmpty()),
-                () -> assertEquals(survey, responses.get(0).getSurvey()),
-                () -> assertEquals(campaign, responses.get(0).getCampaign()));
-
-
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }
 
     @Test
