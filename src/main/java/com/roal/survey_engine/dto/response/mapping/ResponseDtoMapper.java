@@ -26,6 +26,7 @@ public final class ResponseDtoMapper {
             elementResponseList.add(elementResponse);
         }
         surveyResponse.setElementResponses(elementResponseList);
+        surveyResponse.setSurvey(survey);
         return surveyResponse;
 
     }
