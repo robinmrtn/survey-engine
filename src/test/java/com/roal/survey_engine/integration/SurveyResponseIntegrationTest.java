@@ -58,8 +58,6 @@ class SurveyResponseIntegrationTest {
                 () -> assertFalse(responses.isEmpty()),
                 () -> assertEquals(survey, responses.get(0).getSurvey()),
                 () -> assertEquals(campaign, responses.get(0).getCampaign()));
-
-
     }
 
     @Test
