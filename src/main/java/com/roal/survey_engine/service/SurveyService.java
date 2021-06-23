@@ -18,6 +18,10 @@ public class SurveyService {
         this.campaignRepository = campaignRepository;
     }
 
+    public Survey save(Survey survey) {
+        return surveyRepository.save(survey);
+    }
+
     public Survey findSurveyById(long id) {
         return surveyRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
     }
