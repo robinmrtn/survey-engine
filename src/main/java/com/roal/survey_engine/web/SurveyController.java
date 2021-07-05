@@ -21,11 +21,9 @@ public class SurveyController {
         return surveyService.findSurveyById(id);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurvey() {
-        // TODO: endpoint for creating new Surveys
-
-
+    public Survey postSurvey(@RequestBody Survey survey) {
+        return surveyService.save(survey);
     }
 }

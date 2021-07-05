@@ -33,12 +33,13 @@ class ResponseDtoMapperTest {
 
     @Test
     void testDtoToEntityMapping() {
+
         // Arrange
         Campaign campaign = getTestCampaign();
         SurveyResponseDto surveyResponseDto = getSurveyResponseDto();
+
         // Act
         SurveyResponse surveyResponse = responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(campaign, surveyResponseDto);
-
         List<AbstractElementResponse> elementResponses = surveyResponse.getElementResponses();
 
         Optional<AbstractElementResponse> openQuestionResponse = elementResponses
@@ -51,8 +52,8 @@ class ResponseDtoMapperTest {
                 .filter(ClosedQuestionResponse.class::isInstance)
                 .filter(e -> ((ClosedQuestionResponse) e).getClosedQuestion().getId() == 10)
                 .findFirst();
-        // Assert
 
+        // Assert
         assertAll(() -> assertTrue(openQuestionResponse.isPresent()),
                 () -> assertTrue(openQuestionResponse.get() instanceof OpenTextQuestionResponse),
                 () -> assertEquals("This is an answer",

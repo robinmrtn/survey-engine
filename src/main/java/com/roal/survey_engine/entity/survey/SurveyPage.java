@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.survey_engine.entity.question.AbstractSurveyElement;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Entity
 public class SurveyPage {
@@ -22,7 +22,7 @@ public class SurveyPage {
     private Survey survey;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "surveyPage", orphanRemoval = true)
-    private Set<AbstractSurveyElement> surveyPageElements = new TreeSet<>();
+    private List<AbstractSurveyElement> surveyPageElements = new ArrayList<>();
 
     public SurveyPage() {
         // needed by Hibernate
@@ -36,7 +36,7 @@ public class SurveyPage {
         this.id = id;
     }
 
-    public Set<AbstractSurveyElement> getSurveyPageElements() {
+    public List<AbstractSurveyElement> getSurveyPageElements() {
         return surveyPageElements;
     }
 
