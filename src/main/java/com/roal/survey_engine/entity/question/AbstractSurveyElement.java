@@ -1,6 +1,8 @@
 package com.roal.survey_engine.entity.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.roal.survey_engine.entity.survey.SurveyPage;
 
 import javax.persistence.*;
@@ -8,6 +10,15 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = OpenTextQuestion.class, name = "opq"),
+        @JsonSubTypes.Type(value = ClosedQuestion.class, name = "clq"),
+        @JsonSubTypes.Type(value = OpenNumericQuestion.class, name = "opnq"),
+})
 public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
 
     @Id
