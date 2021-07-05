@@ -34,8 +34,8 @@ class SurveyJpaRepositoryTest {
         var receivedSurvey = surveyRepository.findById(survey.getId());
 
         assertAll(() -> assertTrue(receivedSurvey.isPresent()),
-                () -> assertEquals(1, receivedSurvey.get().getSurveyPages().size()),
-                () -> assertEquals(1, receivedSurvey.get().getSurveyPages().get(0)
+                () -> assertEquals(2, receivedSurvey.get().getSurveyPages().size()),
+                () -> assertEquals(2, receivedSurvey.get().getSurveyPages().get(0)
                         .getSurveyPageElements().size()),
                 () -> assertEquals(survey, receivedSurvey.get()),
                 () -> assertNotSame(survey, receivedSurvey.get()));

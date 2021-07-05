@@ -31,6 +31,10 @@ public class ClosedQuestionAnswer {
         this.value = value;
     }
 
+    public ClosedQuestionAnswer(String value) {
+        this.value = value;
+    }
+
     public long getId() {
         return id;
     }

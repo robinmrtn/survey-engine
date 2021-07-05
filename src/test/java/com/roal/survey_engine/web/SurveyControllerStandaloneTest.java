@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.survey_engine.dto.response.ElementResponseDto;
 import com.roal.survey_engine.dto.response.SurveyResponseDto;
 import com.roal.survey_engine.entity.question.ClosedQuestion;
+import com.roal.survey_engine.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.entity.survey.SurveyPage;
 import com.roal.survey_engine.exception.SurveyExceptionHandler;
 import com.roal.survey_engine.exception.SurveyNotFoundException;
 import com.roal.survey_engine.service.SurveyService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,9 +47,22 @@ class SurveyControllerStandaloneTest {
     private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
     private JacksonTester<ElementResponseDto> jsonElementResponseDto;
 
+    private static Survey survey;
+
+    @BeforeAll
+    public static void setup() {
+        var openQuestion = new OpenTextQuestion("This is an open question?");
+        var closedQuestion = new ClosedQuestion("This is a closed question?")
+                .addAnswer(new ClosedQuestionAnswer("first answer"))
+                .addAnswer(new ClosedQuestionAnswer("second answer"));
+
+        survey = new Survey("This is a Survey")
+                .addSurveyPage(new SurveyPage().addSurveyElement(openQuestion))
+                .addSurveyPage(new SurveyPage().addSurveyElement(closedQuestion));
+    }
 
     @BeforeEach
-    public void setup() {
+    public void init() {
         JacksonTester.initFields(this, new ObjectMapper());
 
         mvc = MockMvcBuilders.standaloneSetup(surveyController)
@@ -60,7 +75,7 @@ class SurveyControllerStandaloneTest {
     void canRetrieveByIWhenExists() throws Exception {
 
         given(surveyService.findSurveyById(2L))
-                .willReturn(new Survey("This is a small survey"));
+                .willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(
                 get("/surveys/2")
@@ -68,7 +83,7 @@ class SurveyControllerStandaloneTest {
                 .andReturn().getResponse();
 
         assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()),
-                () -> assertEquals(jsonSurvey.write(new Survey("This is a small survey")).getJson(),
+                () -> assertEquals(jsonSurvey.write(survey).getJson(),
                         response.getContentAsString()));
     }
 
@@ -91,15 +106,6 @@ class SurveyControllerStandaloneTest {
     @Test
     @DisplayName("GET /surveys/2 - success with Page and OpenQuestion")
     void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
-
-        var closedQuestion = new ClosedQuestion("This is a closed question?");
-        var openQuestion = new OpenTextQuestion("This is an open question?");
-        var firstSurveyPage = new SurveyPage()
-                .addSurveyElement(openQuestion)
-                .addSurveyElement(closedQuestion);
-
-        Survey survey = new Survey("This is a Survey")
-                .addSurveyPage(firstSurveyPage);
 
         given(surveyService.findSurveyById(2))
                 .willReturn(survey);
