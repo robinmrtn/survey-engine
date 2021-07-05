@@ -8,15 +8,6 @@ import com.roal.survey_engine.entity.survey.SurveyPage;
 import javax.persistence.*;
 import java.util.Objects;
 
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = OpenTextQuestion.class, name = "opq"),
-        @JsonSubTypes.Type(value = ClosedQuestion.class, name = "clq"),
-        @JsonSubTypes.Type(value = OpenNumericQuestion.class, name = "opnq"),
-})
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonTypeInfo(
