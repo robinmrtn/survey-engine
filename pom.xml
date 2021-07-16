@@ -11,17 +11,22 @@
 	<groupId>com.roal</groupId>
 	<artifactId>jsurvey</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
-	<name>jsurvey</name>
+	<name>survey-engine</name>
 	<description>Survey Tool</description>
+
 	<properties>
 		<java.version>11</java.version>
+		<web-app-src-dir>${project.basedir}/src/main/web-app</web-app-src-dir>
+		<node.version>v14.17.1</node.version>
+		<yarn.version>v1.22.10</yarn.version>
+		<frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -56,6 +61,13 @@
 			<version>3.19.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin -->
+		<dependency>
+			<groupId>com.github.eirslett</groupId>
+			<artifactId>frontend-maven-plugin</artifactId>
+			<version>${frontend-maven-plugin.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -63,6 +75,71 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>${frontend-maven-plugin.version}</version>
+
+				<configuration>
+					<nodeVersion>${node.version}</nodeVersion>
+					<yarnVersion>${yarn.version}</yarnVersion>
+					<workingDirectory>${web-app-src-dir}</workingDirectory>
+					<installDirectory>${project.build.directory}</installDirectory>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>install-frontend-tools</id>
+						<goals>
+							<goal>install-node-and-yarn</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>yarn-install</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>build-frontend</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<arguments>build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>position-react-build</id>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${web-app-src-dir}/build</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
