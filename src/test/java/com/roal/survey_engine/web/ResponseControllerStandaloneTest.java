@@ -59,7 +59,7 @@ class ResponseControllerStandaloneTest {
 
         given(campaignService.findCampaignById(2)).willReturn(campaign);
         String json = jsonSurveyResponseDto.write(responseDto).getJson();
-        MockHttpServletResponse response = mvc.perform(post("/responses/campaigns/2")
+        MockHttpServletResponse response = mvc.perform(post("/api/responses/campaigns/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonSurveyResponseDto.write(responseDto).getJson()))
                 .andReturn().getResponse();
@@ -73,7 +73,7 @@ class ResponseControllerStandaloneTest {
 
         given(campaignService.findCampaignById(3)).willThrow(new SurveyNotFoundException());
 
-        MockHttpServletResponse response = mvc.perform(post("/responses/campaigns/3")
+        MockHttpServletResponse response = mvc.perform(post("/api/responses/campaigns/3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonSurveyResponseDto.write(getSurveyResponseDto()).getJson()))
                 .andReturn().getResponse();
