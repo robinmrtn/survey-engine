@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/surveys")
+@RequestMapping("api/surveys")
 public class SurveyController {
 
     private final SurveyService surveyService;
@@ -17,7 +17,6 @@ public class SurveyController {
 
     @GetMapping("/{id}")
     public Survey getSurveyById(@PathVariable long id) {
-
         return surveyService.findSurveyById(id);
     }
 

@@ -49,7 +49,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/responses/campaigns/" + campaignId,
+                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         List<SurveyResponse> responses = responseRepository.findAllByCampaignId(campaignId);
@@ -69,7 +69,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0) + 1;
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/responses/campaigns/" + campaignId,
+                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -84,7 +84,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/responses/campaigns/" + campaignId + 1,
+                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId + 1,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
