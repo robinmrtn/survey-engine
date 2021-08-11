@@ -1,10 +1,14 @@
 package com.roal.survey_engine.service;
 
+import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.exception.SurveyNotFoundException;
 import com.roal.survey_engine.repository.CampaignRepository;
 import com.roal.survey_engine.repository.SurveyRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SurveyService {
@@ -33,5 +37,17 @@ public class SurveyService {
             throw new SurveyNotFoundException();
         }
         return campaign.getSurvey();
+    }
+
+    public List<Survey> getPublicAndActiveSurveys() {
+        return getSurveysFromCampaigns(campaignRepository.findByHiddenIsFalseAndActiveIsTrue());
+    }
+
+    private List<Survey> getSurveysFromCampaigns(List<Campaign> campaigns) {
+
+        return campaigns.stream()
+                .map(Campaign::getSurvey)
+                .collect(Collectors.toList());
+
     }
 }

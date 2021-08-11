@@ -20,7 +20,7 @@ public class ResponseController {
         this.campaignService = campaignService;
     }
 
-    @PostMapping("/campaigns/{id}")
+    @PostMapping("/surveys/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurveyResponse(@PathVariable long id, @RequestBody SurveyResponseDto surveyResponseDto) {
         var campaign = campaignService.findCampaignById(id);

@@ -50,7 +50,7 @@ class ResponseControllerStandaloneTest {
     private JacksonTester<ElementResponseDto> jsonElementResponseDto;
 
     @Test
-    @DisplayName("POST responses/campaigns/{id} - success")
+    @DisplayName("POST responses/surveys/{id} - success")
     void canCreateNewSurveyResponseForExistingSurvey() throws Exception {
 
         Campaign campaign = getCampaign();
@@ -59,23 +59,23 @@ class ResponseControllerStandaloneTest {
 
         given(campaignService.findCampaignById(2)).willReturn(campaign);
         String json = jsonSurveyResponseDto.write(responseDto).getJson();
-        MockHttpServletResponse response = mvc.perform(post("/api/responses/campaigns/2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonSurveyResponseDto.write(responseDto).getJson()))
+        MockHttpServletResponse response = mvc.perform(post("/api/responses/surveys/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonSurveyResponseDto.write(responseDto).getJson()))
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
     }
 
     @Test
-    @DisplayName("POST responses/campaigns/{id} - failed")
+    @DisplayName("POST responses/surveys/{id} - failed")
     void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
 
         given(campaignService.findCampaignById(3)).willThrow(new SurveyNotFoundException());
 
-        MockHttpServletResponse response = mvc.perform(post("/api/responses/campaigns/3")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonSurveyResponseDto.write(getSurveyResponseDto()).getJson()))
+        MockHttpServletResponse response = mvc.perform(post("/api/responses/surveys/3")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonSurveyResponseDto.write(getSurveyResponseDto()).getJson()))
                 .andReturn().getResponse();
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
