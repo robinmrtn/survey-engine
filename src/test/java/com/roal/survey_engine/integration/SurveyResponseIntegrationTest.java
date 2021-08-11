@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class SurveyResponseIntegrationTest {
 
     @Autowired
@@ -49,7 +51,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId,
+                restTemplate.postForEntity("/api/responses/surveys/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         List<SurveyResponse> responses = responseRepository.findAllByCampaignId(campaignId);
@@ -69,7 +71,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0) + 1;
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId,
+                restTemplate.postForEntity("/api/responses/surveys/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -84,7 +86,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId + 1,
+                restTemplate.postForEntity("/api/responses/surveys/" + campaignId + 1,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());

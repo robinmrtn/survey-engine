@@ -1,10 +1,6 @@
 package com.roal.survey_engine.entity.survey;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.util.Objects;
+import javax.persistence.*;
 
 @Entity
 public class Campaign {
@@ -13,30 +9,25 @@ public class Campaign {
     @GeneratedValue
     private long id;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Campaign)) return false;
-        Campaign campaign = (Campaign) o;
-        return getId() == campaign.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
     @ManyToOne
     private Survey survey;
 
+    @Embedded
     private DateRange dateRange;
 
     private String title;
 
     private boolean active;
 
+    private boolean hidden;
+
     public Campaign() {
         // needed by hibernate
+    }
+
+    public Campaign setId(long id) {
+        this.id = id;
+        return this;
     }
 
     public Survey getSurvey() {
@@ -50,5 +41,30 @@ public class Campaign {
 
     public long getId() {
         return id;
+    }
+
+    public Campaign setActive(boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public Campaign setHidden(boolean hidden) {
+        this.hidden = hidden;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Campaign campaign = (Campaign) o;
+
+        return id == campaign.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 }
