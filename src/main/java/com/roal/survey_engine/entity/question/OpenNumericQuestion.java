@@ -9,6 +9,10 @@ public class OpenNumericQuestion extends AbstractOpenQuestion {
         // needed by hibernate
     }
 
+    public OpenNumericQuestion(String question) {
+        this.question = question;
+    }
+
     public OpenNumericQuestion(long id, String question) {
         this.question = question;
         this.id = id;

@@ -1,7 +1,6 @@
 package com.roal.survey_engine.entity.question;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,8 @@ public class ClosedQuestion extends AbstractSurveyElement {
 
     private String question;
 
-    @OneToMany(mappedBy = "closedQuestion")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "closed_question_id")
     private List<ClosedQuestionAnswer> answers = new ArrayList<>();
 
     public ClosedQuestion() {
@@ -40,7 +40,7 @@ public class ClosedQuestion extends AbstractSurveyElement {
 
     public ClosedQuestion addAnswer(ClosedQuestionAnswer answer) {
         answers.add(answer);
-        answer.setClosedQuestion(this);
+//        answer.setClosedQuestion(this);
         return this;
     }
 
@@ -78,7 +78,6 @@ public class ClosedQuestion extends AbstractSurveyElement {
             closedQuestion.setId(id);
             List<ClosedQuestionAnswer> answers = this.answerBuilder.getAnswers();
             for (ClosedQuestionAnswer answer : answers) {
-                answer.setClosedQuestion(closedQuestion);
                 closedQuestion.addAnswer(answer);
             }
             return closedQuestion;

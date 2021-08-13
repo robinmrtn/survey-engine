@@ -1,11 +1,8 @@
 package com.roal.survey_engine.entity.question;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +12,6 @@ public class ClosedQuestionAnswer {
     @Id
     @GeneratedValue
     private long id;
-
-    @JsonIgnore
-    @ManyToOne
-    private ClosedQuestion closedQuestion;
 
     private String value;
 
@@ -49,10 +42,6 @@ public class ClosedQuestionAnswer {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public void setClosedQuestion(ClosedQuestion closedQuestion) {
-        this.closedQuestion = closedQuestion;
     }
 
     public static final class ClosedQuestionAnswerBuilder {

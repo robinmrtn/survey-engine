@@ -16,7 +16,7 @@ public class SurveyPage {
 
     private int position;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AbstractSurveyElement> surveyPageElements = new ArrayList<>();
 
     public SurveyPage() {
@@ -46,7 +46,7 @@ public class SurveyPage {
 
     public SurveyPage addSurveyElement(AbstractSurveyElement surveyElement) {
         surveyPageElements.add(surveyElement);
-//        surveyElement.setSurveyPage(this);
+//   surveyElement.setSurveyPage(this);
         return this;
     }
 

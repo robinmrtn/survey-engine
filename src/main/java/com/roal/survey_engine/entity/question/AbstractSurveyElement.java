@@ -19,11 +19,11 @@ import java.util.Objects;
 public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "element_seq")
+    @GeneratedValue
     protected long id;
 
     protected int position;
+
 
     public long getId() {
         return id;

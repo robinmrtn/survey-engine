@@ -16,7 +16,8 @@ public class Survey {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "SURVEY_ID")
     private List<SurveyPage> surveyPages = new ArrayList<>();
 
     public Survey() {
@@ -48,6 +49,7 @@ public class Survey {
 
     public Survey addSurveyPage(SurveyPage surveyPage) {
         surveyPages.add(surveyPage);
+        //    surveyPage.setSurveyId(this.id);
         return this;
     }
 
