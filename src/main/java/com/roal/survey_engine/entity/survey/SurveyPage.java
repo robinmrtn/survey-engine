@@ -1,6 +1,5 @@
 package com.roal.survey_engine.entity.survey;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.survey_engine.entity.question.AbstractSurveyElement;
 
 import javax.persistence.*;
@@ -16,10 +15,6 @@ public class SurveyPage {
     private long id;
 
     private int position;
-
-    @JsonIgnore
-    @ManyToOne
-    private Survey survey;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AbstractSurveyElement> surveyPageElements = new ArrayList<>();
@@ -53,14 +48,6 @@ public class SurveyPage {
         surveyPageElements.add(surveyElement);
 //        surveyElement.setSurveyPage(this);
         return this;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Survey {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "survey", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SurveyPage> surveyPages = new ArrayList<>();
 
     public Survey() {
@@ -28,7 +28,6 @@ public class Survey {
         this.title = title;
         this.surveyPages = surveyPages;
     }
-
 
     public void setId(long id) {
         this.id = id;
@@ -49,7 +48,6 @@ public class Survey {
 
     public Survey addSurveyPage(SurveyPage surveyPage) {
         surveyPages.add(surveyPage);
-        surveyPage.setSurvey(this);
         return this;
     }
 
@@ -61,12 +59,8 @@ public class Survey {
         return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Survey survey = (Survey) o;
-        return id == survey.id;
+    public String getTitle() {
+        return title;
     }
 
     public Survey setTitle(String title) {
@@ -75,13 +69,16 @@ public class Survey {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Survey survey = (Survey) o;
+        return id == survey.id;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    public String getTitle() {
-        return title;
-    }
-
 
 }
