@@ -21,7 +21,7 @@ public class SurveyPage {
     @ManyToOne
     private Survey survey;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "surveyPage", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AbstractSurveyElement> surveyPageElements = new ArrayList<>();
 
     public SurveyPage() {
@@ -51,7 +51,7 @@ public class SurveyPage {
 
     public SurveyPage addSurveyElement(AbstractSurveyElement surveyElement) {
         surveyPageElements.add(surveyElement);
-        surveyElement.setSurveyPage(this);
+//        surveyElement.setSurveyPage(this);
         return this;
     }
 
