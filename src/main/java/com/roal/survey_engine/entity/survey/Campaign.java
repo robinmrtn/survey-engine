@@ -9,7 +9,7 @@ public class Campaign {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Survey survey;
 
     @Embedded
