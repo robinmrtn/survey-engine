@@ -5,6 +5,9 @@ import com.roal.survey_engine.service.SurveyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin
 @RestController
 @RequestMapping("api/surveys")
 public class SurveyController {
@@ -17,12 +20,17 @@ public class SurveyController {
 
     @GetMapping("/{id}")
     public Survey getSurveyById(@PathVariable long id) {
-        return surveyService.findSurveyById(id);
+        return surveyService.findSurveyByCampaignId(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Survey postSurvey(@RequestBody Survey survey) {
         return surveyService.save(survey);
+    }
+
+    @GetMapping("/")
+    public List<Survey> getPublicSurveys() {
+        return surveyService.getPublicAndActiveSurveys();
     }
 }

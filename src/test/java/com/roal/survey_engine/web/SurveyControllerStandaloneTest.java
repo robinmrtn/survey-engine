@@ -38,6 +38,7 @@ class SurveyControllerStandaloneTest {
     @Mock
     private SurveyService surveyService;
 
+
     @InjectMocks
     private SurveyController surveyController;
 
@@ -74,7 +75,7 @@ class SurveyControllerStandaloneTest {
     @DisplayName("GET /surveys/2 - success")
     void canRetrieveByIWhenExists() throws Exception {
 
-        given(surveyService.findSurveyById(2L))
+        given(surveyService.findSurveyByCampaignId(2L))
                 .willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(
@@ -91,7 +92,7 @@ class SurveyControllerStandaloneTest {
     @DisplayName("GET /surveys/2 - 404")
     void cannotRetrieveByIdWhenNotExists() throws Exception {
 
-        given(surveyService.findSurveyById(2L))
+        given(surveyService.findSurveyByCampaignId(2L))
                 .willThrow(new SurveyNotFoundException());
 
         MockHttpServletResponse response = mvc.perform(
@@ -107,7 +108,7 @@ class SurveyControllerStandaloneTest {
     @DisplayName("GET /surveys/2 - success with Page and OpenQuestion")
     void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
 
-        given(surveyService.findSurveyById(2))
+        given(surveyService.findSurveyByCampaignId(2))
                 .willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(get("/api/surveys/2")
@@ -118,5 +119,4 @@ class SurveyControllerStandaloneTest {
                 () -> assertEquals(jsonSurvey.write(survey).getJson(), response.getContentAsString()));
 
     }
-
 }
