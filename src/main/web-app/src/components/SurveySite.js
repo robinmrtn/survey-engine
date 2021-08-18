@@ -8,7 +8,9 @@ export default function SurveySite() {
     const [survey, setSurvey] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [pagePosition, setPagePosition] = useState(0)
     const {surveyId} = useParams();
+    const [inputs, setInputs] = useState({})
     useEffect(() => {
         getSurvey(surveyId)
             .then((res) => setSurvey(res))
@@ -19,13 +21,18 @@ export default function SurveySite() {
     }, []);
 
     if (survey !== null && error === null) {
-        console.log(survey)
         return (
             <div>
                 <h1>{survey.title}</h1>
                 <p>ID: {surveyId}</p>
+
                 <p>{survey.description}</p>
-                <SurveyPage/>
+                <SurveyPage page={survey.surveyPages[pagePosition]}
+                            setPagePosition={setPagePosition}
+                            pagePosition={pagePosition}
+                            lastPage={survey.surveyPages.length - 1}
+                            inputs={inputs}
+                            setInputs={setInputs}/>
             </div>
         );
     } else if (error !== null) {
