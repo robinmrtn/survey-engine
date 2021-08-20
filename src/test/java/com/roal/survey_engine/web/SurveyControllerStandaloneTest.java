@@ -1,6 +1,7 @@
 package com.roal.survey_engine.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.roal.survey_engine.dto.SurveyListElementDto;
 import com.roal.survey_engine.dto.response.ElementResponseDto;
 import com.roal.survey_engine.dto.response.SurveyResponseDto;
 import com.roal.survey_engine.entity.question.ClosedQuestion;
@@ -26,6 +27,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,6 +47,8 @@ class SurveyControllerStandaloneTest {
 
     // This object will be magically initialized by the initFields method below.
     private JacksonTester<Survey> jsonSurvey;
+    private JacksonTester<List> jsonList;
+
 
     private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
     private JacksonTester<ElementResponseDto> jsonElementResponseDto;
@@ -112,11 +117,28 @@ class SurveyControllerStandaloneTest {
                 .willReturn(survey);
 
         MockHttpServletResponse response = mvc.perform(get("/api/surveys/2")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()),
                 () -> assertEquals(jsonSurvey.write(survey).getJson(), response.getContentAsString()));
 
+    }
+
+    @Test
+    void canRetrieveSurveyList() throws Exception {
+        List<SurveyListElementDto> surveys = List.of(
+                new SurveyListElementDto(10, "First name", "First desc"),
+                new SurveyListElementDto(11, "second Name", "second Desc"));
+
+        given(surveyService.getPublicAndActiveSurveys())
+                .willReturn(surveys);
+
+        MockHttpServletResponse response = mvc.perform(get("/api/surveys")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()),
+                () -> assertEquals(jsonList.write(surveys).getJson(), response.getContentAsString()));
     }
 }

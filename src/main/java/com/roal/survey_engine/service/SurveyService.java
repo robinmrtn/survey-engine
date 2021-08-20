@@ -1,5 +1,6 @@
 package com.roal.survey_engine.service;
 
+import com.roal.survey_engine.dto.SurveyListElementDto;
 import com.roal.survey_engine.entity.survey.Campaign;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.exception.SurveyNotFoundException;
@@ -39,15 +40,22 @@ public class SurveyService {
         return campaign.getSurvey();
     }
 
-    public List<Survey> getPublicAndActiveSurveys() {
+    public List<SurveyListElementDto> getPublicAndActiveSurveys() {
         return getSurveysFromCampaigns(campaignRepository.findByHiddenIsFalseAndActiveIsTrue());
     }
 
-    private List<Survey> getSurveysFromCampaigns(List<Campaign> campaigns) {
+    private List<SurveyListElementDto> getSurveysFromCampaigns(List<Campaign> campaigns) {
 
         return campaigns.stream()
-                .map(Campaign::getSurvey)
+                .map((campaign) -> new SurveyListElementDto(campaign.getId(),
+                        campaign.getSurvey().getTitle(),
+                        campaign.getSurvey().getDescription()))
                 .collect(Collectors.toList());
+
+//
+//        return campaigns.stream()
+//                .map(Campaign::getSurvey)
+//                .collect(Collectors.toList());
 
     }
 }

@@ -1,5 +1,6 @@
 package com.roal.survey_engine.web;
 
+import com.roal.survey_engine.dto.SurveyListElementDto;
 import com.roal.survey_engine.entity.survey.Survey;
 import com.roal.survey_engine.service.SurveyService;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,8 @@ public class SurveyController {
         return surveyService.save(survey);
     }
 
-    @GetMapping("/")
-    public List<Survey> getPublicSurveys() {
+    @GetMapping("")
+    public List<SurveyListElementDto> getPublicSurveys() {
         return surveyService.getPublicAndActiveSurveys();
     }
 }
