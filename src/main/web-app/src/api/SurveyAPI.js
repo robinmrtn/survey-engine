@@ -7,3 +7,9 @@ export async function getSurvey(id) {
     const {data: response} = await axios.get(url);
     return response;
 }
+
+export async function getSurveys() {
+    const url = apiurl + "surveys/"
+    const {data: response} = await axios.get(url)
+    return response
+}
