@@ -19,11 +19,10 @@ import java.util.Objects;
 public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected long id;
 
     protected int position;
-
 
     public long getId() {
         return id;
