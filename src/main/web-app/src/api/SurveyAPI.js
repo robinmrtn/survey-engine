@@ -13,3 +13,8 @@ export async function getSurveys() {
     const {data: response} = await axios.get(url)
     return response
 }
+
+export async function postSurveyResponse(id, data) {
+    const url = apiurl + "responses/campaigns/" + id;
+    return await axios.post(url, data)
+}
