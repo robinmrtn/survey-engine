@@ -48,6 +48,7 @@ public class SurveyResponse {
     }
 
     public void setElementResponses(List<AbstractElementResponse> elementResponses) {
+        elementResponses.forEach(e -> e.setSurveyResponse(this));
         this.elementResponses = elementResponses;
     }
 

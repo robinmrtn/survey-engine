@@ -20,6 +20,4 @@ public class SurveyResponseDto {
     public void setElementResponseDtos(List<ElementResponseDto> elementResponseDtos) {
         this.elementResponseDtos = elementResponseDtos;
     }
-
-
 }
