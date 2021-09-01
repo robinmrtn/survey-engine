@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import SurveyPage from "./SurveyPage";
 import {useParams} from "react-router-dom";
-import {getSurvey} from "../api/SurveyAPI";
+import {getSurvey, postSurveyResponse} from "../api/SurveyAPI";
 import ErrorDialog from "./ErrorDialog";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -40,6 +40,28 @@ export default function Survey() {
         }
     }
 
+    function submitHandler(e) {
+        e.preventDefault()
+        let dto = inputsToResponseDto(inputs);
+        postSurveyResponse(surveyId, dto).then(r => console.log(r))
+    }
+
+    function inputsToResponseDto(inputs) {
+        let dto = []
+        for (let [key, value] of Object.entries(inputs)) {
+            key = parseInt(key)
+            dto.push({id: key, value: value, type: getElementTypeById(key)})
+        }
+        return {elementResponseDtos: dto}
+    }
+
+    function getElementTypeById(id) {
+        const element = survey.surveyPages.reduce((acc, x) => acc.concat([x.surveyPageElements]), [])
+            .reduce((acc, x) => [...acc, ...x], [])
+            .find(e => e.id === id);
+        return element.type
+    }
+
     if (survey !== null && error === null) {
         isLastPage = pagePosition === survey.surveyPages.length - 1
         return (
@@ -59,7 +81,8 @@ export default function Survey() {
                             onClick={previousHandler}>Previous</button>}
                         {!isLastPage
                             ? <button className="btn btn-primary" onClick={nextHandler}>Next</button>
-                            : <button className="btn btn-success" ref={submitButton}>Submit</button>
+                            : <button className="btn btn-success" ref={submitButton}
+                                      onClick={submitHandler}>Submit</button>
                         }
                     </div>
                 </div>
