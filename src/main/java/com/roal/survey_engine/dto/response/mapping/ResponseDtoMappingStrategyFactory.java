@@ -2,6 +2,7 @@ package com.roal.survey_engine.dto.response.mapping;
 
 import com.roal.survey_engine.dto.response.ClosedQuestionResponseDto;
 import com.roal.survey_engine.dto.response.ElementResponseDto;
+import com.roal.survey_engine.dto.response.OpenNumericQuestionResponseDto;
 import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
 
 public class ResponseDtoMappingStrategyFactory {
@@ -10,6 +11,8 @@ public class ResponseDtoMappingStrategyFactory {
             return new OpenTextQuestionResponseDtoMappingStrategy();
         } else if (dto instanceof ClosedQuestionResponseDto) {
             return new ClosedQuestionResponseDtoMappingStrategy();
+        } else if (dto instanceof OpenNumericQuestionResponseDto) {
+            return new OpenNumericQuestionResponseMappingStrategy();
         }
 
         throw new RuntimeException("Invalid ElementResponseDto type");

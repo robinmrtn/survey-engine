@@ -18,7 +18,7 @@ class OpenTextQuestionResponseDtoMappingStrategy implements ResponseDtoMappingSt
 
         var elementResponse = new OpenTextQuestionResponse();
         AbstractSurveyElement surveyElement =
-                findSurveyElementById(survey, elementResponseDto.getElementId());
+                findSurveyElementById(survey, elementResponseDto.getId());
 
         elementResponse.setAnswer(elementResponseDto.getValue());
         elementResponse.setOpenQuestion((OpenTextQuestion) surveyElement);

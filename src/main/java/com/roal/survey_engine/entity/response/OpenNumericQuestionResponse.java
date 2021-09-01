@@ -14,4 +14,8 @@ public class OpenNumericQuestionResponse extends AbstractOpenQuestionResponse<Do
     public OpenNumericQuestionResponse() {
         // needed for hibernate
     }
+
+    public void setOpenNumericQuestion(OpenNumericQuestion openNumericQuestion) {
+        this.openNumericQuestion = openNumericQuestion;
+    }
 }
