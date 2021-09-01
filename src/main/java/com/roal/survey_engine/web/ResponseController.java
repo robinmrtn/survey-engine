@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @Controller
 @RequestMapping("api/responses")
 public class ResponseController {
@@ -20,10 +21,12 @@ public class ResponseController {
         this.campaignService = campaignService;
     }
 
-    @PostMapping("/surveys/{id}")
+    @PostMapping("/campaigns/{campaignId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurveyResponse(@PathVariable long id, @RequestBody SurveyResponseDto surveyResponseDto) {
-        var campaign = campaignService.findCampaignById(id);
+    public void postSurveyResponse(@PathVariable long campaignId,
+                                   @RequestBody SurveyResponseDto surveyResponseDto) {
+
+        var campaign = campaignService.findCampaignById(campaignId);
         responseService.insertSurveyResponseDto(campaign, surveyResponseDto);
     }
 }
