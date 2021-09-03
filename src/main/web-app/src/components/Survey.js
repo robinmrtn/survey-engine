@@ -4,6 +4,8 @@ import {useParams} from "react-router-dom";
 import {getSurvey, postSurveyResponse} from "../api/SurveyAPI";
 import ErrorDialog from "./ErrorDialog";
 import LoadingSpinner from "./LoadingSpinner";
+import SubmitButton from "./SubmitButton";
+import SuccessPage from "./SuccessPage";
 
 export default function Survey() {
     const [survey, setSurvey] = useState(null);
@@ -12,6 +14,9 @@ export default function Survey() {
     const [pagePosition, setPagePosition] = useState(0)
     const {surveyId} = useParams();
     const [inputs, setInputs] = useState({})
+    const [submitted, setSubmitted] = useState(false);
+    const [finished, setFinished] = useState(false);
+
     useEffect(() => {
         getSurvey(surveyId)
             .then((res) => setSurvey(res))
@@ -42,8 +47,11 @@ export default function Survey() {
 
     function submitHandler(e) {
         e.preventDefault()
-        let dto = inputsToResponseDto(inputs);
-        postSurveyResponse(surveyId, dto).then(r => console.log(r))
+        setSubmitted(true)
+        const dto = inputsToResponseDto(inputs);
+        postSurveyResponse(surveyId, dto)
+            .then(() => setFinished(true))
+            .catch((error) => setError(error))
     }
 
     function inputsToResponseDto(inputs) {
@@ -62,7 +70,11 @@ export default function Survey() {
         return element.type
     }
 
-    if (survey !== null && error === null) {
+    if (error !== null) {
+        return <ErrorDialog message={error.message}/>
+    } else if (finished) {
+        return <SuccessPage message={"Thanks"}/>
+    } else if (survey !== null) {
         isLastPage = pagePosition === survey.surveyPages.length - 1
         return (
             <div>
@@ -81,15 +93,14 @@ export default function Survey() {
                             onClick={previousHandler}>Previous</button>}
                         {!isLastPage
                             ? <button className="btn btn-primary" onClick={nextHandler}>Next</button>
-                            : <button className="btn btn-success" ref={submitButton}
-                                      onClick={submitHandler}>Submit</button>
+                            : <SubmitButton
+                                submitHandler={submitHandler}
+                                loading={submitted}/>
                         }
                     </div>
                 </div>
             </div>
         );
-    } else if (error !== null) {
-        return <ErrorDialog message={error.message}/>
     } else {
         return <LoadingSpinner/>
     }
