@@ -55,7 +55,7 @@ export default function Survey() {
     }
 
     function inputsToResponseDto(inputs) {
-        let dto = []
+        const dto = []
         for (let [key, value] of Object.entries(inputs)) {
             key = parseInt(key)
             dto.push({id: key, value: value, type: getElementTypeById(key)})
@@ -70,7 +70,7 @@ export default function Survey() {
         return element.type
     }
 
-    if (error !== null) {
+    if (error) {
         return <ErrorDialog message={error.message}/>
     } else if (finished) {
         return <SuccessPage message={"Thanks"}/>
@@ -79,7 +79,7 @@ export default function Survey() {
         return (
             <div>
                 <h1>{survey.title}</h1>
-                <p>{survey.description}</p>
+                <p><em>{survey.description}</em></p>
                 <SurveyPage
                     page={survey.surveyPages[pagePosition]}
                     setPagePosition={setPagePosition}

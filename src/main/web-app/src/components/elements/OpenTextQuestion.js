@@ -6,14 +6,17 @@ export default function OpenTextQuestion({element, inputs, setInputs}) {
     }
 
     return (
-        <div><p><b>
-            {element.question}
-        </b>
-        </p>
-            <p>
-                <input className="form-control" type='text' value={inputs[element.id] || ''} onChange={onChangeHandler}
-                       id={element.id}/>
-            </p>
+        <div className="card">
+            <div className="card-body">
+                <h5 className="card-title">
+                    {element.question}
+                </h5>
+                <p>
+                    <input className="form-control" type='text' value={inputs[element.id] || ''}
+                           onChange={onChangeHandler}
+                           id={element.id}/>
+                </p>
+            </div>
         </div>
     )
 }
