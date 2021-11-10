@@ -21,7 +21,7 @@ export default function SurveyList() {
     }, []);
 
     if (surveys && Object.keys(surveys).length !== 0) {
-        return <ul>{surveys.map(element => <li key={element.id}><Link to={'/survey/' + element.id}>{element.name}</Link>
+        return<ul>{surveys.map(element => <li key={element.id}><Link to={'/survey/' + element.id}>{element.name}</Link>
         </li>)} </ul>
     } else if (error !== null) {
         return (
@@ -30,5 +30,4 @@ export default function SurveyList() {
     } else {
         return <LoadingSpinner/>
     }
-
 }

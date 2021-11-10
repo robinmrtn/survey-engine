@@ -1,9 +1,10 @@
 package com.roal.survey_engine.repository;
 
-import com.roal.survey_engine.entity.question.ClosedQuestion;
-import com.roal.survey_engine.entity.question.OpenTextQuestion;
-import com.roal.survey_engine.entity.survey.Survey;
-import com.roal.survey_engine.entity.survey.SurveyPage;
+import com.roal.survey_engine.survey.entity.Survey;
+import com.roal.survey_engine.survey.entity.SurveyPage;
+import com.roal.survey_engine.survey.entity.question.ClosedQuestion;
+import com.roal.survey_engine.survey.entity.question.OpenTextQuestion;
+import com.roal.survey_engine.survey.repository.SurveyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ class SurveyJpaRepositoryTest {
         var receivedSurvey = surveyRepository.findById(survey.getId());
 
         assertAll(() -> assertTrue(receivedSurvey.isPresent()),
-                () -> assertEquals(2, receivedSurvey.get().getSurveyPages().size()),
+                () -> assertEquals(1, receivedSurvey.get().getSurveyPages().size()),
                 () -> assertEquals(2, receivedSurvey.get().getSurveyPages().get(0)
                         .getSurveyPageElements().size()),
                 () -> assertEquals(survey, receivedSurvey.get()),

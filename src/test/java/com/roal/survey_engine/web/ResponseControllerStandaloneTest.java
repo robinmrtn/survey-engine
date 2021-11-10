@@ -1,17 +1,18 @@
 package com.roal.survey_engine.web;
 
-import com.roal.survey_engine.dto.response.ElementResponseDto;
-import com.roal.survey_engine.dto.response.OpenNumericQuestionResponseDto;
-import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
-import com.roal.survey_engine.dto.response.SurveyResponseDto;
-import com.roal.survey_engine.entity.question.OpenNumericQuestion;
-import com.roal.survey_engine.entity.question.OpenTextQuestion;
-import com.roal.survey_engine.entity.survey.Campaign;
-import com.roal.survey_engine.entity.survey.Survey;
-import com.roal.survey_engine.entity.survey.SurveyPage;
-import com.roal.survey_engine.exception.SurveyNotFoundException;
-import com.roal.survey_engine.service.CampaignService;
-import com.roal.survey_engine.service.ResponseService;
+import com.roal.survey_engine.response.controller.ResponseController;
+import com.roal.survey_engine.response.dto.ElementResponseDto;
+import com.roal.survey_engine.response.dto.OpenNumericQuestionResponseDto;
+import com.roal.survey_engine.response.dto.OpenQuestionResponseDto;
+import com.roal.survey_engine.response.dto.SurveyResponseDto;
+import com.roal.survey_engine.response.service.ResponseService;
+import com.roal.survey_engine.survey.entity.Campaign;
+import com.roal.survey_engine.survey.entity.Survey;
+import com.roal.survey_engine.survey.entity.SurveyPage;
+import com.roal.survey_engine.survey.entity.question.OpenNumericQuestion;
+import com.roal.survey_engine.survey.entity.question.OpenTextQuestion;
+import com.roal.survey_engine.survey.exception.SurveyNotFoundException;
+import com.roal.survey_engine.survey.service.CampaignService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ class ResponseControllerStandaloneTest {
 
         given(campaignService.findCampaignById(2)).willReturn(campaign);
         String json = jsonSurveyResponseDto.write(responseDto).getJson();
-        MockHttpServletResponse response = mvc.perform(post("/api/responses/surveys/2")
+        MockHttpServletResponse response = mvc.perform(post("/api/responses/campaigns/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonSurveyResponseDto.write(responseDto).getJson()))
                 .andReturn().getResponse();

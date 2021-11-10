@@ -1,17 +1,17 @@
 package com.roal.survey_engine.integration;
 
-import com.roal.survey_engine.dto.response.ElementResponseDto;
-import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
-import com.roal.survey_engine.dto.response.SurveyResponseDto;
-import com.roal.survey_engine.entity.question.AbstractSurveyElement;
-import com.roal.survey_engine.entity.question.OpenTextQuestion;
-import com.roal.survey_engine.entity.response.SurveyResponse;
-import com.roal.survey_engine.entity.survey.Campaign;
-import com.roal.survey_engine.entity.survey.Survey;
-import com.roal.survey_engine.entity.survey.SurveyPage;
-import com.roal.survey_engine.repository.CampaignRepository;
-import com.roal.survey_engine.repository.ResponseRepository;
-import com.roal.survey_engine.repository.SurveyRepository;
+import com.roal.survey_engine.response.dto.ElementResponseDto;
+import com.roal.survey_engine.response.dto.OpenQuestionResponseDto;
+import com.roal.survey_engine.response.dto.SurveyResponseDto;
+import com.roal.survey_engine.response.entity.SurveyResponse;
+import com.roal.survey_engine.response.repository.ResponseRepository;
+import com.roal.survey_engine.survey.entity.Campaign;
+import com.roal.survey_engine.survey.entity.Survey;
+import com.roal.survey_engine.survey.entity.SurveyPage;
+import com.roal.survey_engine.survey.entity.question.AbstractSurveyElement;
+import com.roal.survey_engine.survey.entity.question.OpenTextQuestion;
+import com.roal.survey_engine.survey.repository.CampaignRepository;
+import com.roal.survey_engine.survey.repository.SurveyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,7 +51,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/surveys/" + campaignId,
+                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         List<SurveyResponse> responses = responseRepository.findAllByCampaignId(campaignId);
@@ -71,7 +71,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0) + 1;
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/surveys/" + campaignId,
+                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -86,7 +86,7 @@ class SurveyResponseIntegrationTest {
         long openQuestionId = getSurveyElementId(survey, OpenTextQuestion.class, 0);
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/surveys/" + campaignId + 1,
+                restTemplate.postForEntity("/api/responses/campaigns/" + campaignId + 1,
                         createSurveyResponseDto(openQuestionId), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());

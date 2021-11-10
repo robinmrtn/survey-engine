@@ -1,19 +1,19 @@
 package com.roal.survey_engine.dto;
 
-import com.roal.survey_engine.dto.response.ClosedQuestionResponseDto;
-import com.roal.survey_engine.dto.response.ElementResponseDto;
-import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
-import com.roal.survey_engine.dto.response.SurveyResponseDto;
-import com.roal.survey_engine.dto.response.mapping.ResponseDtoMapper;
-import com.roal.survey_engine.entity.question.ClosedQuestionAnswer;
-import com.roal.survey_engine.entity.question.OpenTextQuestion;
-import com.roal.survey_engine.entity.response.AbstractElementResponse;
-import com.roal.survey_engine.entity.response.ClosedQuestionResponse;
-import com.roal.survey_engine.entity.response.OpenTextQuestionResponse;
-import com.roal.survey_engine.entity.response.SurveyResponse;
-import com.roal.survey_engine.entity.survey.Campaign;
-import com.roal.survey_engine.entity.survey.Survey;
-import com.roal.survey_engine.entity.survey.SurveyPage;
+import com.roal.survey_engine.response.dto.ClosedQuestionResponseDto;
+import com.roal.survey_engine.response.dto.ElementResponseDto;
+import com.roal.survey_engine.response.dto.OpenQuestionResponseDto;
+import com.roal.survey_engine.response.dto.SurveyResponseDto;
+import com.roal.survey_engine.response.dto.mapping.ResponseDtoMapper;
+import com.roal.survey_engine.response.entity.AbstractElementResponse;
+import com.roal.survey_engine.response.entity.ClosedQuestionResponse;
+import com.roal.survey_engine.response.entity.OpenTextQuestionResponse;
+import com.roal.survey_engine.response.entity.SurveyResponse;
+import com.roal.survey_engine.survey.entity.Campaign;
+import com.roal.survey_engine.survey.entity.Survey;
+import com.roal.survey_engine.survey.entity.SurveyPage;
+import com.roal.survey_engine.survey.entity.question.ClosedQuestionAnswer;
+import com.roal.survey_engine.survey.entity.question.OpenTextQuestion;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.roal.survey_engine.entity.question.ClosedQuestion.ClosedQuestionBuilder;
+import static com.roal.survey_engine.survey.entity.question.ClosedQuestion.ClosedQuestionBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)

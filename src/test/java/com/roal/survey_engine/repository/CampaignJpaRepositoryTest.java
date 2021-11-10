@@ -1,6 +1,7 @@
 package com.roal.survey_engine.repository;
 
-import com.roal.survey_engine.entity.survey.Campaign;
+import com.roal.survey_engine.survey.entity.Campaign;
+import com.roal.survey_engine.survey.repository.CampaignRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

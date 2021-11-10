@@ -1,13 +1,14 @@
 package com.roal.survey_engine.service;
 
-import com.roal.survey_engine.dto.response.ElementResponseDto;
-import com.roal.survey_engine.dto.response.OpenQuestionResponseDto;
-import com.roal.survey_engine.dto.response.SurveyResponseDto;
-import com.roal.survey_engine.entity.survey.Campaign;
-import com.roal.survey_engine.entity.survey.Survey;
-import com.roal.survey_engine.exception.SurveyNotFoundException;
-import com.roal.survey_engine.repository.CampaignRepository;
-import com.roal.survey_engine.repository.SurveyRepository;
+import com.roal.survey_engine.response.dto.ElementResponseDto;
+import com.roal.survey_engine.response.dto.OpenQuestionResponseDto;
+import com.roal.survey_engine.response.dto.SurveyResponseDto;
+import com.roal.survey_engine.survey.entity.Campaign;
+import com.roal.survey_engine.survey.entity.Survey;
+import com.roal.survey_engine.survey.exception.SurveyNotFoundException;
+import com.roal.survey_engine.survey.repository.CampaignRepository;
+import com.roal.survey_engine.survey.repository.SurveyRepository;
+import com.roal.survey_engine.survey.service.SurveyService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
