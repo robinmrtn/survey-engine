@@ -3,9 +3,9 @@ package com.roal.survey_engine.response.service;
 import com.roal.survey_engine.response.dto.SurveyResponseDto;
 import com.roal.survey_engine.response.dto.mapping.ResponseDtoMapper;
 import com.roal.survey_engine.response.entity.SurveyResponse;
+import com.roal.survey_engine.response.exception.ResponseNotFoundException;
 import com.roal.survey_engine.response.repository.ResponseRepository;
 import com.roal.survey_engine.survey.entity.Campaign;
-import com.roal.survey_engine.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.survey.service.CampaignService;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class ResponseService {
     }
 
     public SurveyResponse getResponseById(long id) {
-        return responseRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
+        return responseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException(id));
     }
 
 }
