@@ -28,14 +28,14 @@ public class SurveyService {
     }
 
     public Survey findSurveyById(long id) {
-        return surveyRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
+        return surveyRepository.findById(id).orElseThrow(() -> new SurveyNotFoundException(id));
     }
 
     public Survey findSurveyByCampaignId(long campaignId) {
         var campaign = campaignRepository
-                .findById(campaignId).orElseThrow(SurveyNotFoundException::new);
+                .findById(campaignId).orElseThrow(() -> new SurveyNotFoundException(campaignId));
         if (campaign.getSurvey() == null) {
-            throw new SurveyNotFoundException();
+            throw new SurveyNotFoundException(campaignId);
         }
         return campaign.getSurvey();
     }
