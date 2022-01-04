@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ResponseRepository extends JpaRepository<SurveyResponse, Long> {
+
+    @Query("select r from SurveyResponse r where r.survey.id =:id")
     List<SurveyResponse> findAllBySurveyId(long id);
 
     @Query("select r from SurveyResponse r where r.campaign.id =:id")
