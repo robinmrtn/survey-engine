@@ -1,7 +1,7 @@
 package com.roal.survey_engine.entity;
 
 
-import com.roal.survey_engine.survey.entity.DateRange;
+import com.roal.survey_engine.domain.survey.entity.DateRange;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

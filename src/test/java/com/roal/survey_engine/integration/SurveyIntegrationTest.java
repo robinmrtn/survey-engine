@@ -2,12 +2,12 @@ package com.roal.survey_engine.integration;
 
 //import com.roal.survey_engine.dto.survey.SurveyDto;
 
-import com.roal.survey_engine.survey.entity.Campaign;
-import com.roal.survey_engine.survey.entity.Survey;
-import com.roal.survey_engine.survey.entity.SurveyPage;
-import com.roal.survey_engine.survey.entity.question.OpenTextQuestion;
-import com.roal.survey_engine.survey.repository.CampaignRepository;
-import com.roal.survey_engine.survey.repository.SurveyRepository;
+import com.roal.survey_engine.domain.survey.entity.Campaign;
+import com.roal.survey_engine.domain.survey.entity.Survey;
+import com.roal.survey_engine.domain.survey.entity.SurveyPage;
+import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
+import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
+import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
