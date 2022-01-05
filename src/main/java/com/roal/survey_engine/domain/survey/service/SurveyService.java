@@ -6,10 +6,9 @@ import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SurveyService {
@@ -40,16 +39,11 @@ public class SurveyService {
         return campaign.getSurvey();
     }
 
-    public List<SurveyListElementDto> getPublicAndActiveSurveys() {
-        return getSurveysFromCampaigns(campaignRepository.findByHiddenIsFalseAndActiveIsTrue());
+    public Page<SurveyListElementDto> getPublicAndActiveSurveys(Pageable pageable) {
+        return getSurveysFromCampaigns(campaignRepository.findByHiddenIsFalseAndActiveIsTrue(pageable));
     }
 
-    private List<SurveyListElementDto> getSurveysFromCampaigns(List<Campaign> campaigns) {
-
-        return campaigns.stream()
-                .map((campaign) -> new SurveyListElementDto(campaign.getId(),
-                        campaign.getSurvey().getTitle(),
-                        campaign.getSurvey().getDescription()))
-                .collect(Collectors.toList());
+    private Page<SurveyListElementDto> getSurveysFromCampaigns(Page<Campaign> campaigns) {
+        return campaigns.map(SurveyListElementDto::fromEntity);
     }
 }

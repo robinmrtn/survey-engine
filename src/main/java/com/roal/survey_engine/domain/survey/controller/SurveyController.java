@@ -3,10 +3,10 @@ package com.roal.survey_engine.domain.survey.controller;
 import com.roal.survey_engine.domain.survey.dto.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -31,7 +31,7 @@ public class SurveyController {
     }
 
     @GetMapping("")
-    public List<SurveyListElementDto> getPublicSurveys() {
-        return surveyService.getPublicAndActiveSurveys();
+    public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
+        return surveyService.getPublicAndActiveSurveys(pageable);
     }
 }

@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -72,11 +75,15 @@ class SurveyServiceTest {
 
     @Test
     void testGetPublicAndActiveSurveys() {
-        given(campaignRepository.findByHiddenIsFalseAndActiveIsTrue()).willReturn(
-                List.of(new Campaign().setSurvey(new Survey()),
-                        new Campaign().setSurvey(new Survey()))
-        );
-        assertEquals(2, surveyService.getPublicAndActiveSurveys().size());
+        List<Campaign> surveys = List.of(
+                new Campaign().setSurvey(new Survey()),
+                new Campaign().setSurvey(new Survey()));
+        Page<Campaign> surveyPage = new PageImpl<>(surveys);
+
+
+        given(campaignRepository.findByHiddenIsFalseAndActiveIsTrue(PageRequest.of(0, 10)))
+                .willReturn(surveyPage);
+        assertEquals(2, surveyService.getPublicAndActiveSurveys(PageRequest.of(0, 10)).getTotalElements());
     }
 
 

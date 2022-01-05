@@ -1,5 +1,8 @@
 package com.roal.survey_engine.domain.survey.dto;
 
+import com.roal.survey_engine.domain.survey.entity.Campaign;
+import com.roal.survey_engine.domain.survey.entity.Survey;
+
 import java.util.Objects;
 
 public class SurveyListElementDto {
@@ -12,6 +15,14 @@ public class SurveyListElementDto {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public static SurveyListElementDto fromEntity(Campaign campaign) {
+        return fromEntity(campaign.getSurvey());
+    }
+
+    public static SurveyListElementDto fromEntity(Survey survey) {
+        return new SurveyListElementDto(survey.getId(), survey.getTitle(), survey.getDescription());
     }
 
     public String getDescription() {
