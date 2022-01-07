@@ -15,8 +15,6 @@ import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,6 @@ import java.util.Set;
 import static com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion.ClosedQuestionBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 class ResponseDtoMapperTest {
 
     ResponseDtoMapper responseDtoMapper = new ResponseDtoMapper();
