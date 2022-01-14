@@ -28,11 +28,12 @@ public class ResponseService {
         this.campaignService = campaignService;
     }
 
-    public void insertSurveyResponseDto(long campaignId, SurveyResponseDto surveyResponseDto) {
+    public SurveyResponseDto insertSurveyResponseDto(long campaignId, SurveyResponseDto surveyResponseDto) {
         Campaign campaign = campaignService.findCampaignById(campaignId);
         SurveyResponse surveyResponse =
-                responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(campaign, surveyResponseDto);
-        responseRepository.save(surveyResponse);
+                responseDtoMapper.dtoToEntity(campaign, surveyResponseDto);
+        SurveyResponse savedSurveyResponse = responseRepository.save(surveyResponse);
+        return responseDtoMapper.entityToDto(savedSurveyResponse);
     }
 
     public List<SurveyResponse> getResponsesByCampaignId(long id) {

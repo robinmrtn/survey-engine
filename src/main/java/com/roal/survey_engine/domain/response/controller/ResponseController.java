@@ -22,9 +22,9 @@ public class ResponseController {
 
     @PostMapping("/campaigns/{campaignId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurveyResponse(@PathVariable long campaignId,
-                                   @RequestBody SurveyResponseDto surveyResponseDto) {
-        responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
+    public SurveyResponseDto postSurveyResponse(@PathVariable long campaignId,
+                                                @RequestBody SurveyResponseDto surveyResponseDto) {
+        return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
     }
 
     @GetMapping("/campaigns/{campaignId}")

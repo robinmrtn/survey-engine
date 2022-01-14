@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public final class ResponseDtoMapper {
 
-    public SurveyResponse mapSurveyResponseDtoToSurveyResponse(Campaign campaign, SurveyResponseDto surveyResponseDto) {
+    public SurveyResponse dtoToEntity(Campaign campaign, SurveyResponseDto surveyResponseDto) {
 
         var surveyResponse = new SurveyResponse();
         surveyResponse.setCampaign(campaign);
@@ -29,6 +29,20 @@ public final class ResponseDtoMapper {
         surveyResponse.setElementResponses(elementResponseList);
         surveyResponse.setSurvey(survey);
         return surveyResponse;
+
+    }
+
+    public SurveyResponseDto entityToDto(SurveyResponse surveyResponse) {
+
+        List<ElementResponseDto> elementResponseDtos = surveyResponse.getElementResponses()
+                .stream()
+                .map(this::mapElementResponseToElementResponseDto)
+                .collect(Collectors.toList());
+
+        var surveyResponseDto = new SurveyResponseDto();
+        surveyResponseDto.setElementResponseDtos(elementResponseDtos);
+
+        return surveyResponseDto;
 
     }
 
