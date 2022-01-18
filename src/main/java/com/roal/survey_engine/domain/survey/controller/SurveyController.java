@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.survey.controller;
 
+import com.roal.survey_engine.domain.survey.dto.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.SurveyListElementDto;
-import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +20,14 @@ public class SurveyController {
     }
 
     @GetMapping("/{id}")
-    public Survey getSurveyById(@PathVariable long id) {
+    public SurveyDto getSurveyById(@PathVariable long id) {
         return surveyService.findSurveyByCampaignId(id);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Survey postSurvey(@RequestBody Survey survey) {
-        return surveyService.save(survey);
+    public SurveyDto postSurvey(@RequestBody SurveyDto survey) {
+        return surveyService.saveDto(survey);
     }
 
     @GetMapping("")
