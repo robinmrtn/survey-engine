@@ -12,7 +12,6 @@ import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +72,6 @@ public class SurveyIntegrationTest {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
-    @Disabled
     @Test
     @DisplayName("should return 201 when new Survey is submitted")
     void postNewSurvey() throws Exception {
