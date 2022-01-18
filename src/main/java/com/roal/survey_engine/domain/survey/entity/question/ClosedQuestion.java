@@ -9,6 +9,11 @@ public class ClosedQuestion extends AbstractSurveyElement {
 
     private String question;
 
+    public ClosedQuestion setAnswers(List<ClosedQuestionAnswer> answers) {
+        this.answers = answers;
+        return this;
+    }
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "closed_question_id")
     private List<ClosedQuestionAnswer> answers = new ArrayList<>();
