@@ -1,6 +1,10 @@
 package com.roal.survey_engine.domain.survey.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Campaign {
@@ -20,6 +24,12 @@ public class Campaign {
     private boolean active;
 
     private boolean hidden;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public Campaign() {
         // needed by hibernate

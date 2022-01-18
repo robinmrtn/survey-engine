@@ -1,8 +1,11 @@
 package com.roal.survey_engine.domain.survey.entity;
 
 import com.roal.survey_engine.domain.survey.entity.question.AbstractSurveyElement;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +25,12 @@ public class SurveyPage {
     public SurveyPage() {
         // needed by Hibernate
     }
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public long getId() {
         return id;
