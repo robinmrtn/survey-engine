@@ -1,6 +1,5 @@
 package com.roal.survey_engine.domain.response.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,12 +18,10 @@ public class SurveyResponse {
     @GeneratedValue
     private long id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;

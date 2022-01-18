@@ -1,7 +1,5 @@
 package com.roal.survey_engine.domain.survey.entity.question;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,14 +9,6 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = OpenTextQuestion.class, name = "opq"),
-        @JsonSubTypes.Type(value = ClosedQuestion.class, name = "clq"),
-        @JsonSubTypes.Type(value = OpenNumericQuestion.class, name = "opnq"),
-})
 public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
 
     @Id

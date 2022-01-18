@@ -1,7 +1,5 @@
 package com.roal.survey_engine.domain.response.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -13,7 +11,6 @@ public abstract class AbstractElementResponse {
     @GeneratedValue
     protected long id;
 
-    @JsonIgnore
     @ManyToOne
     private SurveyResponse surveyResponse;
 
