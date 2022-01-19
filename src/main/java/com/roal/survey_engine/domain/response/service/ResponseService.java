@@ -7,9 +7,9 @@ import com.roal.survey_engine.domain.response.exception.ResponseNotFoundExceptio
 import com.roal.survey_engine.domain.response.repository.ResponseRepository;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ResponseService {
@@ -36,12 +36,15 @@ public class ResponseService {
         return responseDtoMapper.entityToDto(savedSurveyResponse);
     }
 
-    public List<SurveyResponse> getResponsesByCampaignId(long id) {
-        return responseRepository.findAllByCampaignId(id);
+    public Page<SurveyResponseDto> getResponsesByCampaignId(long id, Pageable pageable) {
+        return responseRepository.findAllByCampaignId(id, pageable)
+                .map(responseDtoMapper::entityToDto);
     }
 
-    public SurveyResponse getResponseById(long id) {
-        return responseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException(id));
+    public SurveyResponseDto getResponseById(long id) {
+        SurveyResponse surveyResponse = responseRepository.findById(id)
+                .orElseThrow(() -> new ResponseNotFoundException(id));
+        return responseDtoMapper.entityToDto(surveyResponse);
     }
 
 }
