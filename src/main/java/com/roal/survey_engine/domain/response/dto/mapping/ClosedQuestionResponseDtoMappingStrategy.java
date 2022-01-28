@@ -23,7 +23,7 @@ public class ClosedQuestionResponseDtoMappingStrategy implements ResponseDtoMapp
 
         var elementResponse = new ClosedQuestionResponse();
         AbstractSurveyElement surveyElement =
-                findSurveyElementById(survey, elementResponseDto.getId());
+                findSurveyElementById(survey, elementResponseDto.getElementId());
 
         List<ClosedQuestionAnswer> closedQuestionAnswers =
                 getClosedQuestionAnswers(survey, elementResponseDto);
@@ -42,7 +42,7 @@ public class ClosedQuestionResponseDtoMappingStrategy implements ResponseDtoMapp
                 .stream()
                 .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
                 .filter(ClosedQuestion.class::isInstance)
-                .filter(e -> e.getId() == elementResponseDto.getId())
+                .filter(e -> e.getId() == elementResponseDto.getElementId())
                 .flatMap(e -> ((ClosedQuestion) e).getAnswers().stream())
                 .filter(closedQuestionAnswer -> answerIds.contains(closedQuestionAnswer.getId()))
                 .collect(Collectors.toList());

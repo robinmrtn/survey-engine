@@ -36,7 +36,7 @@ class ResponseDtoMapperTest {
         SurveyResponseDto surveyResponseDto = getSurveyResponseDto();
 
         // Act
-        SurveyResponse surveyResponse = responseDtoMapper.mapSurveyResponseDtoToSurveyResponse(campaign, surveyResponseDto);
+        SurveyResponse surveyResponse = responseDtoMapper.dtoToEntity(campaign, surveyResponseDto);
         List<AbstractElementResponse> elementResponses = surveyResponse.getElementResponses();
 
         Optional<AbstractElementResponse> openQuestionResponse = elementResponses

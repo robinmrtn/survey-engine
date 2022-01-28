@@ -14,21 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class ElementResponseDto {
 
-    protected long id;
+    protected long elementId;
 
     protected ElementResponseDto(long elementId) {
-        this.id = elementId;
+        this.elementId = elementId;
     }
 
     public ElementResponseDto() {
     }
 
-    public long getId() {
-        return id;
+    public long getElementId() {
+        return elementId;
     }
 
-    public ElementResponseDto setId(long id) {
-        this.id = id;
+    public ElementResponseDto setElementId(long elementId) {
+        this.elementId = elementId;
         return this;
     }
 

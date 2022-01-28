@@ -40,6 +40,7 @@ public final class ResponseDtoMapper {
                 .collect(Collectors.toList());
 
         var surveyResponseDto = new SurveyResponseDto();
+        surveyResponseDto.setId(surveyResponse.getId());
         surveyResponseDto.setElementResponseDtos(elementResponseDtos);
 
         return surveyResponseDto;
@@ -51,11 +52,11 @@ public final class ResponseDtoMapper {
         if (elementResponse instanceof OpenNumericQuestionResponse) {
             return new OpenNumericQuestionResponseDto()
                     .setValue(((OpenNumericQuestionResponse) elementResponse).getAnswer())
-                    .setId(((OpenNumericQuestionResponse) elementResponse).getOpenNumericQuestion().getId());
+                    .setElementId(((OpenNumericQuestionResponse) elementResponse).getOpenNumericQuestion().getId());
         } else if (elementResponse instanceof OpenTextQuestionResponse) {
             return new OpenQuestionResponseDto()
                     .setValue(((OpenTextQuestionResponse) elementResponse).getAnswer())
-                    .setId(((OpenTextQuestionResponse) elementResponse).getOpenQuestion().getId());
+                    .setElementId(((OpenTextQuestionResponse) elementResponse).getOpenQuestion().getId());
         } else if (elementResponse instanceof ClosedQuestionResponse) {
             Set<Long> answerIds = ((ClosedQuestionResponse) elementResponse).getAnswers()
                     .stream()
@@ -63,7 +64,7 @@ public final class ResponseDtoMapper {
                     .collect(Collectors.toSet());
             return new ClosedQuestionResponseDto()
                     .setAnswers(answerIds)
-                    .setId(((ClosedQuestionResponse) elementResponse).getClosedQuestion().getId());
+                    .setElementId(((ClosedQuestionResponse) elementResponse).getClosedQuestion().getId());
         } else {
             throw new RuntimeException();
         }

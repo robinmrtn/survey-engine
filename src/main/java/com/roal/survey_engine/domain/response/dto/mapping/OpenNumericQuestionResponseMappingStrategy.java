@@ -12,7 +12,7 @@ public class OpenNumericQuestionResponseMappingStrategy implements ResponseDtoMa
     private OpenNumericQuestionResponse getOpenNumericQuestionResponse(Survey survey, OpenNumericQuestionResponseDto dto) {
         var elementResponse = new OpenNumericQuestionResponse();
         AbstractSurveyElement surveyElement =
-                findSurveyElementById(survey, dto.getId());
+                findSurveyElementById(survey, dto.getElementId());
 
         elementResponse.setAnswer(dto.getValue());
         elementResponse.setOpenNumericQuestion((OpenNumericQuestion) surveyElement);
