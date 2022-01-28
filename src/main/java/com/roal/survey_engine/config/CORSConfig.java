@@ -1,4 +1,4 @@
-package com.roal.survey_engine.security;
+package com.roal.survey_engine.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -11,5 +11,6 @@ public class CORSConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**").allowedOrigins("http://localhost:3000").allowCredentials(true);
         registry.addMapping("/h2/**").allowedOrigins("http://localhost");
+        registry.addMapping("/swagger-ui/**").allowedOrigins("http://localhost");
     }
 }
