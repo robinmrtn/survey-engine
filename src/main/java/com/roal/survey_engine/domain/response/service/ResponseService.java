@@ -9,7 +9,9 @@ import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ResponseService {
@@ -37,8 +39,15 @@ public class ResponseService {
     }
 
     public Page<SurveyResponseDto> getResponsesByCampaignId(long id, Pageable pageable) {
-        return responseRepository.findAllByCampaignId(id, pageable)
+
+        Page<SurveyResponseDto> responseDtos = responseRepository.findAllByCampaignId(id, pageable)
                 .map(responseDtoMapper::entityToDto);
+
+        if (responseDtos.getTotalElements() == 0 && !campaignService.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Campaign with id " + id + " not found");
+        }
+
+        return responseDtos;
     }
 
     public SurveyResponseDto getResponseById(long id) {

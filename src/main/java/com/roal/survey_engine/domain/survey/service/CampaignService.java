@@ -17,4 +17,8 @@ public class CampaignService {
     public Campaign findCampaignById(long id) {
         return campaignRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
     }
+
+    public boolean existsById(long id) {
+        return campaignRepository.existsById(id);
+    }
 }
