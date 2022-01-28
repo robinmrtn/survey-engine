@@ -1,6 +1,8 @@
 package com.roal.survey_engine.config;
 
 import com.roal.survey_engine.security.DefaultAccessDeniedHandler;
+import com.roal.survey_engine.security.RESTAuthenticationFailureHandler;
+import com.roal.survey_engine.security.RESTAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @EnableWebSecurity
@@ -16,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("test").roles("USER");
+        auth.inMemoryAuthentication().withUser("user").password("{noop}test").roles("USER");
     }
 
     @Override
@@ -29,7 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.cors()
             .and()
-            .formLogin().permitAll()
+            .formLogin()
+            .loginProcessingUrl("/api/authentication")
+            .failureHandler(authenticationFailureHandler())
+            .successHandler(authenticationSuccessHandler())
+            .permitAll()
             .and()
             .exceptionHandling()
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
@@ -46,5 +54,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     AccessDeniedHandler accessDeniedHandler() {
         return new DefaultAccessDeniedHandler();
+    }
+
+    @Bean
+    AuthenticationFailureHandler authenticationFailureHandler() {
+        return new RESTAuthenticationFailureHandler();
+    }
+
+    @Bean
+    AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new RESTAuthenticationSuccessHandler();
     }
 }
