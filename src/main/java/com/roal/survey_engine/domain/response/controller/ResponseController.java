@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -29,27 +30,36 @@ public class ResponseController {
     @Operation(summary = "Add a new response to a campaign")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Success",
-                    content = @Content(mediaType = "application/json",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SurveyResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid Input")})
-    @PostMapping(value = "/campaigns/{campaignId}", consumes = "application/json")
+    @PostMapping(value = "/campaigns/{campaignId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyResponseDto postSurveyResponse(@PathVariable long campaignId,
                                                 @RequestBody SurveyResponseDto surveyResponseDto) {
         return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
     }
 
-    @GetMapping("/campaigns/{campaignId}")
+    @Operation(summary = "Find responses for a campaign by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE
+                    )),
+            @ApiResponse(responseCode = "404", description = "Campaign not found")
+    })
+    @GetMapping(value = "/campaigns/{campaignId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<SurveyResponseDto> getSurveyResponsesById(@PathVariable long campaignId, Pageable pageable) {
         return responseService.getResponsesByCampaignId(campaignId, pageable);
     }
 
-    @Operation(summary = "Find Response by ID")
+    @Operation(summary = "Find response by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful", content = @Content(schema = @Schema(implementation = SurveyResponseDto.class))),
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "Response not found")
     })
-    @GetMapping("/{responseId}")
+    @GetMapping(value = "/{responseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public SurveyResponseDto getSurveyResponseById(@PathVariable long responseId) {
         return responseService.getResponseById(responseId);
     }
