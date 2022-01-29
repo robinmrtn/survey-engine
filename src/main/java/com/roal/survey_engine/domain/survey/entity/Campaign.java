@@ -35,9 +35,35 @@ public class Campaign {
         // needed by hibernate
     }
 
+    public DateRange getDateRange() {
+        return dateRange;
+    }
+
+    public Campaign setDateRange(DateRange dateRange) {
+        this.dateRange = dateRange;
+        return this;
+    }
+
     public Campaign setId(long id) {
         this.id = id;
         return this;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Campaign setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public Survey getSurvey() {
