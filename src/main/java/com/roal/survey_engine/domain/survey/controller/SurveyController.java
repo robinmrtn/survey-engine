@@ -1,15 +1,23 @@
 package com.roal.survey_engine.domain.survey.controller;
 
-import com.roal.survey_engine.domain.survey.dto.SurveyDto;
-import com.roal.survey_engine.domain.survey.dto.SurveyListElementDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/surveys")
+@Tag(name = "Survey", description = "Survey API")
 public class SurveyController {
 
     private final SurveyService surveyService;
@@ -18,18 +26,32 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @GetMapping("/{id}")
+    @Operation(summary = "Find survey by ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successful",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = SurveyDto.class))),
+        @ApiResponse(responseCode = "404", description = "Survey not found")
+    })
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public SurveyDto getSurveyById(@PathVariable long id) {
         return surveyService.findSurveyByCampaignId(id);
     }
 
-    @PostMapping("")
+    @Operation(summary = "Create new survey")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Success",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = SurveyDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid Input")})
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyDto postSurvey(@RequestBody SurveyDto survey) {
         return surveyService.saveDto(survey);
     }
 
-    @GetMapping("")
+    @Operation(summary = "Find all surveys")
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
         return surveyService.getPublicAndActiveSurveys(pageable);
     }

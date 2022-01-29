@@ -42,8 +42,9 @@ public class ResponseController {
     @Operation(summary = "Find responses for a campaign by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )),
+                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class)
+                )),
             @ApiResponse(responseCode = "404", description = "Campaign not found")
     })
     @GetMapping(value = "/campaigns/{campaignId}", produces = MediaType.APPLICATION_JSON_VALUE)
