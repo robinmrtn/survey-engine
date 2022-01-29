@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.survey;
 
-import com.roal.survey_engine.domain.survey.dto.SurveyDto;
-import com.roal.survey_engine.domain.survey.dto.SurveyDtoMapper;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;

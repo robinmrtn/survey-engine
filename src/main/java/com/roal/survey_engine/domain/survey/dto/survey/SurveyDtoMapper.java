@@ -1,6 +1,6 @@
-package com.roal.survey_engine.domain.survey.dto;
+package com.roal.survey_engine.domain.survey.dto.survey;
 
-import com.roal.survey_engine.domain.survey.dto.element.*;
+import com.roal.survey_engine.domain.survey.dto.survey.element.*;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.*;
