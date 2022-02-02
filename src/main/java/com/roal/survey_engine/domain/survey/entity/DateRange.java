@@ -2,18 +2,19 @@ package com.roal.survey_engine.domain.survey.entity;
 
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Embeddable
 public class DateRange {
 
-    private  LocalDate startDate;
-    private  LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     public DateRange() {
         // needed by hibernate
     }
 
-    public DateRange(LocalDate startDate, LocalDate endDate) {
+    public DateRange(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start Date has to be before End Date");
         }
@@ -22,7 +23,15 @@ public class DateRange {
     }
 
     public boolean isBetween(LocalDate date) {
-        return date.isAfter(startDate.minusDays(1)) && date.isBefore(endDate.plusDays(1));
+        return date.isAfter(startDate.toLocalDate().minusDays(1)) && date.isBefore(endDate.toLocalDate().plusDays(1));
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
     @Override

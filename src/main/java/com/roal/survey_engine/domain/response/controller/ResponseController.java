@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping("api/responses")
 @Tag(name = "Response", description = "Response API")
@@ -43,8 +42,9 @@ public class ResponseController {
     @Operation(summary = "Find responses for a campaign by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )),
+                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class)
+                )),
             @ApiResponse(responseCode = "404", description = "Campaign not found")
     })
     @GetMapping(value = "/campaigns/{campaignId}", produces = MediaType.APPLICATION_JSON_VALUE)

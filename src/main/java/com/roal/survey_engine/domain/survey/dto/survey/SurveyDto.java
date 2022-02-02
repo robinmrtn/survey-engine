@@ -1,4 +1,4 @@
-package com.roal.survey_engine.domain.survey.dto;
+package com.roal.survey_engine.domain.survey.dto.survey;
 
 import java.util.List;
 
