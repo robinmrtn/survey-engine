@@ -18,15 +18,12 @@ import java.util.stream.Collectors;
 public class SurveyDtoMapper {
     public SurveyDto entityToDto(Survey survey) {
 
-
         List<SurveyPageDto> surveyPageDtos = new ArrayList<>();
 
         for (SurveyPage surveyPage : survey.getSurveyPages()) {
 
             List<AbstractSurveyElement> surveyPageElements = surveyPage.getSurveyPageElements();
-
             List<AbstractElementDto> elementDtos = getElementDtos(surveyPageElements);
-
             surveyPageDtos.add(new SurveyPageDto(surveyPage.getPosition(), elementDtos));
         }
         return new SurveyDto(survey.getId(), survey.getTitle(), survey.getDescription(), surveyPageDtos);
@@ -93,7 +90,8 @@ public class SurveyDtoMapper {
                         surveyPage.addSurveyElement(element);
                     }
                     default -> {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format");
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format: Element type '" +
+                                elementDto.type() + "' not valid");
                     }
                 }
             }
