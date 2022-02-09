@@ -1,6 +1,7 @@
 package com.roal.survey_engine.domain.response.repository;
 
 
+import com.roal.survey_engine.domain.response.entity.OpenTextQuestionResponse;
 import com.roal.survey_engine.domain.response.entity.SurveyResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,7 @@ public interface ResponseRepository extends JpaRepository<SurveyResponse, Long> 
 
     @Query("select r from SurveyResponse r where r.campaign.id =:id")
     Page<SurveyResponse> findAllByCampaignId(long id, Pageable pageable);
+
+    @Query("Select otqr from OpenTextQuestionResponse otqr join otqr.surveyResponse sr where sr.campaign.id=:id")
+    Page<OpenTextQuestionResponse> findOpenTextQuestionResponseByCampaignId(long id, Pageable pageable);
 }

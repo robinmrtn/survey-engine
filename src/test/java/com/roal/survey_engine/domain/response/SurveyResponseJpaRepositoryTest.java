@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -109,6 +111,39 @@ class SurveyResponseJpaRepositoryTest {
         Optional<SurveyResponse> byId = responseRepository.findById(respId);
 
         assertTrue(byId.isPresent());
+
+    }
+
+    @Test
+    void testReceiveOpenTextQuestionResponse() {
+
+        Survey survey = getSurvey();
+        surveyRepository.save(survey);
+
+        var campaign = new Campaign().setSurvey(survey);
+        campaignRepository.save(campaign);
+
+        OpenTextQuestion opentextQuestion = (OpenTextQuestion) survey.getSurveyPages().get(0)
+                .getSurveyPageElements().get(0);
+
+        var firstResponse = new SurveyResponse()
+                .addElement(new OpenTextQuestionResponse().setOpenQuestion(opentextQuestion).setAnswer("first answer"))
+                .setCampaign(campaign)
+                .setSurvey(survey);
+        var secondResponse = new SurveyResponse()
+                .addElement(new OpenTextQuestionResponse().setOpenQuestion(opentextQuestion).setAnswer("second answer"))
+                .setCampaign(campaign)
+                .setSurvey(survey);
+
+        responseRepository.saveAll(List.of(firstResponse, secondResponse));
+
+        Page<OpenTextQuestionResponse> actualOpenTextResponses =
+                responseRepository.findOpenTextQuestionResponseByCampaignId(campaign.getId(), Pageable.unpaged());
+
+        assertEquals(2, actualOpenTextResponses.getTotalElements());
+        assertEquals("first answer", actualOpenTextResponses.getContent().get(0).getAnswer());
+        assertEquals("second answer", actualOpenTextResponses.getContent().get(1).getAnswer());
+
 
     }
 

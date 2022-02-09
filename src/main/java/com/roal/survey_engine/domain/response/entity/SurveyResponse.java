@@ -51,8 +51,9 @@ public class SurveyResponse {
         return survey;
     }
 
-    public void setSurvey(Survey survey) {
+    public SurveyResponse setSurvey(Survey survey) {
         this.survey = survey;
+        return this;
     }
 
     public List<AbstractElementResponse> getElementResponses() {
