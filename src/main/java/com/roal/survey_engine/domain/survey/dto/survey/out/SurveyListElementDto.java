@@ -1,4 +1,4 @@
-package com.roal.survey_engine.domain.survey.dto.survey;
+package com.roal.survey_engine.domain.survey.dto.survey.out;
 
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;

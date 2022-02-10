@@ -3,6 +3,8 @@ package com.roal.survey_engine.domain.response.dto;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import javax.validation.constraints.NotNull;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class ElementResponseDto {
 
+    @NotNull
     protected long elementId;
 
     protected ElementResponseDto(long elementId) {

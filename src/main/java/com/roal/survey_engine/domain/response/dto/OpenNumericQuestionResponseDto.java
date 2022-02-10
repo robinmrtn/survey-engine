@@ -1,8 +1,11 @@
 package com.roal.survey_engine.domain.response.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class OpenNumericQuestionResponseDto extends ElementResponseDto {
 
-    double value;
+    @NotNull
+    private double value;
 
     public OpenNumericQuestionResponseDto() {
     }

@@ -6,7 +6,7 @@ import com.roal.survey_engine.domain.response.dto.SurveyResponseDto;
 import com.roal.survey_engine.domain.survey.controller.SurveyController;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
-import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
+import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;

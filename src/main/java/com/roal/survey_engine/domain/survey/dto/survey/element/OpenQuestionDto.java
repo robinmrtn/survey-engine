@@ -1,6 +1,8 @@
 package com.roal.survey_engine.domain.survey.dto.survey.element;
 
-public record OpenQuestionDto(String question, int position, long id) implements AbstractElementDto {
+import javax.validation.constraints.NotBlank;
+
+public record OpenQuestionDto(@NotBlank String question, int position, long id) implements AbstractElementDto {
 
     @Override
     public String type() {

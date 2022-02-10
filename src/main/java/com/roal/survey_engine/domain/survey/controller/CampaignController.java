@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @Tag(name = "Campaign", description = "Campaign API")
 @RestController("/api/campaigns")
 public class CampaignController {
@@ -22,8 +25,8 @@ public class CampaignController {
     }
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    CampaignDto postCampaign(@RequestBody CampaignDto campaignDto) {
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    CampaignDto postCampaign(@NotNull @Valid @RequestBody CampaignDto campaignDto) {
         return campaignService.insertDto(campaignDto);
     }
 
@@ -33,8 +36,8 @@ public class CampaignController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE)
-    CampaignDto put(@RequestBody CampaignDto campaignDto, @PathVariable long id) {
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    CampaignDto put(@NotNull @Valid @RequestBody CampaignDto campaignDto, @PathVariable long id) {
         return campaignService.updateCampaign(campaignDto, id);
     }
 

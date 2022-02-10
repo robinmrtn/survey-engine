@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("api/responses")
 @Tag(name = "Response", description = "Response API")
@@ -35,7 +38,7 @@ public class ResponseController {
     @PostMapping(value = "/campaigns/{campaignId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyResponseDto postSurveyResponse(@PathVariable long campaignId,
-                                                @RequestBody SurveyResponseDto surveyResponseDto) {
+                                                @RequestBody @Valid @NotNull SurveyResponseDto surveyResponseDto) {
         return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
     }
 

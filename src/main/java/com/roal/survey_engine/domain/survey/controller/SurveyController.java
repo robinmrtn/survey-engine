@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.survey.controller;
 
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
-import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
+import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("api/surveys")
@@ -40,13 +43,13 @@ public class SurveyController {
 
     @Operation(summary = "Create new survey")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Success",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = SurveyDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid Input")})
+            @ApiResponse(responseCode = "201", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Input")})
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public SurveyDto postSurvey(@RequestBody SurveyDto survey) {
+    public SurveyDto postSurvey(@NotNull @Valid @RequestBody SurveyDto survey) {
         return surveyService.saveDto(survey);
     }
 

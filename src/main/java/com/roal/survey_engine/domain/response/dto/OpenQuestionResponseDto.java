@@ -1,7 +1,10 @@
 package com.roal.survey_engine.domain.response.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class OpenQuestionResponseDto extends ElementResponseDto {
 
+    @NotBlank
     private String value;
 
     public OpenQuestionResponseDto(long id, String value) {
