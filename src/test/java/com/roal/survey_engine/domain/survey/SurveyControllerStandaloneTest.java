@@ -141,7 +141,7 @@ class SurveyControllerStandaloneTest {
                 new SurveyListElementDto(11, "second Name", "second Desc"));
         Page<SurveyListElementDto> surveyPage = new PageImpl<>(surveys, PageRequest.of(0, 10), 2);
 
-        given(surveyService.getPublicAndActiveSurveys(PageRequest.of(0, 10)))
+        given(surveyService.getPublicSurveys(PageRequest.of(0, 10)))
                 .willReturn(surveyPage);
 
 

@@ -83,7 +83,7 @@ class SurveyServiceTest {
 
         given(campaignRepository.findPublicCampaigns(PageRequest.of(0, 10)))
                 .willReturn(surveyPage);
-        assertEquals(2, surveyService.getPublicAndActiveSurveys(PageRequest.of(0, 10)).getTotalElements());
+        assertEquals(2, surveyService.getPublicSurveys(PageRequest.of(0, 10)).getTotalElements());
     }
 
 
