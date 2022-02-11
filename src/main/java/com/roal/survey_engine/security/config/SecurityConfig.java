@@ -1,4 +1,4 @@
-package com.roal.survey_engine.config;
+package com.roal.survey_engine.security.config;
 
 import com.roal.survey_engine.security.DefaultAccessDeniedHandler;
 import com.roal.survey_engine.security.RESTAuthenticationFailureHandler;
