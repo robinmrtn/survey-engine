@@ -3,6 +3,7 @@ package com.roal.survey_engine.domain.survey.controller;
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDto;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,8 @@ public class CampaignController {
     }
 
     @DeleteMapping("/{id}")
-    void delete(@PathVariable long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void delete(@PathVariable long id) {
         campaignService.deleteCampaign(id);
     }
 }

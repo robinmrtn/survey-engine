@@ -8,6 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CampaignRepository extends JpaRepository<Campaign, Long> {
 
-    @Query("select c from Campaign c where c.hidden = false and c.active = true")
-    Page<Campaign> findByHiddenIsFalseAndActiveIsTrue(Pageable pageable);
+    @Query("select c from Campaign c where c.hidden = false and c.active = true and c.deleted = false ")
+    Page<Campaign> findPublicCampaigns(Pageable pageable);
+
+    @Override
+    @Query("update Campaign c set c.deleted = true where c.id =:id")
+    void deleteById(Long id);
 }

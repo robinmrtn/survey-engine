@@ -58,4 +58,11 @@ public class SurveyController {
     public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
         return surveyService.getPublicAndActiveSurveys(pageable);
     }
+
+    @Operation(summary = "Delete Survey by ID")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{surveyId}")
+    public void deleteSurvey(@PathVariable("surveyId") Long id) {
+        surveyService.deleteSurveyById(id);
+    }
 }

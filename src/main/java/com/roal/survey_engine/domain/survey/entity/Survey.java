@@ -20,6 +20,8 @@ public class Survey {
 
     private String description;
 
+    private boolean deleted = Boolean.FALSE;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

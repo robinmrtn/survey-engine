@@ -81,7 +81,7 @@ class SurveyServiceTest {
         Page<Campaign> surveyPage = new PageImpl<>(surveys);
 
 
-        given(campaignRepository.findByHiddenIsFalseAndActiveIsTrue(PageRequest.of(0, 10)))
+        given(campaignRepository.findPublicCampaigns(PageRequest.of(0, 10)))
                 .willReturn(surveyPage);
         assertEquals(2, surveyService.getPublicAndActiveSurveys(PageRequest.of(0, 10)).getTotalElements());
     }

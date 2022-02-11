@@ -25,6 +25,8 @@ public class Campaign {
 
     private boolean hidden;
 
+    private boolean deleted = Boolean.FALSE;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

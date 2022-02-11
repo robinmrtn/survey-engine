@@ -53,10 +53,14 @@ public class SurveyService {
     }
 
     public Page<SurveyListElementDto> getPublicAndActiveSurveys(Pageable pageable) {
-        return getSurveysFromCampaigns(campaignRepository.findByHiddenIsFalseAndActiveIsTrue(pageable));
+        return getSurveysFromCampaigns(campaignRepository.findPublicCampaigns(pageable));
     }
 
     private Page<SurveyListElementDto> getSurveysFromCampaigns(Page<Campaign> campaigns) {
         return campaigns.map(SurveyListElementDto::fromEntity);
+    }
+
+    public void deleteSurveyById(Long id) {
+        campaignRepository.deleteById(id);
     }
 }

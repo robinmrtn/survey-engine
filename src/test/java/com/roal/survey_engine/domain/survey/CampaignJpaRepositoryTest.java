@@ -29,7 +29,7 @@ public class CampaignJpaRepositoryTest {
 
     @Test
     void testFindPublicAndActive() {
-        Page<Campaign> campaigns = campaignRepository.findByHiddenIsFalseAndActiveIsTrue(Pageable.unpaged());
+        Page<Campaign> campaigns = campaignRepository.findPublicCampaigns(Pageable.unpaged());
 
         Assertions.assertEquals(1, campaigns.getTotalElements());
     }
