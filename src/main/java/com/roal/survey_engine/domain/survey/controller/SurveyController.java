@@ -56,7 +56,7 @@ public class SurveyController {
     @Operation(summary = "Find all surveys")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
-        return surveyService.getPublicAndActiveSurveys(pageable);
+        return surveyService.getPublicSurveys(pageable);
     }
 
     @Operation(summary = "Delete Survey by ID")

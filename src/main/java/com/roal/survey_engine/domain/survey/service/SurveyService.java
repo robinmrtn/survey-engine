@@ -52,7 +52,7 @@ public class SurveyService {
         return surveyDtoMapper.entityToDto(campaign.getSurvey());
     }
 
-    public Page<SurveyListElementDto> getPublicAndActiveSurveys(Pageable pageable) {
+    public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
         return getSurveysFromCampaigns(campaignRepository.findPublicCampaigns(pageable));
     }
 
