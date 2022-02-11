@@ -37,8 +37,8 @@ public class ResponseController {
             @ApiResponse(responseCode = "400", description = "Invalid Input")})
     @PostMapping(value = "/campaigns/{campaignId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public SurveyResponseDto postSurveyResponse(@PathVariable long campaignId,
-                                                @RequestBody @Valid @NotNull SurveyResponseDto surveyResponseDto) {
+    public SurveyResponseDto createSurveyResponse(@PathVariable long campaignId,
+                                                  @RequestBody @Valid @NotNull SurveyResponseDto surveyResponseDto) {
         return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
     }
 
@@ -65,5 +65,11 @@ public class ResponseController {
     @GetMapping(value = "/{responseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public SurveyResponseDto getSurveyResponseById(@PathVariable long responseId) {
         return responseService.getResponseById(responseId);
+    }
+
+    @DeleteMapping(value = "/{responseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSurveyResponse(@PathVariable long responseId) {
+        responseService.deleteSurveyById(responseId);
     }
 }

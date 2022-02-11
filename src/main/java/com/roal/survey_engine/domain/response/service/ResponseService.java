@@ -56,4 +56,7 @@ public class ResponseService {
         return responseDtoMapper.entityToDto(surveyResponse);
     }
 
+    public void deleteSurveyById(long responseId) {
+        responseRepository.deleteById(responseId);
+    }
 }

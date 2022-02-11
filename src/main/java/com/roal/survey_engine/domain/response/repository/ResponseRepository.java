@@ -15,9 +15,17 @@ public interface ResponseRepository extends JpaRepository<SurveyResponse, Long> 
     @Query("select r from SurveyResponse r where r.survey.id =:id")
     List<SurveyResponse> findAllBySurveyId(long id);
 
-    @Query("select r from SurveyResponse r where r.campaign.id =:id")
+    @Query("select r from SurveyResponse r where r.campaign.id =:id and r.deleted = false ")
     Page<SurveyResponse> findAllByCampaignId(long id, Pageable pageable);
 
-    @Query("Select otqr from OpenTextQuestionResponse otqr join otqr.surveyResponse sr where sr.campaign.id=:id")
+    @Override
+    @Query("update SurveyResponse sr set sr.deleted = true where sr.id =:id")
+    void deleteById(Long id);
+
+    @Query("Select otqr from OpenTextQuestionResponse otqr join otqr.surveyResponse sr where sr.campaign.id =:id")
     Page<OpenTextQuestionResponse> findOpenTextQuestionResponseByCampaignId(long id, Pageable pageable);
+
+    @Query("Select onqr.answer from OpenNumericQuestionResponse onqr join onqr.surveyResponse sr " +
+            "where sr.campaign.id =:campaignId and onqr.openNumericQuestion.id =:elementId")
+    List<Double> findOpenNumericQuestionResponseAnswersByElementIdAndCampaignId(long campaignId, long elementId);
 }

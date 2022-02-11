@@ -32,6 +32,8 @@ public class SurveyResponse {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    private Boolean deleted = Boolean.FALSE;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyResponse", fetch = FetchType.EAGER)
     private List<AbstractElementResponse> elementResponses = new ArrayList<>();
 
