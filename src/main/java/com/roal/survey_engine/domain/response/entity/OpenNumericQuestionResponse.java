@@ -18,16 +18,18 @@ public class OpenNumericQuestionResponse extends AbstractElementResponse {
 
     private double answer;
 
-    public void setOpenNumericQuestion(OpenNumericQuestion openNumericQuestion) {
+    public OpenNumericQuestionResponse setOpenNumericQuestion(OpenNumericQuestion openNumericQuestion) {
         this.openNumericQuestion = openNumericQuestion;
+        return this;
     }
 
     public double getAnswer() {
         return answer;
     }
 
-    public void setAnswer(double answer) {
+    public OpenNumericQuestionResponse setAnswer(double answer) {
         this.answer = answer;
+        return this;
     }
 
     public OpenNumericQuestion getOpenNumericQuestion() {
