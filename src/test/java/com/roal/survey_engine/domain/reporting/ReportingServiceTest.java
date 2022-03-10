@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.reporting;
 
-import com.roal.survey_engine.domain.reporting.dto.out.AbstractElementReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
+import com.roal.survey_engine.domain.reporting.dto.out.ReportingDto;
 import com.roal.survey_engine.domain.reporting.service.ReportingService;
 import com.roal.survey_engine.domain.response.entity.ClosedQuestionResponse;
 import com.roal.survey_engine.domain.response.entity.OpenNumericQuestionResponse;
@@ -10,7 +10,6 @@ import com.roal.survey_engine.domain.response.repository.ResponseRepository;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
-import com.roal.survey_engine.domain.survey.entity.question.AbstractSurveyElement;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -39,72 +37,6 @@ public class ReportingServiceTest {
 
     @Autowired
     CampaignRepository campaignRepository;
-
-    @Test
-    void testNumericReporting_Success() {
-
-        var survey = new Survey()
-            .addSurveyPage(new SurveyPage()
-                .addSurveyElement(new OpenNumericQuestion("question")));
-        var campaign = new Campaign().setSurvey(survey);
-        Survey savedSurvey = surveyRepository.saveAndFlush(survey);
-        Campaign savedCampaign = campaignRepository.saveAndFlush(campaign);
-
-        AbstractSurveyElement element = savedSurvey.getSurveyPages().get(0).getSurveyPageElements().get(0);
-
-        var surveyResponse = new SurveyResponse()
-            .setSurvey(survey)
-            .addElement(new OpenNumericQuestionResponse()
-                .setOpenNumericQuestion((OpenNumericQuestion) element).setAnswer(1.0));
-
-        var surveyResponse2 = new SurveyResponse()
-            .setSurvey(survey)
-            .setCampaign(campaign)
-            .addElement(new OpenNumericQuestionResponse()
-                .setOpenNumericQuestion((OpenNumericQuestion) element).setAnswer(2.0));
-        responseRepository.saveAllAndFlush(List.of(surveyResponse, surveyResponse2));
-        NumericReportingDto numericReportingDtoByElementId =
-            reportingService.getNumericReportingDto(element.getId(), savedCampaign.getId());
-
-        Assertions.assertEquals(element.getId(), numericReportingDtoByElementId.elementId());
-        Assertions.assertEquals(1.5, numericReportingDtoByElementId.avg());
-        Assertions.assertEquals(1.0, numericReportingDtoByElementId.min());
-        Assertions.assertEquals(2.0, numericReportingDtoByElementId.max());
-        Assertions.assertEquals(2, numericReportingDtoByElementId.count());
-    }
-
-    @Test
-    void testNumericReporting_NotFound() {
-
-        var survey = new Survey()
-            .addSurveyPage(new SurveyPage()
-                .addSurveyElement(new OpenNumericQuestion("question")));
-        var campaign = new Campaign().setSurvey(survey);
-        Survey savedSurvey = surveyRepository.saveAndFlush(survey);
-        Campaign savedCampaign = campaignRepository.saveAndFlush(campaign);
-
-        AbstractSurveyElement element = savedSurvey.getSurveyPages().get(0).getSurveyPageElements().get(0);
-
-        var surveyResponse = new SurveyResponse()
-            .setSurvey(survey)
-            .addElement(new OpenNumericQuestionResponse()
-                .setOpenNumericQuestion((OpenNumericQuestion) element).setAnswer(1.0));
-
-        var surveyResponse2 = new SurveyResponse()
-            .setSurvey(survey)
-            .setCampaign(campaign)
-            .addElement(new OpenNumericQuestionResponse()
-                .setOpenNumericQuestion((OpenNumericQuestion) element).setAnswer(2.0));
-        responseRepository.saveAllAndFlush(List.of(surveyResponse, surveyResponse2));
-
-
-        ResponseStatusException responseStatusException = Assertions.assertThrows(ResponseStatusException.class, () -> {
-            NumericReportingDto numericReportingDtoByElementId =
-                reportingService.getNumericReportingDto(element.getId(), savedCampaign.getId() + 1);
-        });
-
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseStatusException.getStatus());
-    }
 
     @Test
     void testCategoricalAndNumericReporting_Success() {
@@ -168,7 +100,7 @@ public class ReportingServiceTest {
 
         responseRepository.saveAll(List.of(surveyResponse, surveyResponse2, surveyResponse3));
 
-        List<AbstractElementReportingDto> reportsByCampaignId =
+        List<ReportingDto> reportsByCampaignId =
             reportingService.getReportsByCampaignId(savedCampaign.getId());
 
         Assertions.assertEquals(3, reportsByCampaignId.size());
@@ -244,7 +176,7 @@ public class ReportingServiceTest {
         responseRepository.saveAll(List.of(surveyResponse, surveyResponse2, surveyResponse3));
 
         Assertions.assertThrows(ResponseStatusException.class, () -> {
-            List<AbstractElementReportingDto> reportsByCampaignId =
+            List<ReportingDto> reportsByCampaignId =
                 reportingService.getReportsByCampaignId(savedCampaign.getId() + 1);
         });
     }

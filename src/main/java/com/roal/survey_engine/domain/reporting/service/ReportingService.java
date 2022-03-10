@@ -1,10 +1,9 @@
 package com.roal.survey_engine.domain.reporting.service;
 
-import com.roal.survey_engine.domain.reporting.dto.out.AbstractElementReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingItemDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
-import org.springframework.dao.EmptyResultDataAccessException;
+import com.roal.survey_engine.domain.reporting.dto.out.ReportingDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -24,42 +23,8 @@ public class ReportingService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public NumericReportingDto getNumericReportingDto(Long elementId, Long campaignId) {
-
-
-        var parameters = new MapSqlParameterSource()
-            .addValue("elementId", elementId)
-            .addValue("campaignId", campaignId);
-
-        try {
-            NumericReportingDto numericReportingDto = jdbcTemplate.queryForObject("SELECT COUNT(onqr.answer) as count, MIN(onqr.answer) as min, " +
-                    "MAX(onqr.answer) as max, AVG(onqr.answer) as avg, STDDEV(answer) as sd, " +
-                    "MEDIAN(onqr.answer) as median " +
-                    "FROM open_numeric_question_response onqr " +
-                    "JOIN SURVEY_PAGE_SURVEY_PAGE_ELEMENTS spspe ON spspe.SURVEY_PAGE_ELEMENTS_ID = onqr.open_numeric_question_id " +
-                    "JOIN SURVEY_PAGE sp ON sp.id = spspe.SURVEY_PAGE_ID " +
-                    "JOIN SURVEY s ON s.id = sp.SURVEY_ID " +
-                    "JOIN CAMPAIGN c on c.SURVEY_ID = s.id and c.id=:campaignId " +
-                    "WHERE onqr.open_numeric_question_id=:elementId " +
-                    "GROUP BY onqr.open_numeric_question_id",
-                parameters,
-                (rs, rowNum) -> new NumericReportingDto(elementId,
-                    rs.getInt("count"),
-                    rs.getDouble("avg"),
-                    rs.getDouble("min"),
-                    rs.getDouble("max"),
-                    rs.getDouble("median"),
-                    0,
-                    0,
-                    rs.getDouble("sd")));
-            return numericReportingDto;
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    public List<AbstractElementReportingDto> getReportsByCampaignId(long campaignId) {
-        List<AbstractElementReportingDto> reports = new ArrayList<>();
+    public List<ReportingDto> getReportsByCampaignId(long campaignId) {
+        List<ReportingDto> reports = new ArrayList<>();
 
         reports.addAll(getCategoricalReportsByCampaignId(campaignId));
         reports.addAll(getNumericReportsByCampaignId(campaignId));
@@ -70,7 +35,6 @@ public class ReportingService {
 
         return reports;
     }
-
 
     private List<CategoricalReportingDto> getCategoricalReportsByCampaignId(long campaignId) {
 
@@ -89,10 +53,10 @@ public class ReportingService {
         SqlRowSet rowSet = jdbcTemplate
             .queryForRowSet(sql, new MapSqlParameterSource("campaignId", campaignId));
 
-        long elementId = -1;
-        int count = 0;
         List<CategoricalReportingItemDto> items = null;
         List<CategoricalReportingDto> dtos = new ArrayList<>();
+        long elementId = -1;
+        int count = 0;
         while (rowSet.next()) {
 
             if (rowSet.getLong("ELEMENT_ID") != elementId) {
