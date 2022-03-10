@@ -1,6 +1,6 @@
 package com.roal.survey_engine.domain.reporting.dto.out;
 
-public interface AbstractResponseAnalysisDto {
+public interface AbstractElementReportingDto {
     long elementId();
 
     int count();
