@@ -4,7 +4,6 @@ import com.roal.survey_engine.domain.reporting.dto.out.AbstractElementReportingD
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingItemDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,8 +18,11 @@ import java.util.List;
 @Service
 public class ReportingService {
 
-    @Autowired
-    NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    public ReportingService(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public NumericReportingDto getNumericReportingDto(Long elementId, Long campaignId) {
 
@@ -151,6 +153,4 @@ public class ReportingService {
                     rs.getDouble("sd"))
         );
     }
-
-
 }
