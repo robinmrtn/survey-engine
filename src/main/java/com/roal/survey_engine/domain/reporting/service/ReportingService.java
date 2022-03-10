@@ -1,8 +1,8 @@
 package com.roal.survey_engine.domain.reporting.service;
 
 import com.roal.survey_engine.domain.reporting.dto.out.AbstractElementReportingDto;
-import com.roal.survey_engine.domain.reporting.dto.out.CategoricalResponseAnalysisDto;
-import com.roal.survey_engine.domain.reporting.dto.out.CategoricalResponseAnalysisItemDto;
+import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingDto;
+import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingItemDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -70,7 +70,7 @@ public class ReportingService {
     }
 
 
-    private List<CategoricalResponseAnalysisDto> getCategoricalReportsByCampaignId(long campaignId) {
+    private List<CategoricalReportingDto> getCategoricalReportsByCampaignId(long campaignId) {
 
         String sql = "SELECT cq.ID as element_id, cqa.value as answer, COUNT(cqa.value) as count, COUNT(cq.ID) as count2 " +
             "FROM CLOSED_QUESTION_RESPONSE_ANSWERS cqra " +
@@ -89,14 +89,14 @@ public class ReportingService {
 
         long elementId = -1;
         int count = 0;
-        List<CategoricalResponseAnalysisItemDto> items = null;
-        List<CategoricalResponseAnalysisDto> dtos = new ArrayList<>();
+        List<CategoricalReportingItemDto> items = null;
+        List<CategoricalReportingDto> dtos = new ArrayList<>();
         while (rowSet.next()) {
 
             if (rowSet.getLong("ELEMENT_ID") != elementId) {
                 elementId = elementId == -1 ? rowSet.getLong("ELEMENT_ID") : elementId;
                 if (items != null) {
-                    var dto = new CategoricalResponseAnalysisDto(elementId, count, items);
+                    var dto = new CategoricalReportingDto(elementId, count, items);
                     dtos.add(dto);
                     elementId = rowSet.getLong("ELEMENT_ID");
                     items = new ArrayList<>();
@@ -106,14 +106,14 @@ public class ReportingService {
             if (items == null) {
                 items = new ArrayList<>();
             }
-            items.add(new CategoricalResponseAnalysisItemDto(
+            items.add(new CategoricalReportingItemDto(
                 rowSet.getString("ANSWER"),
                 rowSet.getInt("COUNT"),
                 0.0));
             count += rowSet.getInt("COUNT");
         }
         if (items != null) {
-            var dto = new CategoricalResponseAnalysisDto(elementId, count, items);
+            var dto = new CategoricalReportingDto(elementId, count, items);
             dtos.add(dto);
         }
         return dtos;

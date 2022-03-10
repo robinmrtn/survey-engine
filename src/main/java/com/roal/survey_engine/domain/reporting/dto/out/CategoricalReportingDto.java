@@ -2,8 +2,8 @@ package com.roal.survey_engine.domain.reporting.dto.out;
 
 import java.util.List;
 
-public record CategoricalResponseAnalysisDto(long elementId, int count,
-                                             List<CategoricalResponseAnalysisItemDto> items)
+public record CategoricalReportingDto(long elementId, int count,
+                                      List<CategoricalReportingItemDto> items)
     implements AbstractElementReportingDto {
     @Override
     public String type() {
