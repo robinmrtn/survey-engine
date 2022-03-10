@@ -4,7 +4,7 @@ import java.util.List;
 
 public record CategoricalReportingDto(long elementId, int count,
                                       List<CategoricalReportingItemDto> items)
-    implements AbstractElementReportingDto {
+    implements ReportingDto {
     @Override
     public String type() {
         return "cat";
