@@ -9,9 +9,11 @@ import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class CampaignService {
 
     private final CampaignRepository campaignRepository;
@@ -39,17 +41,19 @@ public class CampaignService {
         return campaignRepository.existsById(id);
     }
 
+    @Transactional
     public CampaignDto insertDto(CampaignDto campaignDto) {
         Campaign campaign = campaignDtoMapper.dtoToEntity(campaignDto);
         Campaign savedCampaign = campaignRepository.save(campaign);
         return campaignDtoMapper.entityToDto(savedCampaign);
     }
 
+    @Transactional
     public CampaignDto addSurveyToCampaign(long surveyId, long campaignId) {
         Survey surveyById = surveyService.findSurveyById(surveyId);
         Campaign campaign = campaignRepository.findById(campaignId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Campaign with id '" + campaignId + "' not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Campaign with id '" + campaignId + "' not found"));
 
         campaign.setSurvey(surveyById);
         campaignRepository.save(campaign);
@@ -57,18 +61,20 @@ public class CampaignService {
         return campaignDtoMapper.entityToDto(campaign);
     }
 
+    @Transactional
     public CampaignDto updateCampaign(CampaignDto campaignDto, long id) {
         return campaignRepository.findById(id)
-            .map(campaign -> {
-                campaign.setTitle(campaignDto.title());
-                campaign.setHidden(campaignDto.hidden());
-                campaign.setActive(campaignDto.active());
-                campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
-                return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
-            }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Campaign with id '" + id + "' not found"));
+                .map(campaign -> {
+                    campaign.setTitle(campaignDto.title());
+                    campaign.setHidden(campaignDto.hidden());
+                    campaign.setActive(campaignDto.active());
+                    campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
+                    return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Campaign with id '" + id + "' not found"));
     }
 
+    @Transactional
     public void deleteCampaign(long id) {
         campaignRepository.deleteById(id);
     }

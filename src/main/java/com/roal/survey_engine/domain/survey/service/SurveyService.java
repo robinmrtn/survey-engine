@@ -11,8 +11,10 @@ import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
@@ -29,10 +31,12 @@ public class SurveyService {
         this.surveyDtoMapper = surveyDtoMapper;
     }
 
+    @Transactional
     public Survey save(Survey survey) {
         return surveyRepository.save(survey);
     }
 
+    @Transactional
     public SurveyDto saveDto(SurveyDto surveyDto) {
         Survey survey = surveyDtoMapper.dtoToEntity(surveyDto);
         surveyRepository.save(survey);
@@ -60,6 +64,7 @@ public class SurveyService {
         return campaigns.map(SurveyListElementDto::fromEntity);
     }
 
+    @Transactional
     public void deleteSurveyById(Long id) {
         campaignRepository.deleteById(id);
     }

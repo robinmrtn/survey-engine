@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class ReportingService {
 
     @Autowired
@@ -38,9 +40,5 @@ public class ReportingService {
                         0,
                         0,
                         rs.getDouble("sd")));
-
-
     }
-
-
 }

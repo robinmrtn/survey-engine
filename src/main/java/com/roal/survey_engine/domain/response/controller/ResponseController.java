@@ -70,6 +70,6 @@ public class ResponseController {
     @DeleteMapping(value = "/{responseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSurveyResponse(@PathVariable long responseId) {
-        responseService.deleteSurveyById(responseId);
+        responseService.deleteResponseById(responseId);
     }
 }

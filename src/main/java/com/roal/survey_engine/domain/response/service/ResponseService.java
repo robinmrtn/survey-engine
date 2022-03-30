@@ -11,9 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class ResponseService {
 
     private final ResponseDtoMapper responseDtoMapper;
@@ -30,6 +32,7 @@ public class ResponseService {
         this.campaignService = campaignService;
     }
 
+    @Transactional
     public SurveyResponseDto insertSurveyResponseDto(long campaignId, SurveyResponseDto surveyResponseDto) {
         Campaign campaign = campaignService.findCampaignById(campaignId);
         SurveyResponse surveyResponse =
@@ -56,7 +59,8 @@ public class ResponseService {
         return responseDtoMapper.entityToDto(surveyResponse);
     }
 
-    public void deleteSurveyById(long responseId) {
+    @Transactional
+    public void deleteResponseById(long responseId) {
         responseRepository.deleteById(responseId);
     }
 }
