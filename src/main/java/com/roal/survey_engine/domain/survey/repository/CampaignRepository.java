@@ -4,6 +4,7 @@ import com.roal.survey_engine.domain.survey.entity.Campaign;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CampaignRepository extends JpaRepository<Campaign, Long> {
@@ -13,5 +14,6 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
 
     @Override
     @Query("update Campaign c set c.deleted = true where c.id =:id")
+    @Modifying
     void deleteById(Long id);
 }
