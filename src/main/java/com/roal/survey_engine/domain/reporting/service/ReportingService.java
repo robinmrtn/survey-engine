@@ -1,9 +1,9 @@
 package com.roal.survey_engine.domain.reporting.service;
 
-import com.roal.survey_engine.domain.reporting.dto.out.AbstractElementReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingItemDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
+import com.roal.survey_engine.domain.reporting.dto.out.ReportingDto;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -48,18 +48,18 @@ public class ReportingService {
                     rs.getDouble("avg"),
                     rs.getDouble("min"),
                     rs.getDouble("max"),
-                    rs.getDouble("median"),
-                    0,
-                    0,
-                    rs.getDouble("sd")));
+                        rs.getDouble("median"),
+                        0,
+                        0,
+                        rs.getDouble("sd")));
             return numericReportingDto;
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
-    public List<AbstractElementReportingDto> getReportsByCampaignId(long campaignId) {
-        List<AbstractElementReportingDto> reports = new ArrayList<>();
+    public List<ReportingDto> getReportsByCampaignId(long campaignId) {
+        List<ReportingDto> reports = new ArrayList<>();
 
         reports.addAll(getCategoricalReportsByCampaignId(campaignId));
         reports.addAll(getNumericReportsByCampaignId(campaignId));
