@@ -5,6 +5,7 @@ import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDtoMapper;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
+import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import org.hashids.Hashids;
@@ -96,7 +97,7 @@ public class CampaignService {
     private long hashidToId(String hashid) {
         long[] decode = campaignHashids.decode(hashid);
         if (decode.length == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new CampaignNotFoundException(hashid);
         }
         return decode[0];
     }

@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.survey.exception;
 
 public class SurveyNotFoundException extends RuntimeException {
-    public SurveyNotFoundException(long id) {
+    public SurveyNotFoundException(String id) {
         super("Survey with id " + id + " not found");
     }
 

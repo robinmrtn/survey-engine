@@ -62,7 +62,7 @@ public class ResponseService {
     public SurveyResponseDto getResponseById(String hashid) {
         long id = hashidToId(hashid);
         SurveyResponse surveyResponse = responseRepository.findById(id)
-                .orElseThrow(() -> new ResponseNotFoundException(id));
+                .orElseThrow(() -> new ResponseNotFoundException(hashid));
         return responseDtoMapper.entityToDto(surveyResponse);
     }
 
@@ -75,7 +75,7 @@ public class ResponseService {
     private long hashidToId(String hashid) {
         long[] decode = responseHashids.decode(hashid);
         if (decode.length == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseNotFoundException(hashid);
         }
         return decode[0];
     }

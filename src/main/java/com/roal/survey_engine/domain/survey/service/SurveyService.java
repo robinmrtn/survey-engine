@@ -5,6 +5,7 @@ import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
 import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
+import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
@@ -12,10 +13,8 @@ import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -52,7 +51,8 @@ public class SurveyService {
     }
 
     public Survey findSurveyById(long id) {
-        return surveyRepository.findById(id).orElseThrow(() -> new SurveyNotFoundException(id));
+        String hashid = surveyHashids.encode(id);
+        return surveyRepository.findById(id).orElseThrow(() -> new SurveyNotFoundException(hashid));
     }
 
     public Survey findSurveyById(String hashid) {
@@ -63,9 +63,9 @@ public class SurveyService {
     public SurveyDto findSurveyByCampaignId(String hashid) {
         long campaignId = hashidToId(hashid);
         var campaign = campaignRepository
-                .findById(campaignId).orElseThrow(() -> new SurveyNotFoundException(campaignId));
+                .findById(campaignId).orElseThrow(() -> new CampaignNotFoundException(hashid));
         if (campaign.getSurvey() == null) {
-            throw new SurveyNotFoundException(campaignId);
+            throw new SurveyNotFoundException(hashid);
         }
         return surveyDtoMapper.entityToDto(campaign.getSurvey());
     }
@@ -89,7 +89,7 @@ public class SurveyService {
     private long hashidToId(String hashid) {
         long[] decode = surveyHashids.decode(hashid);
         if (decode.length == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new SurveyNotFoundException(hashid);
         }
         return decode[0];
     }

@@ -4,15 +4,14 @@ import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingItemDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.ReportingDto;
+import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class ReportingService {
                         rs.getDouble("sd")));
             return numericReportingDto;
         } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new CampaignNotFoundException();
         }
     }
 
@@ -70,7 +69,7 @@ public class ReportingService {
         reports.addAll(getNumericReportsByCampaignId(id));
 
         if (reports.size() == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new CampaignNotFoundException();
         }
 
         return reports;
