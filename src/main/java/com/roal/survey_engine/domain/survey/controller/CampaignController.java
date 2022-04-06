@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Tag(name = "Campaign", description = "Campaign API")
@@ -24,7 +25,7 @@ public class CampaignController {
 
     @Operation(summary = "Find Campaign by ID")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    CampaignDto getById(@PathVariable long id) {
+    CampaignDto getById(@PathVariable @NotBlank String id) {
         return campaignService.findCampaignDtoById(id);
     }
 
@@ -39,21 +40,23 @@ public class CampaignController {
     @Operation(summary = "Add Survey (referenced by ID) to Campaign by ID")
     @PostMapping(value = "/{campaignId}/surveys/{surveyId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    CampaignDto createSurveyToCampaign(@PathVariable long surveyId, @PathVariable long campaignId) {
+    CampaignDto createSurveyToCampaign(@PathVariable @NotBlank String surveyId,
+                                       @PathVariable @NotBlank String campaignId) {
         return campaignService.addSurveyToCampaign(surveyId, campaignId);
     }
 
     @Operation(summary = "Update Campaign by ID")
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    CampaignDto put(@NotNull @Valid @RequestBody CampaignDto campaignDto, @PathVariable long id) {
+    CampaignDto put(@NotNull @Valid @RequestBody CampaignDto campaignDto,
+                    @PathVariable @NotBlank String id) {
         return campaignService.updateCampaign(campaignDto, id);
     }
 
     @Operation(summary = "Delete Campaign by ID")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void delete(@PathVariable long id) {
+    private void delete(@PathVariable @NotBlank String id) {
         campaignService.deleteCampaign(id);
     }
 }

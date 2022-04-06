@@ -12,15 +12,18 @@ import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import org.hashids.Hashids;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -51,11 +54,16 @@ public class SurveyIntegrationTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    @Qualifier("surveyHashids")
+    Hashids surveyHashids;
+
     @Test
     void getSurvey() throws Exception {
 
         Campaign campaign = createCampaign();
-        MockHttpServletResponse response = mvc.perform(get("/api/surveys/" + campaign.getId())
+        String id = surveyHashids.encode(campaign.getId());
+        MockHttpServletResponse response = mvc.perform(get("/api/surveys/" + id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse();
@@ -74,6 +82,7 @@ public class SurveyIntegrationTest {
 
     @Test
     @DisplayName("should return 201 when new Survey is submitted")
+    @WithMockUser
     void postNewSurvey() throws Exception {
 
         SurveyDto surveyDto = mapper.entityToDto(createSurvey());
@@ -90,6 +99,7 @@ public class SurveyIntegrationTest {
     private Survey createSurvey() {
 
         return new Survey("This is a survey")
+                .setTitle("Title")
                 .addSurveyPage(new SurveyPage()
                         .addSurveyElement(new ClosedQuestion("This is a closed question")));
     }

@@ -23,6 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -70,11 +71,12 @@ class ResponseControllerStandaloneTest {
 
     @Test
     @DisplayName("POST responses/surveys/{id} - failed")
+    @WithMockUser
     void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
 
-        given(campaignService.findCampaignById(3)).willThrow(new SurveyNotFoundException());
+        given(campaignService.findCampaignById("abcd123")).willThrow(new SurveyNotFoundException());
 
-        MockHttpServletResponse response = mvc.perform(post("/api/responses/surveys/3")
+        MockHttpServletResponse response = mvc.perform(post("/api/responses/surveys/abcd123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonSurveyResponseDto.write(getSurveyResponseDto()).getJson()))
                 .andReturn().getResponse();

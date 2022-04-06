@@ -4,6 +4,8 @@ import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.CategoricalReportingItemDto;
 import com.roal.survey_engine.domain.reporting.dto.out.NumericReportingDto;
 import com.roal.survey_engine.domain.reporting.dto.out.ReportingDto;
+import org.hashids.Hashids;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,16 +22,20 @@ public class ReportingService {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public ReportingService(NamedParameterJdbcTemplate jdbcTemplate) {
+    private final Hashids campaignHashids;
+
+    public ReportingService(NamedParameterJdbcTemplate jdbcTemplate,
+                            @Qualifier("campaignHashids") Hashids campaignHashids) {
         this.jdbcTemplate = jdbcTemplate;
+        this.campaignHashids = campaignHashids;
     }
 
     public NumericReportingDto getNumericReportingDto(Long elementId, Long campaignId) {
 
 
         var parameters = new MapSqlParameterSource()
-            .addValue("elementId", elementId)
-            .addValue("campaignId", campaignId);
+                .addValue("elementId", elementId)
+                .addValue("campaignId", campaignId);
 
         try {
             NumericReportingDto numericReportingDto = jdbcTemplate.queryForObject("SELECT COUNT(onqr.answer) as count, MIN(onqr.answer) as min, " +
@@ -58,11 +64,10 @@ public class ReportingService {
         }
     }
 
-    public List<ReportingDto> getReportsByCampaignId(long campaignId) {
+    public List<ReportingDto> getReportsByCampaignId(long id) {
         List<ReportingDto> reports = new ArrayList<>();
-
-        reports.addAll(getCategoricalReportsByCampaignId(campaignId));
-        reports.addAll(getNumericReportsByCampaignId(campaignId));
+        reports.addAll(getCategoricalReportsByCampaignId(id));
+        reports.addAll(getNumericReportsByCampaignId(id));
 
         if (reports.size() == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -71,15 +76,22 @@ public class ReportingService {
         return reports;
     }
 
+    public List<ReportingDto> getReportsByCampaignId(String hashid) {
+
+        long campaignId = hashidToId(hashid);
+
+        return getReportsByCampaignId(campaignId);
+    }
+
 
     private List<CategoricalReportingDto> getCategoricalReportsByCampaignId(long campaignId) {
 
         String sql = "SELECT cq.ID as element_id, cqa.value as answer, COUNT(cqa.value) as count, COUNT(cq.ID) as count2 " +
-            "FROM CLOSED_QUESTION_RESPONSE_ANSWERS cqra " +
-            "JOIN CLOSED_QUESTION_ANSWER cqa ON cqa.id = cqra.answers_id " +
-            "JOIN CLOSED_QUESTION_RESPONSE cqr ON cqra.CLOSED_QUESTION_RESPONSE_ID = cqr.ID " +
-            "JOIN CLOSED_QUESTION cq ON cqr.CLOSED_QUESTION_ID = cq.ID " +
-            "JOIN SURVEY_PAGE_SURVEY_PAGE_ELEMENTS spspe ON spspe.SURVEY_PAGE_ELEMENTS_ID = cq.ID " +
+                "FROM CLOSED_QUESTION_RESPONSE_ANSWERS cqra " +
+                "JOIN CLOSED_QUESTION_ANSWER cqa ON cqa.id = cqra.answers_id " +
+                "JOIN CLOSED_QUESTION_RESPONSE cqr ON cqra.CLOSED_QUESTION_RESPONSE_ID = cqr.ID " +
+                "JOIN CLOSED_QUESTION cq ON cqr.CLOSED_QUESTION_ID = cq.ID " +
+                "JOIN SURVEY_PAGE_SURVEY_PAGE_ELEMENTS spspe ON spspe.SURVEY_PAGE_ELEMENTS_ID = cq.ID " +
             "JOIN SURVEY_PAGE sp ON sp.id = spspe.SURVEY_PAGE_ID " +
             "JOIN SURVEY s ON s.id = sp.SURVEY_ID " +
             "JOIN CAMPAIGN c on c.SURVEY_ID = s.id " +
@@ -143,14 +155,24 @@ public class ReportingService {
             (rs, rowNum) ->
                 new NumericReportingDto(
                     rs.getLong("element_id"),
-                    rs.getInt("count"),
-                    rs.getDouble("avg"),
-                    rs.getDouble("min"),
-                    rs.getDouble("max"),
-                    rs.getDouble("median"),
-                    0,
-                    0,
-                    rs.getDouble("sd"))
+                        rs.getInt("count"),
+                        rs.getDouble("avg"),
+                        rs.getDouble("min"),
+                        rs.getDouble("max"),
+                        rs.getDouble("median"),
+                        0,
+                        0,
+                        rs.getDouble("sd"))
         );
+    }
+
+    private long hashidToId(String hashid) {
+        long[] ids = campaignHashids.decode(hashid);
+
+        if (ids.length == 0) {
+            throw new RuntimeException();
+        }
+
+        return ids[0];
     }
 }

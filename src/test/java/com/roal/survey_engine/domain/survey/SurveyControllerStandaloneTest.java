@@ -15,6 +15,7 @@ import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.exception.SurveyExceptionHandler;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
+import org.hashids.Hashids;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,7 +49,7 @@ class SurveyControllerStandaloneTest {
     @Mock
     private SurveyService surveyService;
 
-    private final SurveyDtoMapper surveyDtoMapper = new SurveyDtoMapper();
+    private final SurveyDtoMapper surveyDtoMapper = new SurveyDtoMapper(new Hashids());
 
     @InjectMocks
     private SurveyController surveyController;
@@ -89,11 +90,11 @@ class SurveyControllerStandaloneTest {
     @DisplayName("GET /surveys/2 - success")
     void canRetrieveByIWhenExists() throws Exception {
 
-        given(surveyService.findSurveyByCampaignId(2L))
+        given(surveyService.findSurveyByCampaignId("abcd123"))
                 .willReturn(surveyDtoMapper.entityToDto(survey));
 
         MockHttpServletResponse response = mvc.perform(
-                get("/api/surveys/2")
+                        get("/api/surveys/abcd123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -106,11 +107,11 @@ class SurveyControllerStandaloneTest {
     @DisplayName("GET /surveys/2 - 404")
     void cannotRetrieveByIdWhenNotExists() throws Exception {
 
-        given(surveyService.findSurveyByCampaignId(2L))
+        given(surveyService.findSurveyByCampaignId("abcd123"))
                 .willThrow(new SurveyNotFoundException());
 
         MockHttpServletResponse response = mvc.perform(
-                get("/api/surveys/2")
+                        get("/api/surveys/abcd123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -122,10 +123,10 @@ class SurveyControllerStandaloneTest {
     @DisplayName("GET /surveys/2 - success with Page and OpenQuestion")
     void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
 
-        given(surveyService.findSurveyByCampaignId(2))
+        given(surveyService.findSurveyByCampaignId("abcd123"))
                 .willReturn(surveyDtoMapper.entityToDto(survey));
 
-        MockHttpServletResponse response = mvc.perform(get("/api/surveys/2")
+        MockHttpServletResponse response = mvc.perform(get("/api/surveys/abcd123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -137,8 +138,8 @@ class SurveyControllerStandaloneTest {
     @Test
     void canRetrieveSurveyList() throws Exception {
         List<SurveyListElementDto> surveys = List.of(
-                new SurveyListElementDto(10, "First name", "First desc"),
-                new SurveyListElementDto(11, "second Name", "second Desc"));
+                new SurveyListElementDto("aa", "First name", "First desc"),
+                new SurveyListElementDto("bb", "second Name", "second Desc"));
         Page<SurveyListElementDto> surveyPage = new PageImpl<>(surveys, PageRequest.of(0, 10), 2);
 
         given(surveyService.getPublicSurveys(PageRequest.of(0, 10)))

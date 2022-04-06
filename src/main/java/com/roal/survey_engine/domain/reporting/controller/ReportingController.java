@@ -20,7 +20,7 @@ public class ReportingController {
     }
 
     @GetMapping("campaigns/{campaignId}/report")
-    List<ReportingDto> getReportByCampaign(@PathVariable long campaignId) {
+    List<ReportingDto> getReportByCampaign(@PathVariable String campaignId) {
         return reportingService.getReportsByCampaignId(campaignId);
     }
 }

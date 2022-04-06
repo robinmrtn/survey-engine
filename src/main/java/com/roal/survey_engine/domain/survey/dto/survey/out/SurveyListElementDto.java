@@ -1,28 +1,15 @@
 package com.roal.survey_engine.domain.survey.dto.survey.out;
 
-import com.roal.survey_engine.domain.survey.entity.Campaign;
-import com.roal.survey_engine.domain.survey.entity.Survey;
-
-import java.util.Objects;
-
 public class SurveyListElementDto {
 
-    private long id;
+    private String id;
     private String name;
     private String description;
 
-    public SurveyListElementDto(long id, String name, String description) {
+    public SurveyListElementDto(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-    }
-
-    public static SurveyListElementDto fromEntity(Campaign campaign) {
-        return fromEntity(campaign.getSurvey());
-    }
-
-    public static SurveyListElementDto fromEntity(Survey survey) {
-        return new SurveyListElementDto(survey.getId(), survey.getTitle(), survey.getDescription());
     }
 
     public String getDescription() {
@@ -41,11 +28,11 @@ public class SurveyListElementDto {
         this.name = name;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,16 +43,11 @@ public class SurveyListElementDto {
 
         SurveyListElementDto that = (SurveyListElementDto) o;
 
-        if (id != that.id) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        return Objects.equals(description, that.description);
+        return id != null ? id.equals(that.id) : that.id == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

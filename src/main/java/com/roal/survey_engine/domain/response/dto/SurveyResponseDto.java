@@ -1,13 +1,11 @@
 package com.roal.survey_engine.domain.response.dto;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class SurveyResponseDto {
 
-    @NotNull
-    private long id;
+    private String id;
 
     @NotEmpty
     private List<ElementResponseDto> elementResponseDtos;
@@ -27,11 +25,11 @@ public class SurveyResponseDto {
         this.elementResponseDtos = elementResponseDtos;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

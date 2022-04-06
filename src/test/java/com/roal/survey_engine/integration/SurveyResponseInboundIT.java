@@ -7,8 +7,10 @@ import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.*;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import org.hashids.Hashids;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
@@ -36,14 +38,18 @@ class SurveyResponseInboundIT {
     @Autowired
     private CampaignRepository campaignRepository;
 
+    @Autowired
+    @Qualifier("campaignHashids")
+    private Hashids campaignHashids;
+
     @Test
     void testPostResponseDto_Success() {
 
         Survey survey = createSurvey();
         Campaign campaign = createCampaign(survey);
-
+        String id = campaignHashids.encode(campaign.getId());
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + campaign.getId(),
+                restTemplate.postForEntity("/api/responses/campaigns/" + id,
                         createSurveyResponseDto(survey), SurveyResponseDto.class);
         SurveyResponseDto receivedDto = responseEntity.getBody();
 
@@ -57,9 +63,10 @@ class SurveyResponseInboundIT {
 
         Survey survey = createSurvey();
         Campaign campaign = createCampaign(survey);
+        String id = campaignHashids.encode(campaign.getId());
 
         ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + campaign.getId(),
+                restTemplate.postForEntity("/api/responses/campaigns/" + id,
                         makeDtoInvalid(createSurveyResponseDto(survey)), SurveyResponseDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());

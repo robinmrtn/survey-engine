@@ -7,6 +7,8 @@ import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
+import org.hashids.Hashids;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,20 +21,29 @@ public class CampaignService {
     private final CampaignRepository campaignRepository;
     private final CampaignDtoMapper campaignDtoMapper;
     private final SurveyService surveyService;
+    private final Hashids campaignHashids;
 
     public CampaignService(CampaignRepository campaignRepository,
                            CampaignDtoMapper campaignDtoMapper,
-                           SurveyService surveyService) {
+                           SurveyService surveyService,
+                           @Qualifier("campaignHashids") Hashids campaignHashids) {
         this.campaignRepository = campaignRepository;
         this.campaignDtoMapper = campaignDtoMapper;
         this.surveyService = surveyService;
+        this.campaignHashids = campaignHashids;
     }
 
     public Campaign findCampaignById(long id) {
         return campaignRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
     }
 
-    public CampaignDto findCampaignDtoById(long id) {
+    public Campaign findCampaignById(String hashid) {
+        long id = hashidToId(hashid);
+        return findCampaignById(id);
+    }
+
+    public CampaignDto findCampaignDtoById(String hashid) {
+        long id = hashidToId(hashid);
         Campaign campaignById = findCampaignById(id);
         return campaignDtoMapper.entityToDto(campaignById);
     }
@@ -49,8 +60,9 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignDto addSurveyToCampaign(long surveyId, long campaignId) {
-        Survey surveyById = surveyService.findSurveyById(surveyId);
+    public CampaignDto addSurveyToCampaign(String surveyHashid, String campaignHashid) {
+        long campaignId = hashidToId(campaignHashid);
+        Survey surveyById = surveyService.findSurveyById(surveyHashid);
         Campaign campaign = campaignRepository.findById(campaignId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Campaign with id '" + campaignId + "' not found"));
@@ -62,7 +74,8 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignDto updateCampaign(CampaignDto campaignDto, long id) {
+    public CampaignDto updateCampaign(CampaignDto campaignDto, String hashid) {
+        long id = hashidToId(hashid);
         return campaignRepository.findById(id)
                 .map(campaign -> {
                     campaign.setTitle(campaignDto.title());
@@ -75,7 +88,16 @@ public class CampaignService {
     }
 
     @Transactional
-    public void deleteCampaign(long id) {
+    public void deleteCampaign(String hashid) {
+        long id = hashidToId(hashid);
         campaignRepository.deleteById(id);
+    }
+
+    private long hashidToId(String hashid) {
+        long[] decode = campaignHashids.decode(hashid);
+        if (decode.length == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return decode[0];
     }
 }

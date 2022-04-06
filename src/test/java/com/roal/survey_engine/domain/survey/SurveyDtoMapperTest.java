@@ -8,6 +8,7 @@ import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
+import org.hashids.Hashids;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SurveyDtoMapperTest {
 
 
-    SurveyDtoMapper surveyDtoMapper = new SurveyDtoMapper();
+    SurveyDtoMapper surveyDtoMapper = new SurveyDtoMapper(new Hashids());
 
 
     @Test

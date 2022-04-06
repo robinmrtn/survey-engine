@@ -14,6 +14,7 @@ import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
+import org.hashids.Hashids;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ResponseDtoMapperTest {
 
-    ResponseDtoMapper responseDtoMapper = new ResponseDtoMapper();
+    ResponseDtoMapper responseDtoMapper = new ResponseDtoMapper(new Hashids());
 
     @Test
     void testDtoToEntityMapping() {

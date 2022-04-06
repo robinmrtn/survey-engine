@@ -8,10 +8,14 @@ import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import org.hashids.Hashids;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,12 +27,16 @@ public class SurveyService {
 
     private final SurveyDtoMapper surveyDtoMapper;
 
+    private final Hashids surveyHashids;
+
     public SurveyService(SurveyRepository surveyRepository,
                          CampaignRepository campaignRepository,
-                         SurveyDtoMapper surveyDtoMapper) {
+                         SurveyDtoMapper surveyDtoMapper,
+                         @Qualifier("surveyHashids") Hashids surveyHashids) {
         this.surveyRepository = surveyRepository;
         this.campaignRepository = campaignRepository;
         this.surveyDtoMapper = surveyDtoMapper;
+        this.surveyHashids = surveyHashids;
     }
 
     @Transactional
@@ -47,7 +55,13 @@ public class SurveyService {
         return surveyRepository.findById(id).orElseThrow(() -> new SurveyNotFoundException(id));
     }
 
-    public SurveyDto findSurveyByCampaignId(long campaignId) {
+    public Survey findSurveyById(String hashid) {
+        long id = hashidToId(hashid);
+        return findSurveyById(id);
+    }
+
+    public SurveyDto findSurveyByCampaignId(String hashid) {
+        long campaignId = hashidToId(hashid);
         var campaign = campaignRepository
                 .findById(campaignId).orElseThrow(() -> new SurveyNotFoundException(campaignId));
         if (campaign.getSurvey() == null) {
@@ -61,11 +75,22 @@ public class SurveyService {
     }
 
     private Page<SurveyListElementDto> getSurveysFromCampaigns(Page<Campaign> campaigns) {
-        return campaigns.map(SurveyListElementDto::fromEntity);
+        Page<Survey> surveys = campaigns.map(Campaign::getSurvey);
+
+        return surveyDtoMapper.surveysToListDto(surveys);
     }
 
     @Transactional
-    public void deleteSurveyById(Long id) {
+    public void deleteSurveyById(String hashid) {
+        long id = hashidToId(hashid);
         campaignRepository.deleteById(id);
+    }
+
+    private long hashidToId(String hashid) {
+        long[] decode = surveyHashids.decode(hashid);
+        if (decode.length == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return decode[0];
     }
 }

@@ -1,9 +1,13 @@
 package com.roal.survey_engine.domain.survey.dto.survey;
 
 import com.roal.survey_engine.domain.survey.dto.survey.element.*;
+import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.*;
+import org.hashids.Hashids;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +20,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class SurveyDtoMapper {
+
+    private final Hashids surveyHashids;
+
+    public SurveyDtoMapper(@Qualifier("surveyHashids") Hashids surveyHashids) {
+        this.surveyHashids = surveyHashids;
+    }
+
     public SurveyDto entityToDto(Survey survey) {
 
         List<SurveyPageDto> surveyPageDtos = new ArrayList<>();
@@ -26,7 +37,8 @@ public class SurveyDtoMapper {
             List<AbstractElementDto> elementDtos = getElementDtos(surveyPageElements);
             surveyPageDtos.add(new SurveyPageDto(surveyPage.getPosition(), elementDtos));
         }
-        return new SurveyDto(survey.getId(), survey.getTitle(), survey.getDescription(), surveyPageDtos);
+        return new SurveyDto(surveyHashids.encode(survey.getId()), survey.getTitle(),
+                survey.getDescription(), surveyPageDtos);
     }
 
     private List<AbstractElementDto> getElementDtos(List<AbstractSurveyElement> surveyPageElements) {
@@ -98,6 +110,14 @@ public class SurveyDtoMapper {
             survey.addSurveyPage(surveyPage);
         }
         return survey;
+    }
+
+    public Page<SurveyListElementDto> surveysToListDto(Page<Survey> surveys) {
+
+        return surveys.map(survey -> {
+            String hashid = surveyHashids.encode(survey.getId());
+            return new SurveyListElementDto(hashid, survey.getTitle(), survey.getDescription());
+        });
     }
 
     private List<ClosedQuestionAnswer> dtoAnswersToEntity(Collection<ClosedQuestionAnswerDto> answerDtos) {

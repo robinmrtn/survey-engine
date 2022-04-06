@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -37,7 +38,7 @@ public class ResponseController {
             @ApiResponse(responseCode = "400", description = "Invalid Input")})
     @PostMapping(value = "/campaigns/{campaignId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public SurveyResponseDto createSurveyResponse(@PathVariable long campaignId,
+    public SurveyResponseDto createSurveyResponse(@PathVariable @NotBlank String campaignId,
                                                   @RequestBody @Valid @NotNull SurveyResponseDto surveyResponseDto) {
         return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
     }
@@ -45,13 +46,14 @@ public class ResponseController {
     @Operation(summary = "Find responses for a campaign by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
-                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = Page.class)
-                )),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = Page.class)
+                    )),
             @ApiResponse(responseCode = "404", description = "Campaign not found")
     })
     @GetMapping(value = "/campaigns/{campaignId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<SurveyResponseDto> getSurveyResponsesById(@PathVariable long campaignId, Pageable pageable) {
+    public Page<SurveyResponseDto> getSurveyResponsesById(@PathVariable @NotBlank String campaignId,
+                                                          Pageable pageable) {
         return responseService.getResponsesByCampaignId(campaignId, pageable);
     }
 
@@ -63,13 +65,13 @@ public class ResponseController {
             @ApiResponse(responseCode = "404", description = "Response not found")
     })
     @GetMapping(value = "/{responseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public SurveyResponseDto getSurveyResponseById(@PathVariable long responseId) {
+    public SurveyResponseDto getSurveyResponseById(@PathVariable @NotBlank String responseId) {
         return responseService.getResponseById(responseId);
     }
 
     @DeleteMapping(value = "/{responseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSurveyResponse(@PathVariable long responseId) {
+    public void deleteSurveyResponse(@PathVariable @NotBlank String responseId) {
         responseService.deleteResponseById(responseId);
     }
 }

@@ -4,6 +4,8 @@ import com.roal.survey_engine.domain.response.dto.*;
 import com.roal.survey_engine.domain.response.entity.*;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
+import org.hashids.Hashids;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +15,12 @@ import java.util.stream.Collectors;
 
 @Component
 public final class ResponseDtoMapper {
+
+    private final Hashids responseHashids;
+
+    public ResponseDtoMapper(@Qualifier("responseHashids") Hashids responseHashids) {
+        this.responseHashids = responseHashids;
+    }
 
     public SurveyResponse dtoToEntity(Campaign campaign, SurveyResponseDto surveyResponseDto) {
 
@@ -40,14 +48,14 @@ public final class ResponseDtoMapper {
                 .collect(Collectors.toList());
 
         var surveyResponseDto = new SurveyResponseDto();
-        surveyResponseDto.setId(surveyResponse.getId());
+        surveyResponseDto.setId(responseHashids.encode(surveyResponse.getId()));
         surveyResponseDto.setElementResponseDtos(elementResponseDtos);
 
         return surveyResponseDto;
 
     }
 
-    public ElementResponseDto mapElementResponseToElementResponseDto(AbstractElementResponse elementResponse) {
+    private ElementResponseDto mapElementResponseToElementResponseDto(AbstractElementResponse elementResponse) {
 
         if (elementResponse instanceof OpenNumericQuestionResponse) {
             return new OpenNumericQuestionResponseDto()

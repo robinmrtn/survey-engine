@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -31,13 +32,13 @@ public class SurveyController {
 
     @Operation(summary = "Find survey by ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successful",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = SurveyDto.class))),
-        @ApiResponse(responseCode = "404", description = "Survey not found")
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyDto.class))),
+            @ApiResponse(responseCode = "404", description = "Survey not found")
     })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public SurveyDto getSurveyById(@PathVariable long id) {
+    public SurveyDto getSurveyById(@PathVariable @NotBlank String id) {
         return surveyService.findSurveyByCampaignId(id);
     }
 
@@ -62,7 +63,7 @@ public class SurveyController {
     @Operation(summary = "Delete Survey by ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{surveyId}")
-    public void deleteSurvey(@PathVariable("surveyId") Long id) {
+    public void deleteSurvey(@PathVariable("surveyId") @NotBlank String id) {
         surveyService.deleteSurveyById(id);
     }
 }
