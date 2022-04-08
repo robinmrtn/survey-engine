@@ -1,4 +1,4 @@
-package com.roal.survey_engine.domain.user;
+package com.roal.survey_engine.domain.user.dto;
 
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.entity.User;
@@ -19,7 +19,7 @@ public class UserDtoMapper {
         this.userHashids = userHashids;
     }
 
-    public User dtoToEntity(UserDto userDto) {
+    public User dtoToEntity(UserRegistrationDto userDto) {
         List<Role> roles = userDto.roles().stream().map(Role::new).toList();
         return new User(userDto.username(), userDto.password(), roles);
     }
@@ -29,6 +29,6 @@ public class UserDtoMapper {
                 .map(Role::getName)
                 .collect(Collectors.toSet());
         return new UserDto(userHashids.encode(user.getId()),
-                user.getUsername(), null, roles);
+                user.getUsername(), roles);
     }
 }

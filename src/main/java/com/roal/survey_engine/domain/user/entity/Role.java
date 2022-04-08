@@ -9,6 +9,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
+    @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "roles")

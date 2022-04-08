@@ -1,12 +1,14 @@
 package com.roal.survey_engine.domain.user.service;
 
-import com.roal.survey_engine.domain.user.UserDto;
-import com.roal.survey_engine.domain.user.UserDtoMapper;
+import com.roal.survey_engine.domain.user.dto.UserDto;
+import com.roal.survey_engine.domain.user.dto.UserDtoMapper;
+import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.entity.User;
 import com.roal.survey_engine.domain.user.exception.RoleNotFoundException;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto save(UserDto userDto) {
+    public UserDto save(UserRegistrationDto userDto) {
 
         User user = userDtoMapper.dtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -47,6 +49,12 @@ public class UserService {
         user.setRoles(foundRoles);
         User saved = userRepository.save(user);
         return userDtoMapper.entityToDto(saved);
+    }
+
+    public UserDto findByUsername(String username) {
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
+        return userDtoMapper.entityToDto(user);
     }
 
 

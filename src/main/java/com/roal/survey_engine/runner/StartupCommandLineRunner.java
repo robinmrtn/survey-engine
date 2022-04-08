@@ -9,7 +9,7 @@ import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
-import com.roal.survey_engine.domain.user.UserDto;
+import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
 import com.roal.survey_engine.domain.user.service.UserService;
@@ -46,11 +46,6 @@ class StartupCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         addRoles();
-        var openQuestion = new OpenTextQuestion("This is an open question?")
-                .setPosition(1);
-
-        var surveyPage = new SurveyPage()
-                .addSurveyElement(openQuestion);
 
         var survey = new Survey()
                 .setDescription("This is a Survey Description")
@@ -70,12 +65,12 @@ class StartupCommandLineRunner implements CommandLineRunner {
                 .setHidden(false);
 
         surveyRepository.save(survey);
-        Campaign savedCampaign = campaignRepository.save(campaign);
-        System.out.println(savedCampaign.getId());
+        campaignRepository.save(campaign);
 
-        UserDto peter = new UserDto(null, "peter", "peter", Set.of("USER"));
-        UserDto max = new UserDto(null, "max", "max", Set.of("USER"));
-        UserDto admin = new UserDto(null, "admin", "admin", Set.of("USER", "ADMIN"));
+
+        UserRegistrationDto peter = new UserRegistrationDto("peter", "peter", Set.of("USER"));
+        UserRegistrationDto max = new UserRegistrationDto("max", "max", Set.of("USER"));
+        UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("USER", "ADMIN"));
 
         userService.save(peter);
         userService.save(max);
@@ -83,12 +78,13 @@ class StartupCommandLineRunner implements CommandLineRunner {
     }
 
     private void addRoles() {
-
-        List<Role> roles = List.of(
-                new Role("USER"),
-                new Role("ADMIN"));
-        roleRepository.saveAll(roles);
-
+        int size = roleRepository.findAll().size();
+        if (size == 0) {
+            List<Role> roles = List.of(
+                    new Role("USER"),
+                    new Role("ADMIN"));
+            roleRepository.saveAll(roles);
+        }
     }
 }
 
