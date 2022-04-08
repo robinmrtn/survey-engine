@@ -28,6 +28,12 @@ public class HashidsConfig {
     }
 
     @Bean
+    @Qualifier("userHashids")
+    public Hashids userHashids() {
+        return new Hashids("user", 9);
+    }
+
+    @Bean
     @Primary
     public Hashids elementHashids() {
         return new Hashids("element", 9);
