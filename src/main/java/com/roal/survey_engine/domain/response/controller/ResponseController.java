@@ -35,7 +35,8 @@ public class ResponseController {
             @ApiResponse(responseCode = "201", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SurveyResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid Input")})
+            @ApiResponse(responseCode = "400", description = "Invalid Input"),
+            @ApiResponse(responseCode = "404", description = "Campaign not found")})
     @PostMapping(value = "/campaigns/{campaignId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyResponseDto createSurveyResponse(@PathVariable @NotBlank String campaignId,
