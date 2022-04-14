@@ -4,6 +4,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-public record SurveyDto(String id, @NotBlank String title, String description,
+public record SurveyDto(String id, @NotBlank String title, String description, String workspaceId,
                         @NotEmpty List<SurveyPageDto> surveyPages) {
 }

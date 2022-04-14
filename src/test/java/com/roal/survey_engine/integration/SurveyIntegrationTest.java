@@ -8,10 +8,12 @@ import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
+import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
 import org.hashids.Hashids;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +51,9 @@ public class SurveyIntegrationTest {
     CampaignRepository campaignRepository;
 
     @Autowired
+    WorkspaceRepository workspaceRepository;
+
+    @Autowired
     SurveyDtoMapper mapper;
 
     @Autowired
@@ -57,6 +62,10 @@ public class SurveyIntegrationTest {
     @Autowired
     @Qualifier("surveyHashids")
     Hashids surveyHashids;
+
+    @Autowired
+    @Qualifier("workspaceHashids")
+    Hashids workspaceHashids;
 
     @Test
     void getSurvey() throws Exception {
@@ -84,10 +93,11 @@ public class SurveyIntegrationTest {
     @DisplayName("should return 201 when new Survey is submitted")
     @WithMockUser
     void postNewSurvey() throws Exception {
-
+        Long id = createWorkspace().getId();
+        String hashid = workspaceHashids.encode(id);
         SurveyDto surveyDto = mapper.entityToDto(createSurvey());
         String json = objectMapper.writeValueAsString(surveyDto);
-        MvcResult mvcResult = mvc.perform(post("/api/surveys/")
+        MvcResult mvcResult = mvc.perform(post("/api/surveys/" + hashid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
@@ -96,12 +106,19 @@ public class SurveyIntegrationTest {
 
     }
 
+    private Workspace createWorkspace() {
+        Workspace workspace = new Workspace("workspace");
+        workspaceRepository.saveAndFlush(workspace);
+        return workspace;
+    }
+
     private Survey createSurvey() {
 
         return new Survey("This is a survey")
                 .setTitle("Title")
                 .addSurveyPage(new SurveyPage()
-                        .addSurveyElement(new ClosedQuestion("This is a closed question")));
+                        .addSurveyElement(new ClosedQuestion("This is a closed question")))
+                .setWorkspace(createWorkspace());
     }
 
     private Campaign createCampaign() {
@@ -114,7 +131,8 @@ public class SurveyIntegrationTest {
 
         var survey = new Survey()
                 .setDescription("This is a Survey")
-                .addSurveyPage(surveyPage);
+                .addSurveyPage(surveyPage)
+                .setWorkspace(createWorkspace());
 
         var campaign = new Campaign().setSurvey(survey);
         surveyRepository.saveAndFlush(survey);

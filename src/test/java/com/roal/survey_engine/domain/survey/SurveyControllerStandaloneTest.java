@@ -1,22 +1,14 @@
 package com.roal.survey_engine.domain.survey;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.roal.survey_engine.domain.response.dto.ElementResponseDto;
-import com.roal.survey_engine.domain.response.dto.SurveyResponseDto;
 import com.roal.survey_engine.domain.survey.controller.SurveyController;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
-import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyPageDto;
+import com.roal.survey_engine.domain.survey.dto.survey.element.OpenQuestionDto;
 import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
-import com.roal.survey_engine.domain.survey.entity.Survey;
-import com.roal.survey_engine.domain.survey.entity.SurveyPage;
-import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
-import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
-import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.exception.SurveyExceptionHandler;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
-import org.hashids.Hashids;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +29,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -49,32 +42,12 @@ class SurveyControllerStandaloneTest {
     @Mock
     private SurveyService surveyService;
 
-    private final SurveyDtoMapper surveyDtoMapper = new SurveyDtoMapper(new Hashids());
-
     @InjectMocks
     private SurveyController surveyController;
 
     // This object will be magically initialized by the initFields method below.
     private JacksonTester<SurveyDto> jsonSurvey;
-    private JacksonTester<List> jsonList;
 
-
-    private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
-    private JacksonTester<ElementResponseDto> jsonElementResponseDto;
-
-    private static Survey survey;
-
-    @BeforeAll
-    public static void setup() {
-        var openQuestion = new OpenTextQuestion("This is an open question?");
-        var closedQuestion = new ClosedQuestion("This is a closed question?")
-                .addAnswer(new ClosedQuestionAnswer("first answer"))
-                .addAnswer(new ClosedQuestionAnswer("second answer"));
-
-        survey = new Survey("This is a Survey")
-                .addSurveyPage(new SurveyPage().addSurveyElement(openQuestion))
-                .addSurveyPage(new SurveyPage().addSurveyElement(closedQuestion));
-    }
 
     @BeforeEach
     public void init() {
@@ -91,7 +64,7 @@ class SurveyControllerStandaloneTest {
     void canRetrieveByIWhenExists() throws Exception {
 
         given(surveyService.findSurveyByCampaignId("abcd123"))
-                .willReturn(surveyDtoMapper.entityToDto(survey));
+                .willReturn(getSurveyDto());
 
         MockHttpServletResponse response = mvc.perform(
                         get("/api/surveys/abcd123")
@@ -99,7 +72,7 @@ class SurveyControllerStandaloneTest {
                 .andReturn().getResponse();
 
         assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()),
-                () -> assertEquals(jsonSurvey.write(surveyDtoMapper.entityToDto(survey)).getJson(),
+                () -> assertEquals(jsonSurvey.write(getSurveyDto()).getJson(),
                         response.getContentAsString()));
     }
 
@@ -116,24 +89,9 @@ class SurveyControllerStandaloneTest {
                 .andReturn().getResponse();
 
         assertAll(() -> assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus()),
-                () -> assertTrue(response.getContentAsString().isEmpty()));
+                () -> assertEquals("Survey not found", response.getContentAsString()));
     }
 
-    @Test
-    @DisplayName("GET /surveys/2 - success with Page and OpenQuestion")
-    void canRetrieveSurveyWithPageAndOpenQuestion() throws Exception {
-
-        given(surveyService.findSurveyByCampaignId("abcd123"))
-                .willReturn(surveyDtoMapper.entityToDto(survey));
-
-        MockHttpServletResponse response = mvc.perform(get("/api/surveys/abcd123")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse();
-
-        assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()),
-                () -> assertEquals(jsonSurvey.write(surveyDtoMapper.entityToDto(survey)).getJson(), response.getContentAsString()));
-
-    }
 
     @Test
     void canRetrieveSurveyList() throws Exception {
@@ -154,5 +112,10 @@ class SurveyControllerStandaloneTest {
 
         assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()));
 
+    }
+
+    private SurveyDto getSurveyDto() {
+        return new SurveyDto("abcd123", "Title", "description", "bbbbb",
+                List.of(new SurveyPageDto(1, List.of(new OpenQuestionDto("question", 1, 99)))));
     }
 }

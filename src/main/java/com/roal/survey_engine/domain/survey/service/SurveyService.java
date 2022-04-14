@@ -5,6 +5,7 @@ import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
 import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
+import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
@@ -21,21 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
-
     private final CampaignRepository campaignRepository;
-
     private final SurveyDtoMapper surveyDtoMapper;
-
     private final Hashids surveyHashids;
+    private final WorkspaceService workspaceService;
 
     public SurveyService(SurveyRepository surveyRepository,
                          CampaignRepository campaignRepository,
                          SurveyDtoMapper surveyDtoMapper,
-                         @Qualifier("surveyHashids") Hashids surveyHashids) {
+                         @Qualifier("surveyHashids") Hashids surveyHashids, WorkspaceService workspaceService) {
         this.surveyRepository = surveyRepository;
         this.campaignRepository = campaignRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
+        this.workspaceService = workspaceService;
     }
 
     @Transactional
@@ -44,8 +44,10 @@ public class SurveyService {
     }
 
     @Transactional
-    public SurveyDto saveDto(SurveyDto surveyDto) {
+    public SurveyDto saveDto(SurveyDto surveyDto, String workspaceId) {
         Survey survey = surveyDtoMapper.dtoToEntity(surveyDto);
+        Workspace workspace = workspaceService.getEntityByHashid(workspaceId);
+        survey.setWorkspace(workspace);
         surveyRepository.save(survey);
         return surveyDtoMapper.entityToDto(survey);
     }
@@ -92,5 +94,9 @@ public class SurveyService {
             throw new SurveyNotFoundException(hashid);
         }
         return decode[0];
+    }
+
+    public String idToHash(long id) {
+        return surveyHashids.encode(id);
     }
 }

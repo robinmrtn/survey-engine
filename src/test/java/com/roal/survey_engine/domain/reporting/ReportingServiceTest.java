@@ -13,13 +13,13 @@ import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
+import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -175,9 +175,9 @@ public class ReportingServiceTest {
 
         responseRepository.saveAll(List.of(surveyResponse, surveyResponse2, surveyResponse3));
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> {
+        Assertions.assertThrows(CampaignNotFoundException.class, () -> {
             List<ReportingDto> reportsByCampaignId =
-                reportingService.getReportsByCampaignId(savedCampaign.getId() + 1);
+                    reportingService.getReportsByCampaignId(savedCampaign.getId() + 1);
         });
     }
 }

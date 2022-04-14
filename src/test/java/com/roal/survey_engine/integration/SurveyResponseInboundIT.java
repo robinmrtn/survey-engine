@@ -1,6 +1,7 @@
 package com.roal.survey_engine.integration;
 
 import com.roal.survey_engine.domain.response.dto.*;
+import com.roal.survey_engine.domain.response.repository.ResponseRepository;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
@@ -8,6 +9,7 @@ import com.roal.survey_engine.domain.survey.entity.question.*;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import org.hashids.Hashids;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,8 +41,18 @@ class SurveyResponseInboundIT {
     private CampaignRepository campaignRepository;
 
     @Autowired
+    private ResponseRepository responseRepository;
+
+    @Autowired
     @Qualifier("campaignHashids")
     private Hashids campaignHashids;
+
+    @BeforeEach
+    void init() {
+        responseRepository.deleteAll();
+        campaignRepository.deleteAll();
+        surveyRepository.deleteAll();
+    }
 
     @Test
     void testPostResponseDto_Success() {
@@ -78,13 +90,12 @@ class SurveyResponseInboundIT {
 
         Survey survey = createSurvey();
         Campaign campaign = createCampaign(survey);
-
-        ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + campaign.getId() + 1,
-                        createSurveyResponseDto(survey), SurveyResponseDto.class);
-
+        String id = campaignHashids.encode(campaign.getId());
+        SurveyResponseDto dto = createSurveyResponseDto(survey);
+        ResponseEntity<String> responseEntity =
+                restTemplate.postForEntity("/api/responses/campaigns/abcd",
+                        dto, String.class);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertNull(responseEntity.getBody());
     }
 
 

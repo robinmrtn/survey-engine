@@ -1,5 +1,7 @@
 package com.roal.survey_engine.domain.user.entity;
 
+import com.roal.survey_engine.domain.survey.entity.Workspace;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
@@ -27,6 +29,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+
+    @ManyToMany(mappedBy = "users")
+    private Collection<Workspace> workspaces;
 
     public User(String username, String password, List<Role> roles) {
         this.username = username;

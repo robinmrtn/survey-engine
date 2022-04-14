@@ -48,10 +48,11 @@ public class SurveyController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SurveyDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid Input")})
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{workspaceId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public SurveyDto postSurvey(@NotNull @Valid @RequestBody SurveyDto survey) {
-        return surveyService.saveDto(survey);
+    public SurveyDto postSurvey(@PathVariable @NotBlank String workspaceId,
+                                @NotNull @Valid @RequestBody SurveyDto survey) {
+        return surveyService.saveDto(survey, workspaceId);
     }
 
     @Operation(summary = "Find all surveys")

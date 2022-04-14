@@ -34,6 +34,12 @@ public class HashidsConfig {
     }
 
     @Bean
+    @Qualifier("workspaceHashids")
+    public Hashids workspaceHashids() {
+        return new Hashids("workspace", 9);
+    }
+
+    @Bean
     @Primary
     public Hashids elementHashids() {
         return new Hashids("element", 9);

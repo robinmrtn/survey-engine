@@ -23,6 +23,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -44,6 +45,9 @@ class ResponseControllerStandaloneTest {
 
     @MockBean
     private CampaignService campaignService;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;

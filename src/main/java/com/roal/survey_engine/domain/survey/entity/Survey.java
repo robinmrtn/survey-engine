@@ -32,6 +32,9 @@ public class Survey {
     @JoinColumn(name = "SURVEY_ID")
     private List<SurveyPage> surveyPages = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Workspace workspace;
+
     public Survey() {
         // needed by hibernate
     }
@@ -82,6 +85,15 @@ public class Survey {
         return this;
     }
 
+    public Workspace getWorkspace() {
+        return workspace;
+    }
+
+    public Survey setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,5 +106,4 @@ public class Survey {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }

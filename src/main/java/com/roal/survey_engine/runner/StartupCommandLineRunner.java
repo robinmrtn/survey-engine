@@ -12,6 +12,7 @@ import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
+import com.roal.survey_engine.domain.user.repository.UserRepository;
 import com.roal.survey_engine.domain.user.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -31,15 +32,17 @@ class StartupCommandLineRunner implements CommandLineRunner {
     private final CampaignRepository campaignRepository;
     private final UserService userService;
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
     StartupCommandLineRunner(SurveyRepository surveyRepository,
                              CampaignRepository campaignRepository,
                              UserService userService,
-                             RoleRepository roleRepository) {
+                             RoleRepository roleRepository, UserRepository userRepository) {
         this.surveyRepository = surveyRepository;
         this.campaignRepository = campaignRepository;
         this.userService = userService;
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -68,13 +71,17 @@ class StartupCommandLineRunner implements CommandLineRunner {
         campaignRepository.save(campaign);
 
 
-        UserRegistrationDto peter = new UserRegistrationDto("peter", "peter", Set.of("USER"));
-        UserRegistrationDto max = new UserRegistrationDto("max", "max", Set.of("USER"));
-        UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("USER", "ADMIN"));
+        if (userRepository.findAll().isEmpty()) {
 
-        userService.save(peter);
-        userService.save(max);
-        userService.save(admin);
+            UserRegistrationDto peter = new UserRegistrationDto("user1", "peter", Set.of("USER"));
+            UserRegistrationDto max = new UserRegistrationDto("user2", "max", Set.of("USER"));
+            UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("USER", "ADMIN"));
+
+            userService.create(peter);
+            userService.create(max);
+            userService.create(admin);
+        }
+
     }
 
     private void addRoles() {
