@@ -78,14 +78,15 @@ public class CampaignService {
     public CampaignDto updateCampaign(CampaignDto campaignDto, String hashid) {
         long id = hashidToId(hashid);
         return campaignRepository.findById(id)
-                .map(campaign -> {
-                    campaign.setTitle(campaignDto.title());
-                    campaign.setHidden(campaignDto.hidden());
-                    campaign.setActive(campaignDto.active());
-                    campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
-                    return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Campaign with id '" + id + "' not found"));
+            .map(campaign -> {
+                campaign.setTitle(campaignDto.title());
+                campaign.setHidden(campaignDto.hidden());
+                campaign.setActive(campaignDto.active());
+                campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
+                return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
+            })
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Campaign with id '" + id + "' not found"));
     }
 
     @Transactional
