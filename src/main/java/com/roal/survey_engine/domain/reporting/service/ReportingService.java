@@ -86,11 +86,11 @@ public class ReportingService {
     private List<CategoricalReportingDto> getCategoricalReportsByCampaignId(long campaignId) {
 
         String sql = "SELECT cq.ID as element_id, cqa.value as answer, COUNT(cqa.value) as count, COUNT(cq.ID) as count2 " +
-                "FROM CLOSED_QUESTION_RESPONSE_ANSWERS cqra " +
-                "JOIN CLOSED_QUESTION_ANSWER cqa ON cqa.id = cqra.answers_id " +
-                "JOIN CLOSED_QUESTION_RESPONSE cqr ON cqra.CLOSED_QUESTION_RESPONSE_ID = cqr.ID " +
-                "JOIN CLOSED_QUESTION cq ON cqr.CLOSED_QUESTION_ID = cq.ID " +
-                "JOIN SURVEY_PAGE_SURVEY_PAGE_ELEMENTS spspe ON spspe.SURVEY_PAGE_ELEMENTS_ID = cq.ID " +
+            "FROM CLOSED_QUESTION_RESPONSE_ANSWERS cqra " +
+            "JOIN CLOSED_QUESTION_ANSWER cqa ON cqa.id = cqra.answers_id " +
+            "JOIN CLOSED_QUESTION_RESPONSE cqr ON cqra.CLOSED_QUESTION_RESPONSE_ID = cqr.ID " +
+            "JOIN CLOSED_QUESTION cq ON cqr.CLOSED_QUESTION_ID = cq.ID " +
+            "JOIN SURVEY_PAGE_SURVEY_PAGE_ELEMENTS spspe ON spspe.SURVEY_PAGE_ELEMENTS_ID = cq.ID " +
             "JOIN SURVEY_PAGE sp ON sp.id = spspe.SURVEY_PAGE_ID " +
             "JOIN SURVEY s ON s.id = sp.SURVEY_ID " +
             "JOIN CAMPAIGN c on c.SURVEY_ID = s.id " +
@@ -100,6 +100,10 @@ public class ReportingService {
         SqlRowSet rowSet = jdbcTemplate
             .queryForRowSet(sql, new MapSqlParameterSource("campaignId", campaignId));
 
+        return parseRows(rowSet);
+    }
+
+    private List<CategoricalReportingDto> parseRows(SqlRowSet rowSet) {
         long elementId = -1;
         int count = 0;
         List<CategoricalReportingItemDto> items = null;
