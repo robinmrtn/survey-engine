@@ -29,7 +29,8 @@ public class Survey {
     private LocalDateTime updatedAt;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "SURVEY_ID")
+    @JoinColumn(name = "survey_id")
+    @OrderBy("position")
     private List<SurveyPage> surveyPages = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,13 +39,6 @@ public class Survey {
     public Survey() {
         // needed by hibernate
     }
-
-    public Survey(long id, String title, List<SurveyPage> surveyPages) {
-        this.id = id;
-        this.title = title;
-        this.surveyPages = surveyPages;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -63,8 +57,11 @@ public class Survey {
     }
 
     public Survey addSurveyPage(SurveyPage surveyPage) {
+        if (surveyPage.getPosition() <= 0) {
+            int position = surveyPages.size() + 1;
+            surveyPage.setPosition(position);
+        }
         surveyPages.add(surveyPage);
-        //    surveyPage.setSurveyId(this.id);
         return this;
     }
 
