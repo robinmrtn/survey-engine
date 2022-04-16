@@ -91,6 +91,10 @@ public class Campaign {
         return this;
     }
 
+    public Workspace getWorkspace() {
+        return survey.getWorkspace();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

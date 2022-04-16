@@ -5,6 +5,7 @@ import com.roal.survey_engine.domain.user.entity.User;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 public class Workspace {
@@ -70,12 +71,7 @@ public class Workspace {
     }
 
     public Collection<User> getUsers() {
-        return users;
-    }
-
-    public Workspace setUsers(Collection<User> users) {
-        this.users = users;
-        return this;
+        return Collections.unmodifiableCollection(users);
     }
 
     public Workspace addUser(User user) {
@@ -86,6 +82,11 @@ public class Workspace {
     public Workspace removeUser(User user) {
         users.remove(user);
         return this;
+    }
+
+    public boolean containsUserByUsername(String username) {
+        return users.stream()
+            .anyMatch(user -> user.getUsername().equals(username));
     }
 
     @Override
