@@ -20,6 +20,7 @@ public class SurveyPage {
     private int position;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("position")
     private List<AbstractSurveyElement> surveyPageElements = new ArrayList<>();
 
     public SurveyPage() {
@@ -54,8 +55,9 @@ public class SurveyPage {
     }
 
     public SurveyPage addSurveyElement(AbstractSurveyElement surveyElement) {
+        int position = surveyPageElements.size() + 1;
+        surveyElement.setPosition(position);
         surveyPageElements.add(surveyElement);
-//   surveyElement.setSurveyPage(this);
         return this;
     }
 
