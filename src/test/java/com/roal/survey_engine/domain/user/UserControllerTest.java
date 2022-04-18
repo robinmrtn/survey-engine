@@ -48,7 +48,7 @@ public class UserControllerTest {
     public void successAsUser() throws Exception {
 
         given(userService.findByUsername("user1"))
-            .willReturn(new UserDto("aaa", "user1", Set.of("ROLE_USER")));
+            .willReturn(new UserDto("aaa", "user1", Set.of("ROLE_USER"), false));
 
         MockHttpServletResponse response = mvc.perform(get("/api/users/me")
                 .contentType(MediaType.APPLICATION_JSON))
