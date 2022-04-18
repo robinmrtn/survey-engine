@@ -20,7 +20,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("api/surveys")
+@RequestMapping("api")
 @Tag(name = "Survey", description = "Survey API")
 public class SurveyController {
 
@@ -32,23 +32,23 @@ public class SurveyController {
 
     @Operation(summary = "Find survey by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SurveyDto.class))),
-            @ApiResponse(responseCode = "404", description = "Survey not found")
+        @ApiResponse(responseCode = "200", description = "Successful",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = SurveyDto.class))),
+        @ApiResponse(responseCode = "404", description = "Survey not found")
     })
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/surveys/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public SurveyDto getSurveyById(@PathVariable @NotBlank String id) {
         return surveyService.findSurveyByCampaignId(id);
     }
 
     @Operation(summary = "Create new survey")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Success",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SurveyDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid Input")})
-    @PostMapping(value = "/{workspaceId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+        @ApiResponse(responseCode = "201", description = "Success",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = SurveyDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid Input")})
+    @PostMapping(value = "/workspaces/{workspaceId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyDto postSurvey(@PathVariable @NotBlank String workspaceId,
                                 @NotNull @Valid @RequestBody SurveyDto survey) {
@@ -56,14 +56,14 @@ public class SurveyController {
     }
 
     @Operation(summary = "Find all surveys")
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/surveys", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
         return surveyService.getPublicSurveys(pageable);
     }
 
     @Operation(summary = "Delete Survey by ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{surveyId}")
+    @DeleteMapping("surveys/{surveyId}")
     public void deleteSurvey(@PathVariable("surveyId") @NotBlank String id) {
         surveyService.deleteSurveyById(id);
     }
