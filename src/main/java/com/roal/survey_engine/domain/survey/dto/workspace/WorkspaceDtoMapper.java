@@ -1,7 +1,6 @@
 package com.roal.survey_engine.domain.survey.dto.workspace;
 
 import com.roal.survey_engine.domain.survey.entity.Workspace;
-import com.roal.survey_engine.domain.user.entity.User;
 import com.roal.survey_engine.domain.user.service.UserService;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,13 +29,13 @@ public class WorkspaceDtoMapper {
         Workspace workspace = new Workspace(workspaceDto.title());
 
         if (workspaceDto.userIds() != null && !workspaceDto.userIds().isEmpty()) {
-            List<User> users = workspaceDto
-                    .userIds()
-                    .stream()
-                    .map(userService::findById)
-                    .toList();
 
-            workspace.setUsers(users);
+            workspaceDto
+                .userIds()
+                .stream()
+                .map(userService::findById)
+                .forEach(workspace::addUser);
+
         }
         return workspace;
     }
