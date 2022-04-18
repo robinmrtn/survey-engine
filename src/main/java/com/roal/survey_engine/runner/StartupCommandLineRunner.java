@@ -47,11 +47,9 @@ class StartupCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
         addRoles();
         addSurey();
         addUsers();
-
     }
 
     private void addUsers() {
