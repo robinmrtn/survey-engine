@@ -10,12 +10,15 @@ import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,16 +29,18 @@ public class SurveyService {
     private final SurveyDtoMapper surveyDtoMapper;
     private final Hashids surveyHashids;
     private final WorkspaceService workspaceService;
+    private final AuthenticationFacade authenticationFacade;
 
     public SurveyService(SurveyRepository surveyRepository,
                          CampaignRepository campaignRepository,
                          SurveyDtoMapper surveyDtoMapper,
-                         @Qualifier("surveyHashids") Hashids surveyHashids, WorkspaceService workspaceService) {
+                         @Qualifier("surveyHashids") Hashids surveyHashids, WorkspaceService workspaceService, AuthenticationFacade authenticationFacade) {
         this.surveyRepository = surveyRepository;
         this.campaignRepository = campaignRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
         this.workspaceService = workspaceService;
+        this.authenticationFacade = authenticationFacade;
     }
 
     @Transactional
@@ -45,6 +50,11 @@ public class SurveyService {
 
     @Transactional
     public SurveyDto saveDto(SurveyDto surveyDto, String workspaceId) {
+
+        if (!workspaceService.currentUserCanModifyWorkspace(workspaceId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
         Survey survey = surveyDtoMapper.dtoToEntity(surveyDto);
         Workspace workspace = workspaceService.getEntityByHashid(workspaceId);
         survey.setWorkspace(workspace);
@@ -85,6 +95,15 @@ public class SurveyService {
     @Transactional
     public void deleteSurveyById(String hashid) {
         long id = hashidToId(hashid);
+        Campaign campaign = campaignRepository.findById(id)
+            .orElseThrow(() -> new CampaignNotFoundException(hashid));
+
+        Workspace workspace = campaign.getWorkspace();
+
+        if (!workspaceService.currentUserCanModifyWorkspace(workspace)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
         campaignRepository.deleteById(id);
     }
 
