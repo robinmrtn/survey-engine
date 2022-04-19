@@ -10,7 +10,6 @@ import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
-import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -29,18 +28,16 @@ public class SurveyService {
     private final SurveyDtoMapper surveyDtoMapper;
     private final Hashids surveyHashids;
     private final WorkspaceService workspaceService;
-    private final AuthenticationFacade authenticationFacade;
 
     public SurveyService(SurveyRepository surveyRepository,
                          CampaignRepository campaignRepository,
                          SurveyDtoMapper surveyDtoMapper,
-                         @Qualifier("surveyHashids") Hashids surveyHashids, WorkspaceService workspaceService, AuthenticationFacade authenticationFacade) {
+                         @Qualifier("surveyHashids") Hashids surveyHashids, WorkspaceService workspaceService) {
         this.surveyRepository = surveyRepository;
         this.campaignRepository = campaignRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
         this.workspaceService = workspaceService;
-        this.authenticationFacade = authenticationFacade;
     }
 
     @Transactional
@@ -115,7 +112,4 @@ public class SurveyService {
         return decode[0];
     }
 
-    public String idToHash(long id) {
-        return surveyHashids.encode(id);
-    }
 }

@@ -23,8 +23,7 @@ public class AuthenticationFacade {
         if (getAuthentication() == null) {
             return false;
         }
-        return SecurityContextHolder.getContext()
-            .getAuthentication()
+        return getAuthentication()
             .getAuthorities()
             .stream()
             .anyMatch(authority -> "ADMIN".equals(authority.getAuthority()));

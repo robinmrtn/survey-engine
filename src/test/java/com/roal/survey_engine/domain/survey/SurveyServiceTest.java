@@ -9,6 +9,7 @@ import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
+import com.roal.survey_engine.security.AuthenticationFacade;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ class SurveyServiceTest {
 
     @MockBean
     private CampaignRepository campaignRepository;
+
+    @MockBean
+    AuthenticationFacade authenticationFacade;
 
     @Test
     @DisplayName("Test findById success")

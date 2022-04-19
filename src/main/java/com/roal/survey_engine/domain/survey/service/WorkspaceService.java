@@ -98,7 +98,8 @@ public class WorkspaceService {
     }
 
     public boolean currentUserCanModifyWorkspace(Workspace workspace) {
-        String username = authenticationFacade.getUserDetails().getUsername();
+        String username = authenticationFacade.getUserDetails()
+            .getUsername();
         return authenticationFacade.isAdmin() || workspace.containsUserByUsername(username);
     }
 

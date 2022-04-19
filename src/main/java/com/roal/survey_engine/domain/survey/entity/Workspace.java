@@ -18,16 +18,17 @@ public class Workspace {
     private Boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "workspace")
-    private Collection<Survey> surveys;
+    private Collection<Survey> surveys = new ArrayList<>();
+
 
     @ManyToMany
     @JoinTable(
-            name = "workspaces_users",
-            joinColumns = @JoinColumn(
-                    name = "workspace_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"))
-    private Collection<User> users;
+        name = "workspaces_users",
+        joinColumns = @JoinColumn(
+            name = "workspace_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(
+            name = "user_id", referencedColumnName = "id"))
+    private Collection<User> users = new ArrayList<>();
 
     public Workspace(String title) {
         this.title = title;
