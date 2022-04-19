@@ -20,7 +20,7 @@ public class AuthenticationFacade {
     }
 
     public boolean isAdmin() {
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (getAuthentication() == null) {
             return false;
         }
         return SecurityContextHolder.getContext()

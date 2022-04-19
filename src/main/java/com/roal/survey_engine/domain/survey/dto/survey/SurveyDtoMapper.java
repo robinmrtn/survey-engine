@@ -41,7 +41,7 @@ public class SurveyDtoMapper {
             surveyPageDtos.add(new SurveyPageDto(surveyPage.getPosition(), elementDtos));
         }
         return new SurveyDto(surveyHashids.encode(survey.getId()), survey.getTitle(),
-                survey.getDescription(), workspaceService.idToHashid(survey.getWorkspace().getId()), surveyPageDtos);
+            survey.getDescription(), workspaceService.idToHashid(survey.getWorkspace().getId()), surveyPageDtos);
     }
 
     private List<AbstractElementDto> getElementDtos(List<AbstractSurveyElement> surveyPageElements) {
@@ -49,30 +49,37 @@ public class SurveyDtoMapper {
         List<AbstractElementDto> elementDtos = new ArrayList<>();
 
         for (AbstractSurveyElement surveyPageElement : surveyPageElements) {
-            if (surveyPageElement instanceof ClosedQuestion closedQuestion) {
-
-                Set<ClosedQuestionAnswerDto> answersDto = closedQuestion.getAnswers().stream()
-                        .map(answer -> new ClosedQuestionAnswerDto(answer.getValue(), answer.getId()))
-                        .collect(Collectors.toSet());
-
-                elementDtos.add(new ClosedQuestionDto(closedQuestion.getQuestion(),
-                        closedQuestion.getId(),
-                        closedQuestion.getPosition(),
-                        answersDto));
-
-            } else if (surveyPageElement instanceof OpenNumericQuestion openNumericQuestion) {
-
-                elementDtos.add(new OpenNumericQuestionDto(openNumericQuestion.getQuestion(),
-                        openNumericQuestion.getPosition(),
-                        openNumericQuestion.getId()));
-
-            } else if (surveyPageElement instanceof OpenTextQuestion openTextQuestion) {
-                elementDtos.add(new OpenQuestionDto(openTextQuestion.getQuestion(),
-                        openTextQuestion.getPosition(),
-                        openTextQuestion.getId()));
-            }
+            elementDtos.add(parseElements(surveyPageElement));
         }
         return elementDtos;
+    }
+
+    private AbstractElementDto parseElements(AbstractSurveyElement surveyPageElement) {
+
+        if (surveyPageElement instanceof ClosedQuestion closedQuestion) {
+
+            Set<ClosedQuestionAnswerDto> answersDto = closedQuestion.getAnswers().stream()
+                .map(answer -> new ClosedQuestionAnswerDto(answer.getValue(), answer.getId()))
+                .collect(Collectors.toSet());
+
+            return new ClosedQuestionDto(closedQuestion.getQuestion(),
+                closedQuestion.getId(),
+                closedQuestion.getPosition(),
+                answersDto);
+
+        } else if (surveyPageElement instanceof OpenNumericQuestion openNumericQuestion) {
+
+            return new OpenNumericQuestionDto(openNumericQuestion.getQuestion(),
+                openNumericQuestion.getPosition(),
+                openNumericQuestion.getId());
+
+        } else if (surveyPageElement instanceof OpenTextQuestion openTextQuestion) {
+            return new OpenQuestionDto(openTextQuestion.getQuestion(),
+                openTextQuestion.getPosition(),
+                openTextQuestion.getId());
+        }
+
+        throw new IllegalArgumentException();
     }
 
     public Survey dtoToEntity(SurveyDto surveyDto) {
@@ -80,7 +87,7 @@ public class SurveyDtoMapper {
 
         for (SurveyPageDto surveyPageDto : surveyDto.surveyPages()) {
             var surveyPage = new SurveyPage()
-                    .setPosition(surveyPageDto.position());
+                .setPosition(surveyPageDto.position());
 
             parseElements(surveyPageDto, surveyPage);
             survey.addSurveyPage(surveyPage);
@@ -90,30 +97,34 @@ public class SurveyDtoMapper {
 
     private void parseElements(SurveyPageDto surveyPageDto, SurveyPage surveyPage) {
         for (AbstractElementDto elementDto : surveyPageDto.surveyPageElements()) {
-            switch (elementDto.type()) {
-                case "opq" -> {
-                    AbstractSurveyElement element = new OpenTextQuestion(((OpenQuestionDto) elementDto).question());
-                    element.setId(elementDto.id());
-                    element.setPosition(elementDto.position());
-                    surveyPage.addSurveyElement(element);
-                }
-                case "opnq" -> {
-                    AbstractSurveyElement element = new OpenNumericQuestion(((OpenNumericQuestionDto) elementDto).question());
-                    element.setId(elementDto.id());
-                    element.setPosition(elementDto.position());
-                    surveyPage.addSurveyElement(element);
-                }
-                case "clq" -> {
-                    Set<ClosedQuestionAnswerDto> answers = ((ClosedQuestionDto) elementDto).answers();
-                    ClosedQuestion element = new ClosedQuestion(((ClosedQuestionDto) elementDto).question());
-                    element.setId(elementDto.id());
-                    element.setPosition(elementDto.position());
-                    element.setAnswers(dtoAnswersToEntity(answers));
-                    surveyPage.addSurveyElement(element);
-                }
-                default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format: Element type '" +
-                        elementDto.type() + "' not valid");
+            parseElementDto(surveyPage, elementDto);
+        }
+    }
+
+    private void parseElementDto(SurveyPage surveyPage, AbstractElementDto elementDto) {
+        switch (elementDto.type()) {
+            case "opq" -> {
+                AbstractSurveyElement element = new OpenTextQuestion(((OpenQuestionDto) elementDto).question());
+                element.setId(elementDto.id());
+                element.setPosition(elementDto.position());
+                surveyPage.addSurveyElement(element);
             }
+            case "opnq" -> {
+                AbstractSurveyElement element = new OpenNumericQuestion(((OpenNumericQuestionDto) elementDto).question());
+                element.setId(elementDto.id());
+                element.setPosition(elementDto.position());
+                surveyPage.addSurveyElement(element);
+            }
+            case "clq" -> {
+                Set<ClosedQuestionAnswerDto> answers = ((ClosedQuestionDto) elementDto).answers();
+                ClosedQuestion element = new ClosedQuestion(((ClosedQuestionDto) elementDto).question());
+                element.setId(elementDto.id());
+                element.setPosition(elementDto.position());
+                element.setAnswers(dtoAnswersToEntity(answers));
+                surveyPage.addSurveyElement(element);
+            }
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format: Element type '" +
+                elementDto.type() + "' not valid");
         }
     }
 
