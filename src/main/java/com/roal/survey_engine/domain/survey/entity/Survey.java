@@ -13,7 +13,8 @@ import java.util.Objects;
 public class Survey {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_survey")
+    @SequenceGenerator(name = "seq_survey")
     private long id;
 
     private String title;

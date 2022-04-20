@@ -14,7 +14,8 @@ import java.util.Objects;
 public class SurveyPage {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_surveypage")
+    @SequenceGenerator(name = "seq_surveypage")
     private long id;
 
     private int position;

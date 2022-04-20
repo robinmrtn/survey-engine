@@ -10,7 +10,8 @@ import java.util.Collections;
 @Entity
 public class Workspace {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_workspace")
+    @SequenceGenerator(name = "seq_workspace")
     private Long id;
 
     private String title;

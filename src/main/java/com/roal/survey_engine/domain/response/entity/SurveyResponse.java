@@ -15,7 +15,8 @@ import java.util.Objects;
 public class SurveyResponse {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_response")
+    @SequenceGenerator(name = "seq_response")
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
