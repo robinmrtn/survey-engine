@@ -23,11 +23,11 @@ public class Workspace {
 
     @ManyToMany
     @JoinTable(
-        name = "workspaces_users",
-        joinColumns = @JoinColumn(
-            name = "workspace_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(
-            name = "user_id", referencedColumnName = "id"))
+            name = "workspace_user",
+            joinColumns = @JoinColumn(
+                    name = "workspace_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"))
     private Collection<User> users = new ArrayList<>();
 
     public Workspace(String title) {
