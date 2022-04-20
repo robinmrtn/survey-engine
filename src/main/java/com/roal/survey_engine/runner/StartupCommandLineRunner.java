@@ -55,9 +55,9 @@ class StartupCommandLineRunner implements CommandLineRunner {
     private void addUsers() {
         if (userRepository.findAll().isEmpty()) {
 
-            UserRegistrationDto peter = new UserRegistrationDto("user1", "peter", Set.of("USER"));
-            UserRegistrationDto max = new UserRegistrationDto("user2", "max", Set.of("USER"));
-            UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("USER", "ADMIN"));
+            UserRegistrationDto peter = new UserRegistrationDto("user1", "peter", Set.of("ROLE_USER"));
+            UserRegistrationDto max = new UserRegistrationDto("user2", "max", Set.of("ROLE_USER"));
+            UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("ROLE_USER", "ROLE_ADMIN"));
 
             userService.create(peter);
             userService.create(max);
@@ -91,8 +91,8 @@ class StartupCommandLineRunner implements CommandLineRunner {
         int size = roleRepository.findAll().size();
         if (size == 0) {
             List<Role> roles = List.of(
-                    new Role("USER"),
-                    new Role("ADMIN"));
+                    new Role("ROLE_USER"),
+                    new Role("ROLE_ADMIN"));
             roleRepository.saveAll(roles);
         }
     }

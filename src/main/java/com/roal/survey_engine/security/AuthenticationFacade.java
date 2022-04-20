@@ -24,8 +24,8 @@ public class AuthenticationFacade {
             return false;
         }
         return getAuthentication()
-            .getAuthorities()
-            .stream()
-            .anyMatch(authority -> "ADMIN".equals(authority.getAuthority()));
+                .getAuthorities()
+                .stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
     }
 }

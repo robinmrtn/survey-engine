@@ -16,7 +16,7 @@ public class AuthenticationFacadeTest {
 
 
     @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void testIsAdmin() {
         assertTrue(authenticationFacade.isAdmin());
     }

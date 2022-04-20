@@ -91,13 +91,13 @@ public class SurveyIntegrationTest {
 
     @Test
     @DisplayName("should return 201 when new Survey is submitted")
-    @WithMockUser
+    @WithMockUser(authorities = {"ROLE_ADMIN"})
     void postNewSurvey() throws Exception {
         Long id = createWorkspace().getId();
         String hashid = workspaceHashids.encode(id);
         SurveyDto surveyDto = mapper.entityToDto(createSurvey());
         String json = objectMapper.writeValueAsString(surveyDto);
-        MvcResult mvcResult = mvc.perform(post("/api/surveys/" + hashid)
+        MvcResult mvcResult = mvc.perform(post("/api/workspaces/" + hashid + "/surveys/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
