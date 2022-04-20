@@ -8,7 +8,8 @@ import javax.persistence.*;
 public abstract class AbstractElementResponse {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_response_element")
+    @SequenceGenerator(name = "seq_response_element")
     protected long id;
 
     @ManyToOne

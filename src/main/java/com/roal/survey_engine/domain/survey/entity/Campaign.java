@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 public class Campaign {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_campaign")
+    @SequenceGenerator(name = "seq_campaign")
     private long id;
 
     @ManyToOne

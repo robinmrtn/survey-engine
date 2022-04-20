@@ -12,7 +12,8 @@ import java.util.Objects;
 public abstract class AbstractSurveyElement implements Comparable<AbstractSurveyElement> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_survey_element")
+    @SequenceGenerator(name = "seq_survey_element")
     protected long id;
 
     protected int position;
