@@ -2,13 +2,14 @@ package com.roal.survey_engine.domain.user.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_role")
     @SequenceGenerator(name = "seq_role")
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String name;
@@ -23,11 +24,11 @@ public class Role {
     public Role() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,7 +47,7 @@ public class Role {
 
         Role role = (Role) o;
 
-        return id == role.id;
+        return Objects.equals(id, role.id);
     }
 
     @Override

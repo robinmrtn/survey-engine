@@ -15,7 +15,7 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_survey")
     @SequenceGenerator(name = "seq_survey")
-    private long id;
+    private Long id;
 
     private String title;
 
@@ -40,8 +40,9 @@ public class Survey {
     public Survey() {
         // needed by hibernate
     }
-    public void setId(long id) {
-        this.id = id;
+
+    public Long getId() {
+        return id;
     }
 
     public Survey(String description) {
@@ -70,8 +71,8 @@ public class Survey {
         return surveyPages;
     }
 
-    public long getId() {
-        return id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -97,7 +98,7 @@ public class Survey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Survey survey = (Survey) o;
-        return id == survey.id;
+        return Objects.equals(id, survey.id);
     }
 
     @Override

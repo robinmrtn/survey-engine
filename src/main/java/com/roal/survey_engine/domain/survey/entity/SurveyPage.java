@@ -16,7 +16,7 @@ public class SurveyPage {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_surveypage")
     @SequenceGenerator(name = "seq_surveypage")
-    private long id;
+    private Long id;
 
     private int position;
 
@@ -34,11 +34,11 @@ public class SurveyPage {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -70,7 +70,7 @@ public class SurveyPage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SurveyPage that = (SurveyPage) o;
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override

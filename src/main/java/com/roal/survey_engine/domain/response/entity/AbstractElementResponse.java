@@ -1,6 +1,7 @@
 package com.roal.survey_engine.domain.response.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -10,7 +11,7 @@ public abstract class AbstractElementResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_response_element")
     @SequenceGenerator(name = "seq_response_element")
-    protected long id;
+    protected Long id;
 
     @ManyToOne
     private SurveyResponse surveyResponse;
@@ -18,11 +19,11 @@ public abstract class AbstractElementResponse {
     public AbstractElementResponse() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,7 +42,7 @@ public abstract class AbstractElementResponse {
 
         AbstractElementResponse that = (AbstractElementResponse) o;
 
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override

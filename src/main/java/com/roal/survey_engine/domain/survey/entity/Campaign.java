@@ -12,7 +12,7 @@ public class Campaign {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_campaign")
     @SequenceGenerator(name = "seq_campaign")
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Survey survey;
@@ -78,7 +78,7 @@ public class Campaign {
         return this;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -103,7 +103,7 @@ public class Campaign {
 
         Campaign campaign = (Campaign) o;
 
-        return id == campaign.id;
+        return id.equals(campaign.id);
     }
 
     @Override

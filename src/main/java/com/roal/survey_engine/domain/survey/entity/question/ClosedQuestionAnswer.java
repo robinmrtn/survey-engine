@@ -3,6 +3,7 @@ package com.roal.survey_engine.domain.survey.entity.question;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class ClosedQuestionAnswer {
@@ -10,7 +11,7 @@ public class ClosedQuestionAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_closed_question_answer")
     @SequenceGenerator(name = "seq_closed_question_answer")
-    private long id;
+    private Long id;
 
     private String value;
 
@@ -18,7 +19,7 @@ public class ClosedQuestionAnswer {
         // needed by hibernate
     }
 
-    public ClosedQuestionAnswer(long id, String value) {
+    public ClosedQuestionAnswer(Long id, String value) {
         this.id = id;
         this.value = value;
     }
@@ -27,11 +28,11 @@ public class ClosedQuestionAnswer {
         this.value = value;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public ClosedQuestionAnswer setId(long id) {
+    public ClosedQuestionAnswer setId(Long id) {
         this.id = id;
         return this;
     }
@@ -68,4 +69,18 @@ public class ClosedQuestionAnswer {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClosedQuestionAnswer that = (ClosedQuestionAnswer) o;
+
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

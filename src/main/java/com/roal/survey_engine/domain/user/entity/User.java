@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -13,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
     @SequenceGenerator(name = "seq_user")
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     @NotBlank
@@ -86,7 +87,7 @@ public class User {
 
         User user = (User) o;
 
-        return id == user.id;
+        return Objects.equals(id, user.id);
     }
 
     @Override

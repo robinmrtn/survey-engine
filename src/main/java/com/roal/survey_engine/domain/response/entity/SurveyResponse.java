@@ -17,7 +17,7 @@ public class SurveyResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_response")
     @SequenceGenerator(name = "seq_response")
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
@@ -42,11 +42,11 @@ public class SurveyResponse {
         // needed by hibernate
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -88,7 +88,7 @@ public class SurveyResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SurveyResponse that = (SurveyResponse) o;
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override

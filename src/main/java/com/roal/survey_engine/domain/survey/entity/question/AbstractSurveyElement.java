@@ -14,7 +14,7 @@ public abstract class AbstractSurveyElement implements Comparable<AbstractSurvey
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_survey_element")
     @SequenceGenerator(name = "seq_survey_element")
-    protected long id;
+    protected Long id;
 
     protected int position;
 
@@ -24,11 +24,11 @@ public abstract class AbstractSurveyElement implements Comparable<AbstractSurvey
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -48,7 +48,7 @@ public abstract class AbstractSurveyElement implements Comparable<AbstractSurvey
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OpenTextQuestion that = (OpenTextQuestion) o;
-        return id == that.getId();
+        return Objects.equals(id, that.getId());
     }
 
     @Override
