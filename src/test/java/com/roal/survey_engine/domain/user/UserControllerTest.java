@@ -21,6 +21,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -48,16 +50,13 @@ public class UserControllerTest {
     public void successAsUser() throws Exception {
 
         given(userService.findByUsername("user1"))
-            .willReturn(new UserDto("aaa", "user1", Set.of("ROLE_USER"), false));
+                .willReturn(new UserDto("aaa", "user1", Set.of("ROLE_USER"), false));
 
-        MockHttpServletResponse response = mvc.perform(get("/api/users/me")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andReturn()
-            .getResponse();
+        mvc.perform(get("/api/users/me")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"id\":\"aaa\",\"username\":\"user1\",\"roles\":[\"ROLE_USER\"],\"isAdmin\":false}"));
 
         verify(userService, times(1)).findByUsername("user1");
-
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals("{\"id\":\"aaa\",\"username\":\"user1\",\"roles\":[\"ROLE_USER\"]}", response.getContentAsString());
     }
 }

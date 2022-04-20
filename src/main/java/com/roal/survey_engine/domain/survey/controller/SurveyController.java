@@ -44,11 +44,11 @@ public class SurveyController {
 
     @Operation(summary = "Create new survey")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Success",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = SurveyDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid Input")})
-    @PostMapping(value = "/workspaces/{workspaceId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+            @ApiResponse(responseCode = "201", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Input")})
+    @PostMapping(value = "/workspaces/{workspaceId}/surveys", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyDto postSurvey(@PathVariable @NotBlank String workspaceId,
                                 @NotNull @Valid @RequestBody SurveyDto survey) {
