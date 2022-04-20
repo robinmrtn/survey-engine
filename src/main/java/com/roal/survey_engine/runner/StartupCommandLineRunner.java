@@ -48,34 +48,34 @@ class StartupCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         addRoles();
-        addSurey();
+        addSurvey();
         addUsers();
     }
 
     private void addUsers() {
         if (userRepository.findAll().isEmpty()) {
 
-            UserRegistrationDto peter = new UserRegistrationDto("user1", "peter", Set.of("ROLE_USER"));
-            UserRegistrationDto max = new UserRegistrationDto("user2", "max", Set.of("ROLE_USER"));
+            UserRegistrationDto user1 = new UserRegistrationDto("user1", "user1", Set.of("ROLE_USER"));
+            UserRegistrationDto user2 = new UserRegistrationDto("user2", "user2", Set.of("ROLE_USER"));
             UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("ROLE_USER", "ROLE_ADMIN"));
 
-            userService.create(peter);
-            userService.create(max);
+            userService.create(user1);
+            userService.create(user2);
             userService.create(admin);
         }
     }
 
-    private void addSurey() {
+    private void addSurvey() {
         var survey = new Survey()
-            .setDescription("This is a Survey Description")
-            .setTitle("This is a Survey Title")
-            .addSurveyPage(new SurveyPage()
-                .addSurveyElement(new OpenTextQuestion("This is an open question?"))
-                .addSurveyElement(new ClosedQuestion("This is an closed question")
-                    .addAnswer(new ClosedQuestionAnswer("First answer"))
-                    .addAnswer(new ClosedQuestionAnswer("Second answer"))))
-            .addSurveyPage(new SurveyPage()
-                .addSurveyElement(new OpenTextQuestion("This is another open question"))
+                .setDescription("This is a Survey Description")
+                .setTitle("This is a Survey Title")
+                .addSurveyPage(new SurveyPage()
+                        .addSurveyElement(new OpenTextQuestion("This is an open question?"))
+                        .addSurveyElement(new ClosedQuestion("This is an closed question")
+                                .addAnswer(new ClosedQuestionAnswer("First answer"))
+                                .addAnswer(new ClosedQuestionAnswer("Second answer"))))
+                .addSurveyPage(new SurveyPage()
+                        .addSurveyElement(new OpenTextQuestion("This is another open question"))
                 .addSurveyElement(new OpenNumericQuestion("This is a numeric question")));
         var campaign = new Campaign()
             .setSurvey(survey)
