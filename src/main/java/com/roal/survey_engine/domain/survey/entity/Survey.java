@@ -71,8 +71,9 @@ public class Survey {
         return surveyPages;
     }
 
-    public void setId(Long id) {
+    public Survey setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getTitle() {
