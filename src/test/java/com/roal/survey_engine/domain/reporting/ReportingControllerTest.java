@@ -76,8 +76,8 @@ public class ReportingControllerTest {
         String campaignHashid = hashids.encode(savedCampaign.getId());
 
         mvc.perform(get("/api/campaigns/" + campaignHashid + "/report")
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().json("[{\"elementId\":3,\"count\":2,\"avg\":1.5,\"min\":1.0,\"max\":2.0,\"median\":1.5,\"percentile25\":0.0,\"percentile75\":0.0,\"sd\":0.7071067811865476}]"));
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[{\"elementId\":1,\"count\":2,\"avg\":1.5,\"min\":1.0,\"max\":2.0,\"median\":1.5,\"percentile25\":0.0,\"percentile75\":0.0,\"sd\":0.7071067811865476}]"));
     }
 }
