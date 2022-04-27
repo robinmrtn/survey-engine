@@ -40,8 +40,8 @@ public class SurveyDtoMapper {
             List<AbstractElementDto> elementDtos = getElementDtos(surveyPageElements);
             surveyPageDtos.add(new SurveyPageDto(surveyPage.getPosition(), elementDtos));
         }
-        return new SurveyDto(surveyHashids.encode(survey.getId()), survey.getTitle(),
-            survey.getDescription(), workspaceService.idToHashid(survey.getWorkspace().getId()), surveyPageDtos);
+        return new SurveyDto(surveyHashids.encode(wrapperToPrimitive(survey.getId())), survey.getTitle(),
+                survey.getDescription(), workspaceService.idToHashid(survey.getWorkspace().getId()), surveyPageDtos);
     }
 
     private List<AbstractElementDto> getElementDtos(List<AbstractSurveyElement> surveyPageElements) {
@@ -59,24 +59,24 @@ public class SurveyDtoMapper {
         if (surveyPageElement instanceof ClosedQuestion closedQuestion) {
 
             Set<ClosedQuestionAnswerDto> answersDto = closedQuestion.getAnswers().stream()
-                .map(answer -> new ClosedQuestionAnswerDto(answer.getValue(), answer.getId()))
-                .collect(Collectors.toSet());
+                    .map(answer -> new ClosedQuestionAnswerDto(answer.getValue(), wrapperToPrimitive(answer.getId())))
+                    .collect(Collectors.toSet());
 
             return new ClosedQuestionDto(closedQuestion.getQuestion(),
-                closedQuestion.getId(),
-                closedQuestion.getPosition(),
-                answersDto);
+                    wrapperToPrimitive(closedQuestion.getId()),
+                    closedQuestion.getPosition(),
+                    answersDto);
 
         } else if (surveyPageElement instanceof OpenNumericQuestion openNumericQuestion) {
 
             return new OpenNumericQuestionDto(openNumericQuestion.getQuestion(),
-                openNumericQuestion.getPosition(),
-                openNumericQuestion.getId());
+                    openNumericQuestion.getPosition(),
+                    wrapperToPrimitive(openNumericQuestion.getId()));
 
         } else if (surveyPageElement instanceof OpenTextQuestion openTextQuestion) {
             return new OpenQuestionDto(openTextQuestion.getQuestion(),
-                openTextQuestion.getPosition(),
-                openTextQuestion.getId());
+                    openTextQuestion.getPosition(),
+                    wrapperToPrimitive(openTextQuestion.getId()));
         }
 
         throw new IllegalArgumentException();
@@ -140,5 +140,12 @@ public class SurveyDtoMapper {
         return answerDtos.stream()
                 .map((e) -> new ClosedQuestionAnswer(e.id(), e.answer()))
                 .collect(Collectors.toList());
+    }
+
+    private long wrapperToPrimitive(Long value) {
+        if (value == null) {
+            return 0;
+        }
+        return value;
     }
 }
