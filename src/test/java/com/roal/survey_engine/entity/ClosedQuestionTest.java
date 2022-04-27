@@ -15,8 +15,8 @@ class ClosedQuestionTest {
                 .setId(3)
                 .setQuestion("This is an open question")
                 .withAnswers()
-                .addAnswer(new ClosedQuestionAnswer(21, "first answer"))
-                .addAnswer(new ClosedQuestionAnswer(33, "second answer"))
+                .addAnswer(new ClosedQuestionAnswer(21L, "first answer"))
+                .addAnswer(new ClosedQuestionAnswer(33L, "second answer"))
                 .build()
                 .build();
 

@@ -82,9 +82,9 @@ class ResponseDtoMapperTest {
                 .setQuestion("This is a closed question?")
                 .setId(10)
                 .withAnswers()
-                .addAnswer(new ClosedQuestionAnswer(21, "First answer"))
-                .addAnswer(new ClosedQuestionAnswer(22, "Second answer"))
-                .addAnswer(new ClosedQuestionAnswer(23, "Third answer"))
+                .addAnswer(new ClosedQuestionAnswer(21L, "First answer"))
+                .addAnswer(new ClosedQuestionAnswer(22L, "Second answer"))
+                .addAnswer(new ClosedQuestionAnswer(23L, "Third answer"))
                 .build()
                 .build();
 
