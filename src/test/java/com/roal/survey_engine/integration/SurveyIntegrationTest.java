@@ -9,7 +9,6 @@ import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
-import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
@@ -117,7 +116,7 @@ public class SurveyIntegrationTest {
         return new Survey("This is a survey")
                 .setTitle("Title")
                 .addSurveyPage(new SurveyPage()
-                        .addSurveyElement(new ClosedQuestion("This is a closed question")))
+                        .addSurveyElement(new OpenTextQuestion("This is a closed question")))
                 .setWorkspace(createWorkspace());
     }
 
