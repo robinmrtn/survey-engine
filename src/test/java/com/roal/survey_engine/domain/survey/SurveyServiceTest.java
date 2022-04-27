@@ -80,8 +80,8 @@ class SurveyServiceTest {
     @Test
     void testGetPublicAndActiveSurveys() {
         List<Campaign> surveys = List.of(
-                new Campaign().setSurvey(new Survey()),
-                new Campaign().setSurvey(new Survey()));
+                new Campaign().setSurvey(new Survey().setId(1L)),
+                new Campaign().setSurvey(new Survey().setId(2L)));
         Page<Campaign> surveyPage = new PageImpl<>(surveys);
 
 
