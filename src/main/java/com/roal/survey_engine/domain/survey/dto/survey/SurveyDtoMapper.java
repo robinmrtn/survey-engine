@@ -104,21 +104,21 @@ public class SurveyDtoMapper {
     private void parseElementDto(SurveyPage surveyPage, AbstractElementDto elementDto) {
         switch (elementDto.type()) {
             case "opq" -> {
-                AbstractSurveyElement element = new OpenTextQuestion(((OpenQuestionDto) elementDto).question());
-                element.setId(elementDto.id());
+                var element = new OpenTextQuestion(((OpenQuestionDto) elementDto).question());
+                element.setId(primitiveToWrapper(elementDto.id()));
                 element.setPosition(elementDto.position());
                 surveyPage.addSurveyElement(element);
             }
             case "opnq" -> {
-                AbstractSurveyElement element = new OpenNumericQuestion(((OpenNumericQuestionDto) elementDto).question());
-                element.setId(elementDto.id());
+                var element = new OpenNumericQuestion(((OpenNumericQuestionDto) elementDto).question());
+                element.setId(primitiveToWrapper(elementDto.id()));
                 element.setPosition(elementDto.position());
                 surveyPage.addSurveyElement(element);
             }
             case "clq" -> {
                 Set<ClosedQuestionAnswerDto> answers = ((ClosedQuestionDto) elementDto).answers();
                 ClosedQuestion element = new ClosedQuestion(((ClosedQuestionDto) elementDto).question());
-                element.setId(elementDto.id());
+                element.setId(primitiveToWrapper(elementDto.id()));
                 element.setPosition(elementDto.position());
                 element.setAnswers(dtoAnswersToEntity(answers));
                 surveyPage.addSurveyElement(element);
@@ -145,6 +145,13 @@ public class SurveyDtoMapper {
     private long wrapperToPrimitive(Long value) {
         if (value == null) {
             return 0;
+        }
+        return value;
+    }
+
+    private Long primitiveToWrapper(long value) {
+        if (value == 0) {
+            return null;
         }
         return value;
     }
