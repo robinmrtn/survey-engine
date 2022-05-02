@@ -22,14 +22,14 @@ public final class ResponseDtoMapper {
         this.responseHashids = responseHashids;
     }
 
-    public SurveyResponse dtoToEntity(Campaign campaign, SurveyResponseDto surveyResponseDto) {
+    public SurveyResponse dtoToEntity(Campaign campaign, CreateSurveyResponseDto surveyResponseDto) {
 
         var surveyResponse = new SurveyResponse();
         surveyResponse.setCampaign(campaign);
         var survey = campaign.getSurvey();
         List<AbstractElementResponse> elementResponseList = new ArrayList<>();
 
-        for (ElementResponseDto elementResponseDto : surveyResponseDto.getElementResponseDtos()) {
+        for (ElementResponseDto elementResponseDto : surveyResponseDto.elementResponseDtos()) {
             ResponseDtoMappingStrategy strategy = ResponseDtoMappingStrategyFactory.create(elementResponseDto);
             AbstractElementResponse elementResponse = strategy.map(survey, elementResponseDto);
             elementResponseList.add(elementResponse);

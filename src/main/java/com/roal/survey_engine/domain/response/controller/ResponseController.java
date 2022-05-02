@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.response.controller;
 
+import com.roal.survey_engine.domain.response.dto.CreateSurveyResponseDto;
 import com.roal.survey_engine.domain.response.dto.SurveyResponseDto;
 import com.roal.survey_engine.domain.response.service.ResponseService;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
@@ -32,15 +33,15 @@ public class ResponseController {
 
     @Operation(summary = "Add a new response to a campaign")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Success",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SurveyResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid Input"),
-            @ApiResponse(responseCode = "404", description = "Campaign not found")})
+        @ApiResponse(responseCode = "201", description = "Success",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = SurveyResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid Input"),
+        @ApiResponse(responseCode = "404", description = "Campaign not found")})
     @PostMapping(value = "/campaigns/{campaignId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyResponseDto createSurveyResponse(@PathVariable @NotBlank String campaignId,
-                                                  @RequestBody @Valid @NotNull SurveyResponseDto surveyResponseDto) {
+                                                  @RequestBody @Valid @NotNull CreateSurveyResponseDto surveyResponseDto) {
         return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
     }
 

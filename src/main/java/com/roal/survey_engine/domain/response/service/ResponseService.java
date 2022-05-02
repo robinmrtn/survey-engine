@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.response.service;
 
+import com.roal.survey_engine.domain.response.dto.CreateSurveyResponseDto;
 import com.roal.survey_engine.domain.response.dto.SurveyResponseDto;
 import com.roal.survey_engine.domain.response.dto.mapping.ResponseDtoMapper;
 import com.roal.survey_engine.domain.response.entity.SurveyResponse;
@@ -39,10 +40,10 @@ public class ResponseService {
     }
 
     @Transactional
-    public SurveyResponseDto insertSurveyResponseDto(String campaignId, SurveyResponseDto surveyResponseDto) {
+    public SurveyResponseDto insertSurveyResponseDto(String campaignId, CreateSurveyResponseDto surveyResponseDto) {
         Campaign campaign = campaignService.findCampaignById(campaignId);
         SurveyResponse surveyResponse =
-                responseDtoMapper.dtoToEntity(campaign, surveyResponseDto);
+            responseDtoMapper.dtoToEntity(campaign, surveyResponseDto);
         SurveyResponse savedSurveyResponse = responseRepository.save(surveyResponse);
         return responseDtoMapper.entityToDto(savedSurveyResponse);
     }

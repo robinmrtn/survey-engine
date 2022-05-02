@@ -1,9 +1,9 @@
 package com.roal.survey_engine.domain.response;
 
 import com.roal.survey_engine.domain.response.dto.ClosedQuestionResponseDto;
+import com.roal.survey_engine.domain.response.dto.CreateSurveyResponseDto;
 import com.roal.survey_engine.domain.response.dto.ElementResponseDto;
 import com.roal.survey_engine.domain.response.dto.OpenQuestionResponseDto;
-import com.roal.survey_engine.domain.response.dto.SurveyResponseDto;
 import com.roal.survey_engine.domain.response.dto.mapping.ResponseDtoMapper;
 import com.roal.survey_engine.domain.response.entity.AbstractElementResponse;
 import com.roal.survey_engine.domain.response.entity.ClosedQuestionResponse;
@@ -34,7 +34,7 @@ class ResponseDtoMapperTest {
 
         // Arrange
         Campaign campaign = getTestCampaign();
-        SurveyResponseDto surveyResponseDto = getSurveyResponseDto();
+        CreateSurveyResponseDto surveyResponseDto = getSurveyResponseDto();
 
         // Act
         SurveyResponse surveyResponse = responseDtoMapper.dtoToEntity(campaign, surveyResponseDto);
@@ -64,13 +64,11 @@ class ResponseDtoMapperTest {
                         ((ClosedQuestionResponse) closedQuestionResponse.get()).getAnswers().size()));
     }
 
-    private SurveyResponseDto getSurveyResponseDto() {
-        var surveyResponseDto = new SurveyResponseDto();
+    private CreateSurveyResponseDto getSurveyResponseDto() {
         List<ElementResponseDto> elementResponseDtos = new ArrayList<>();
         elementResponseDtos.add(new OpenQuestionResponseDto(9, "This is an answer"));
         elementResponseDtos.add(new ClosedQuestionResponseDto(10, Set.of(22L)));
-        surveyResponseDto.setElementResponseDtos(elementResponseDtos);
-        return surveyResponseDto;
+        return new CreateSurveyResponseDto(elementResponseDtos);
     }
 
     private Campaign getTestCampaign() {
