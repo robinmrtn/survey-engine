@@ -1,4 +1,4 @@
-package com.roal.survey_engine.security.config;
+package com.roal.survey_engine.config;
 
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;

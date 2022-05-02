@@ -1,8 +1,8 @@
-package com.roal.survey_engine.security.config;
+package com.roal.survey_engine.config.security;
 
 import com.roal.survey_engine.security.DefaultAccessDeniedHandler;
-import com.roal.survey_engine.security.RESTAuthenticationFailureHandler;
-import com.roal.survey_engine.security.RESTAuthenticationSuccessHandler;
+import com.roal.survey_engine.security.RestAuthenticationFailureHandler;
+import com.roal.survey_engine.security.RestAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -89,11 +89,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     AuthenticationFailureHandler authenticationFailureHandler() {
-        return new RESTAuthenticationFailureHandler();
+        return new RestAuthenticationFailureHandler();
     }
 
     @Bean
     AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new RESTAuthenticationSuccessHandler();
+        return new RestAuthenticationSuccessHandler();
     }
 }

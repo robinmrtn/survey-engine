@@ -1,4 +1,4 @@
-package com.roal.survey_engine.security.config;
+package com.roal.survey_engine.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
