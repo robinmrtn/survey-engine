@@ -1,4 +1,4 @@
-package com.roal.survey_engine.domain.survey.dto.survey.out;
+package com.roal.survey_engine.domain.survey.dto.survey;
 
 public class SurveyListElementDto {
 

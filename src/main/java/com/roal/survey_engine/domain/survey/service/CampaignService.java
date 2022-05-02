@@ -2,6 +2,7 @@ package com.roal.survey_engine.domain.survey.service;
 
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDto;
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDtoMapper;
+import com.roal.survey_engine.domain.survey.dto.campaign.CreateCampaignDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
@@ -54,7 +55,7 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignDto insertDto(CampaignDto campaignDto) {
+    public CampaignDto insertDto(CreateCampaignDto campaignDto) {
         Campaign campaign = campaignDtoMapper.dtoToEntity(campaignDto);
         Campaign savedCampaign = campaignRepository.save(campaign);
         return campaignDtoMapper.entityToDto(savedCampaign);

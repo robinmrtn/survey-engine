@@ -24,18 +24,17 @@ public class WorkspaceDtoMapper {
         this.surveyHashids = surveyHashids;
     }
 
-
-    public Workspace dtoToEntity(WorkspaceDto workspaceDto) {
+    public Workspace dtoToEntity(CreateWorkspaceDto workspaceDto) {
 
         Workspace workspace = new Workspace(workspaceDto.title());
 
         if (workspaceDto.userIds() != null && !workspaceDto.userIds().isEmpty()) {
 
             List<User> users = workspaceDto
-                    .userIds()
-                    .stream()
-                    .map(userService::findById)
-                    .toList();
+                .userIds()
+                .stream()
+                .map(userService::findById)
+                .toList();
 
             for (User user : users) {
                 workspace.addUser(user);

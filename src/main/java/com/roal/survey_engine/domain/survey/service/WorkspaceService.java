@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.survey.service;
 
+import com.roal.survey_engine.domain.survey.dto.workspace.CreateWorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDtoMapper;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
@@ -36,7 +37,7 @@ public class WorkspaceService {
     }
 
     @Transactional
-    public WorkspaceDto create(WorkspaceDto workspaceDto) {
+    public WorkspaceDto create(CreateWorkspaceDto workspaceDto) {
         if (!authenticationFacade.isAdmin()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

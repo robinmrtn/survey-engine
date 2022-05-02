@@ -1,7 +1,8 @@
 package com.roal.survey_engine.domain.survey.controller;
 
+import com.roal.survey_engine.domain.survey.dto.survey.CreateSurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
-import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,14 +45,14 @@ public class SurveyController {
 
     @Operation(summary = "Create new survey")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Success",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SurveyDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid Input")})
+        @ApiResponse(responseCode = "201", description = "Success",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = SurveyDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid Input")})
     @PostMapping(value = "/workspaces/{workspaceId}/surveys", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyDto postSurvey(@PathVariable @NotBlank String workspaceId,
-                                @NotNull @Valid @RequestBody SurveyDto survey) {
+                                @NotNull @Valid @RequestBody CreateSurveyDto survey) {
         return surveyService.saveDto(survey, workspaceId);
     }
 

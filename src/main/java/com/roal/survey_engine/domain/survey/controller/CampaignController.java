@@ -1,6 +1,7 @@
 package com.roal.survey_engine.domain.survey.controller;
 
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDto;
+import com.roal.survey_engine.domain.survey.dto.campaign.CreateCampaignDto;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +32,9 @@ public class CampaignController {
 
     @Operation(summary = "Create new Campaign")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    CampaignDto createCampaign(@NotNull @Valid @RequestBody CampaignDto campaignDto) {
+    CampaignDto createCampaign(@NotNull @Valid @RequestBody CreateCampaignDto campaignDto) {
         return campaignService.insertDto(campaignDto);
     }
 

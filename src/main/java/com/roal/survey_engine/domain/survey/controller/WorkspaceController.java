@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.survey.controller;
 
+import com.roal.survey_engine.domain.survey.dto.workspace.CreateWorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
 import com.roal.survey_engine.domain.survey.service.WorkspaceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +22,7 @@ public class WorkspaceController {
     }
 
     @PostMapping("/")
-    public WorkspaceDto create(@Valid WorkspaceDto workspaceDto) {
+    public WorkspaceDto create(@Valid CreateWorkspaceDto workspaceDto) {
         return workspaceService.create(workspaceDto);
     }
 

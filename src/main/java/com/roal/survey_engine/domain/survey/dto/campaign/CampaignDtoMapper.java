@@ -27,7 +27,7 @@ public class CampaignDtoMapper {
                 campaign.getSurvey().getId());
     }
 
-    public Campaign dtoToEntity(CampaignDto campaignDto) {
+    public Campaign dtoToEntity(CreateCampaignDto campaignDto) {
         var dateRange = new DateRange(campaignDto.from(), campaignDto.to());
         return new Campaign()
             .setActive(campaignDto.active())

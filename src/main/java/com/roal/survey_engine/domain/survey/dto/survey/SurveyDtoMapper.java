@@ -1,7 +1,6 @@
 package com.roal.survey_engine.domain.survey.dto.survey;
 
 import com.roal.survey_engine.domain.survey.dto.survey.element.*;
-import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.*;
@@ -82,7 +81,7 @@ public class SurveyDtoMapper {
         throw new IllegalArgumentException();
     }
 
-    public Survey dtoToEntity(SurveyDto surveyDto) {
+    public Survey dtoToEntity(CreateSurveyDto surveyDto) {
         var survey = new Survey();
 
         for (SurveyPageDto surveyPageDto : surveyDto.surveyPages()) {

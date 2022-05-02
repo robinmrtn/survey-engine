@@ -1,8 +1,9 @@
 package com.roal.survey_engine.domain.survey.service;
 
+import com.roal.survey_engine.domain.survey.dto.survey.CreateSurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
-import com.roal.survey_engine.domain.survey.dto.survey.out.SurveyListElementDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
@@ -46,7 +47,7 @@ public class SurveyService {
     }
 
     @Transactional
-    public SurveyDto saveDto(SurveyDto surveyDto, String workspaceId) {
+    public SurveyDto saveDto(CreateSurveyDto surveyDto, String workspaceId) {
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspaceId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
