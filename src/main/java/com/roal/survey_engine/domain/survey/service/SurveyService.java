@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.survey.service;
 
+import com.roal.survey_engine.common.exception.ForbiddenException;
 import com.roal.survey_engine.domain.survey.dto.survey.CreateSurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
@@ -15,10 +16,8 @@ import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,7 +49,7 @@ public class SurveyService {
     public SurveyDto saveDto(CreateSurveyDto surveyDto, String workspaceId) {
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspaceId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ForbiddenException();
         }
 
         Survey survey = surveyDtoMapper.dtoToEntity(surveyDto);
@@ -99,7 +98,7 @@ public class SurveyService {
         Workspace workspace = campaign.getWorkspace();
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspace)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ForbiddenException();
         }
 
         campaignRepository.deleteById(id);

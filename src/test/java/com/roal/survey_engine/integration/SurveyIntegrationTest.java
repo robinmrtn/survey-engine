@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -73,6 +74,7 @@ public class SurveyIntegrationTest {
         String id = surveyHashids.encode(campaign.getId());
         MockHttpServletResponse response = mvc.perform(get("/api/surveys/" + id)
                         .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
         assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()));

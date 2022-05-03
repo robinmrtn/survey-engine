@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.survey.service;
 
+import com.roal.survey_engine.common.exception.ForbiddenException;
 import com.roal.survey_engine.domain.survey.dto.workspace.CreateWorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDtoMapper;
@@ -11,10 +12,8 @@ import com.roal.survey_engine.domain.user.service.UserService;
 import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,7 +38,7 @@ public class WorkspaceService {
     @Transactional
     public WorkspaceDto create(CreateWorkspaceDto workspaceDto) {
         if (!authenticationFacade.isAdmin()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ForbiddenException();
         }
         Workspace workspace = workspaceDtoMapper.dtoToEntity(workspaceDto);
         Workspace savedWorkspace = workspaceRepository.save(workspace);
@@ -49,7 +48,7 @@ public class WorkspaceService {
     @Transactional
     public void deleteById(String hashid) {
         if (!authenticationFacade.isAdmin()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ForbiddenException();
         }
         long id = hashidToId(hashid);
         workspaceRepository.deleteById(id);
@@ -77,7 +76,7 @@ public class WorkspaceService {
     public WorkspaceDto addUser(String hashid, String userId) {
 
         if (!currentUserCanModifyWorkspace(hashid)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ForbiddenException();
         }
 
         long id = hashidToId(hashid);
