@@ -1,4 +1,4 @@
-package com.roal.survey_engine.common.exception;
+package com.roal.survey_engine.domain.user.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

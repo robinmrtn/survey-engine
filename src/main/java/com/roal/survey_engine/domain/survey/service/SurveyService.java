@@ -1,6 +1,5 @@
 package com.roal.survey_engine.domain.survey.service;
 
-import com.roal.survey_engine.common.exception.ForbiddenException;
 import com.roal.survey_engine.domain.survey.dto.survey.CreateSurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
@@ -12,6 +11,7 @@ import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
+import com.roal.survey_engine.domain.user.exception.ForbiddenException;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;

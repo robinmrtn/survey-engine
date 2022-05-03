@@ -1,4 +1,4 @@
-package com.roal.survey_engine.common.exception;
+package com.roal.survey_engine.domain.user.exception;
 
 
 public class ForbiddenException extends RuntimeException {

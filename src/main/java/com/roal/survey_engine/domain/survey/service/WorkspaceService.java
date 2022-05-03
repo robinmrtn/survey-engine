@@ -1,6 +1,5 @@
 package com.roal.survey_engine.domain.survey.service;
 
-import com.roal.survey_engine.common.exception.ForbiddenException;
 import com.roal.survey_engine.domain.survey.dto.workspace.CreateWorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDtoMapper;
@@ -8,6 +7,7 @@ import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.exception.WorkspaceNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
 import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.exception.ForbiddenException;
 import com.roal.survey_engine.domain.user.service.UserService;
 import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
