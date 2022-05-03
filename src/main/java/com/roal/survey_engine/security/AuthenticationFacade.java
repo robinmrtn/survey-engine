@@ -1,5 +1,6 @@
 package com.roal.survey_engine.security;
 
+import com.roal.survey_engine.domain.user.UserAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,6 @@ public class AuthenticationFacade {
         return getAuthentication()
                 .getAuthorities()
                 .stream()
-                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+                .anyMatch(authority -> UserAuthority.ROLE_ADMIN.toString().equals(authority.getAuthority()));
     }
 }
