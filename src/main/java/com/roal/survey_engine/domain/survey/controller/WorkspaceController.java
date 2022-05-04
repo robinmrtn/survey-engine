@@ -2,6 +2,7 @@ package com.roal.survey_engine.domain.survey.controller;
 
 import com.roal.survey_engine.domain.survey.dto.workspace.CreateWorkspaceDto;
 import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
+import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.service.WorkspaceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Tag(name = "Workspace", description = "Workspace API")
 @RequestMapping("/api/workspaces")
@@ -41,5 +43,10 @@ public class WorkspaceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserFromWorkspace(@NotBlank @PathVariable String id, @PathVariable @NotBlank String userId) {
         workspaceService.deleteUserFromWorkspace(id, userId);
+    }
+
+    @GetMapping("")
+    public List<Workspace> getWorkspacesForCurrentUser() {
+        return workspaceService.getWorkspacesForCurrentUser();
     }
 }

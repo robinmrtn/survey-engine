@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class WorkspaceService {
@@ -99,12 +101,19 @@ public class WorkspaceService {
 
     public boolean currentUserCanModifyWorkspace(Workspace workspace) {
         String username = authenticationFacade.getUserDetails()
-            .getUsername();
+                .getUsername();
         return authenticationFacade.isAdmin() || workspace.containsUserByUsername(username);
     }
 
     public boolean currentUserCanModifyWorkspace(String hashid) {
         Workspace workspace = getEntityByHashid(hashid);
         return currentUserCanModifyWorkspace(workspace);
+    }
+
+    public List<Workspace> getWorkspacesForCurrentUser() {
+        String username = authenticationFacade.getUserDetails()
+                .getUsername();
+
+        return workspaceRepository.findByUsername(username);
     }
 }

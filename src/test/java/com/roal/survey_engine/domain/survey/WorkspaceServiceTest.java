@@ -1,8 +1,10 @@
 package com.roal.survey_engine.domain.survey;
 
 import com.roal.survey_engine.domain.survey.entity.Workspace;
+import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
 import com.roal.survey_engine.domain.survey.service.WorkspaceService;
 import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.repository.UserRepository;
 import com.roal.survey_engine.security.AuthenticationFacade;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,6 +28,12 @@ public class WorkspaceServiceTest {
     @Autowired
     WorkspaceService workspaceService;
 
+    @Autowired
+    WorkspaceRepository workspaceRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     @MockBean
     AuthenticationFacade authenticationFacade;
 
@@ -32,7 +41,7 @@ public class WorkspaceServiceTest {
     public void testUserIsPartOfWorkspace() {
         Workspace workspace = new Workspace().addUser(new User("user1"));
         var loggedInUser = new org.springframework.security.core.userdetails.User("user1", "pw",
-            Set.of(new SimpleGrantedAuthority("USER")));
+                Set.of(new SimpleGrantedAuthority("USER")));
 
         given(authenticationFacade.getUserDetails()).willReturn(loggedInUser);
 
@@ -71,6 +80,25 @@ public class WorkspaceServiceTest {
 
         verify(authenticationFacade, times(1)).getUserDetails();
         assertFalse(actual);
+    }
+
+    @Test
+    public void testGetWorkspacesForCurrentUser() {
+        User user = new User("user1", "password", Collections.emptyList());
+        User savedUser = userRepository.save(user);
+        Workspace firstWorkspace = new Workspace("first workspace").addUser(savedUser);
+        Workspace secondWorkspace = new Workspace("second workspace").addUser(savedUser);
+        workspaceRepository.save(firstWorkspace);
+        workspaceRepository.save(secondWorkspace);
+
+        given(authenticationFacade.getUserDetails())
+                .willReturn(new org.springframework.security.core.userdetails.User("user1", "password", Collections.emptyList()));
+
+        List<Workspace> workspacesForCurrentUser = workspaceService.getWorkspacesForCurrentUser();
+
+        assertEquals(2, workspacesForCurrentUser.size());
+        assertEquals("first workspace", workspacesForCurrentUser.get(0).getTitle());
+        assertEquals("second workspace", workspacesForCurrentUser.get(1).getTitle());
     }
 
 }
