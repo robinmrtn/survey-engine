@@ -7,7 +7,6 @@ import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
-import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +35,7 @@ public class CampaignService {
 
     @Transactional(readOnly = true)
     public Campaign findCampaignById(long id) {
-        return campaignRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
+        return campaignRepository.findById(id).orElseThrow(CampaignNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
