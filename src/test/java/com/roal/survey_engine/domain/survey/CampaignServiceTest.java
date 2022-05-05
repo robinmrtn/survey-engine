@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CampaignServiceTest {
@@ -51,5 +51,27 @@ public class CampaignServiceTest {
         CampaignDto campaignDto = campaignService.findCampaignDtoById(hashid);
 
         assertEquals(hashid, campaignDto.id());
+    }
+
+    @Test
+    void testCampaignExists() {
+        Survey survey = surveyRepository.save(new Survey());
+
+        Campaign campaign = new Campaign()
+            .setDateRange(new DateRange(LocalDateTime.now(), LocalDateTime.MAX))
+            .setSurvey(survey);
+
+        campaignRepository.save(campaign);
+
+        boolean exists = campaignService.existsById(campaign.getId());
+
+        assertTrue(exists);
+    }
+
+    @Test
+    void testCampaignNotExists() {
+        boolean exists = campaignService.existsById(1L);
+
+        assertFalse(exists);
     }
 }
