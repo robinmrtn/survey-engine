@@ -10,10 +10,8 @@ import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CampaignService {
@@ -77,8 +75,7 @@ public class CampaignService {
                 campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
                 return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
             })
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Campaign with id '" + id + "' not found"));
+            .orElseThrow(() -> new CampaignNotFoundException(hashid));
     }
 
     @Transactional
