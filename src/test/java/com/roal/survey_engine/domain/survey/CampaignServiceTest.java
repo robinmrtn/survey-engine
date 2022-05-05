@@ -5,6 +5,7 @@ import com.roal.survey_engine.domain.survey.dto.campaign.CreateCampaignDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
+import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
@@ -98,5 +99,22 @@ public class CampaignServiceTest {
         assertEquals(createCampaignDto.to(), campaignDto.to());
         assertEquals(createCampaignDto.hidden(), campaignDto.hidden());
         assertEquals(createCampaignDto.title(), campaignDto.title());
+    }
+
+    @Test
+    void testDeleteCampaignById() {
+        Survey survey = surveyRepository.save(new Survey());
+
+        Campaign campaign = new Campaign()
+            .setDateRange(new DateRange(LocalDateTime.now(), LocalDateTime.MAX))
+            .setSurvey(survey);
+
+        campaignRepository.save(campaign);
+
+        String hashid = campaignHashids.encode(campaign.getId());
+
+        campaignService.deleteCampaignById(hashid);
+
+        assertThrows(CampaignNotFoundException.class, () -> campaignService.findCampaignById(hashid));
     }
 }
