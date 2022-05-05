@@ -1,6 +1,7 @@
 package com.roal.survey_engine.domain.survey;
 
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDto;
+import com.roal.survey_engine.domain.survey.dto.campaign.CreateCampaignDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
@@ -29,10 +30,13 @@ public class CampaignServiceTest {
     @Autowired
     SurveyRepository surveyRepository;
 
-
     @Autowired
     @Qualifier("campaignHashids")
     Hashids campaignHashids;
+
+    @Autowired
+    @Qualifier("surveyHashids")
+    Hashids surveyHashids;
 
     @Test
     void testFindCampaignDtoById() {
@@ -73,5 +77,25 @@ public class CampaignServiceTest {
         boolean exists = campaignService.existsById(1L);
 
         assertFalse(exists);
+    }
+
+    @Test
+    void testCreateCampaign() {
+
+        Survey survey = surveyRepository.save(new Survey());
+
+        String hashid = surveyHashids.encode(survey.getId());
+
+        CreateCampaignDto createCampaignDto =
+            new CreateCampaignDto(LocalDateTime.now(), LocalDateTime.MAX, "Title", true, false);
+
+        CampaignDto campaignDto = campaignService.create(createCampaignDto, hashid);
+
+        assertEquals(createCampaignDto.active(), campaignDto.active());
+        assertEquals(createCampaignDto.from(), campaignDto.from());
+        assertEquals(createCampaignDto.to(), campaignDto.to());
+        assertEquals(createCampaignDto.hidden(), campaignDto.hidden());
+        assertEquals(createCampaignDto.title(), campaignDto.title());
+
     }
 }
