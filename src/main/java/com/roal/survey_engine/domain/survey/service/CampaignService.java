@@ -57,8 +57,11 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignDto create(CreateCampaignDto campaignDto) {
+    public CampaignDto create(CreateCampaignDto campaignDto, String surveyId) {
+        Survey surveyById = surveyService.findSurveyById(surveyId);
         Campaign campaign = campaignDtoMapper.dtoToEntity(campaignDto);
+        campaign.setSurvey(surveyById);
+
         Campaign savedCampaign = campaignRepository.save(campaign);
         return campaignDtoMapper.entityToDto(savedCampaign);
     }

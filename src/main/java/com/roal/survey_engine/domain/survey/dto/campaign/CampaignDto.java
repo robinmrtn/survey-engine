@@ -4,5 +4,5 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public record CampaignDto(String id, LocalDateTime from, LocalDateTime to, @NotBlank String title, boolean active,
-                          boolean hidden, long surveyId) {
+                          boolean hidden, String surveyId) {
 }

@@ -11,20 +11,24 @@ public class CampaignDtoMapper {
 
     private final Hashids campaignHashid;
 
-    public CampaignDtoMapper(@Qualifier("campaignHashids") Hashids campaignHashid) {
+    private final Hashids surveyHashid;
+
+    public CampaignDtoMapper(@Qualifier("campaignHashids") Hashids campaignHashid,
+                             @Qualifier("surveyHashids") Hashids surveyHashid) {
         this.campaignHashid = campaignHashid;
+        this.surveyHashid = surveyHashid;
     }
 
 
     public CampaignDto entityToDto(Campaign campaign) {
 
         return new CampaignDto(campaignHashid.encode(campaign.getId()),
-                campaign.getDateRange().getStartDate(),
-                campaign.getDateRange().getEndDate(),
-                campaign.getTitle(),
-                campaign.isActive(),
-                campaign.isHidden(),
-                campaign.getSurvey().getId());
+            campaign.getDateRange().getStartDate(),
+            campaign.getDateRange().getEndDate(),
+            campaign.getTitle(),
+            campaign.isActive(),
+            campaign.isHidden(),
+            surveyHashid.encode(campaign.getSurvey().getId()));
     }
 
     public Campaign dtoToEntity(CreateCampaignDto campaignDto) {

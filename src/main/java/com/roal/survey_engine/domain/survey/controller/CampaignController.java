@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Tag(name = "Campaign", description = "Campaign API")
-@RequestMapping("/api/campaigns")
+@RequestMapping("/api/")
 @RestController
 public class CampaignController {
 
@@ -25,21 +25,22 @@ public class CampaignController {
     }
 
     @Operation(summary = "Find Campaign by ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "campaigns/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     CampaignDto getById(@PathVariable @NotBlank String id) {
         return campaignService.findCampaignDtoById(id);
     }
 
     @Operation(summary = "Create new Campaign")
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value = "/surveys/{surveyId}/campaigns", consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    CampaignDto createCampaign(@NotNull @Valid @RequestBody CreateCampaignDto campaignDto) {
-        return campaignService.create(campaignDto);
+    CampaignDto createCampaign(@NotNull @Valid @RequestBody CreateCampaignDto campaignDto,
+                               @PathVariable String surveyId) {
+        return campaignService.create(campaignDto, surveyId);
     }
 
     @Operation(summary = "Add Survey (referenced by ID) to Campaign by ID")
-    @PostMapping(value = "/{campaignId}/surveys/{surveyId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "campaigns/{campaignId}/surveys/{surveyId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     CampaignDto createSurveyToCampaign(@PathVariable @NotBlank String surveyId,
                                        @PathVariable @NotBlank String campaignId) {
@@ -47,15 +48,15 @@ public class CampaignController {
     }
 
     @Operation(summary = "Update Campaign by ID")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "campaigns/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
     CampaignDto put(@NotNull @Valid @RequestBody CampaignDto campaignDto,
                     @PathVariable @NotBlank String id) {
         return campaignService.update(campaignDto, id);
     }
 
     @Operation(summary = "Delete Campaign by ID")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("campaigns/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void delete(@PathVariable @NotBlank String id) {
         campaignService.deleteCampaignById(id);
