@@ -77,6 +77,7 @@ public class CampaignServiceTest {
 
     @Test
     void testCampaignNotExists() {
+        campaignRepository.deleteById(1L);
         boolean exists = campaignService.existsById(1L);
 
         assertFalse(exists);
