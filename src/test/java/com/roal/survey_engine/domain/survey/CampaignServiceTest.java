@@ -117,4 +117,34 @@ public class CampaignServiceTest {
 
         assertThrows(CampaignNotFoundException.class, () -> campaignService.findCampaignById(hashid));
     }
+
+    @Test
+    void testUpdate() {
+        Survey survey = surveyRepository.save(new Survey());
+        LocalDateTime testDate = LocalDateTime
+            .of(2020, 12, 24, 0, 0);
+
+        Campaign campaign = new Campaign()
+            .setDateRange(new DateRange(LocalDateTime.now(), LocalDateTime.MAX))
+            .setSurvey(survey)
+            .setTitle("Title")
+            .setActive(true)
+            .setHidden(false);
+
+        campaignRepository.save(campaign);
+
+        String hashid = campaignHashids.encode(campaign.getId());
+        var campaignDto = new CampaignDto(hashid, LocalDateTime.MIN, testDate,
+            "new Title", false, true, null);
+
+        campaignService.update(campaignDto, hashid);
+
+        Campaign updatedCampaign = campaignService.findCampaignById(hashid);
+
+        assertEquals(campaignDto.from(), updatedCampaign.getDateRange().getStartDate());
+        assertEquals(campaignDto.to(), updatedCampaign.getDateRange().getEndDate());
+        assertEquals(campaignDto.title(), updatedCampaign.getTitle());
+        assertEquals(campaignDto.active(), updatedCampaign.isActive());
+        assertEquals(campaignDto.hidden(), updatedCampaign.isHidden());
+    }
 }
