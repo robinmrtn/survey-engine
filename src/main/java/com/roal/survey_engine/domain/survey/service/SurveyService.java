@@ -11,7 +11,7 @@ import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
-import com.roal.survey_engine.domain.user.exception.ForbiddenException;
+import com.roal.survey_engine.domain.user.exception.ForbiddenUserActionException;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -43,7 +43,7 @@ public class SurveyService {
     public SurveyDto create(CreateSurveyDto surveyDto, String workspaceId) {
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspaceId)) {
-            throw new ForbiddenException();
+            throw new ForbiddenUserActionException();
         }
 
         Survey survey = surveyDtoMapper.dtoToEntity(surveyDto);
@@ -94,7 +94,7 @@ public class SurveyService {
         Workspace workspace = campaign.getWorkspace();
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspace)) {
-            throw new ForbiddenException();
+            throw new ForbiddenUserActionException();
         }
         campaignRepository.deleteById(id);
     }

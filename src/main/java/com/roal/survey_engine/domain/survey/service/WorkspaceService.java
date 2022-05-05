@@ -7,7 +7,7 @@ import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.exception.WorkspaceNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
 import com.roal.survey_engine.domain.user.entity.User;
-import com.roal.survey_engine.domain.user.exception.ForbiddenException;
+import com.roal.survey_engine.domain.user.exception.ForbiddenUserActionException;
 import com.roal.survey_engine.domain.user.service.UserService;
 import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
@@ -40,7 +40,7 @@ public class WorkspaceService {
     @Transactional
     public WorkspaceDto create(CreateWorkspaceDto workspaceDto) {
         if (!authenticationFacade.isAdmin()) {
-            throw new ForbiddenException();
+            throw new ForbiddenUserActionException();
         }
         Workspace workspace = workspaceDtoMapper.dtoToEntity(workspaceDto);
         Workspace savedWorkspace = workspaceRepository.save(workspace);
@@ -50,7 +50,7 @@ public class WorkspaceService {
     @Transactional
     public void deleteById(String hashid) {
         if (!authenticationFacade.isAdmin()) {
-            throw new ForbiddenException();
+            throw new ForbiddenUserActionException();
         }
         long id = hashidToId(hashid);
         workspaceRepository.deleteById(id);
@@ -79,7 +79,7 @@ public class WorkspaceService {
     public WorkspaceDto addUser(String hashid, String userId) {
 
         if (!currentUserCanModifyWorkspace(hashid)) {
-            throw new ForbiddenException();
+            throw new ForbiddenUserActionException();
         }
 
         long id = hashidToId(hashid);
