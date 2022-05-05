@@ -20,7 +20,7 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
     void deleteById(Long id);
 
     @Override
-    @Query("Select c FROM Campaign c where c.deleted = false")
+    @Query("Select c FROM Campaign c where c.deleted = false and c.id = :id")
     Optional<Campaign> findById(Long id);
 
     @Override
