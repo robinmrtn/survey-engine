@@ -42,7 +42,7 @@ public class ResponseController {
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyResponseDto createSurveyResponse(@PathVariable @NotBlank String campaignId,
                                                   @RequestBody @Valid @NotNull CreateSurveyResponseDto surveyResponseDto) {
-        return responseService.insertSurveyResponseDto(campaignId, surveyResponseDto);
+        return responseService.create(campaignId, surveyResponseDto);
     }
 
     @Operation(summary = "Find responses for a campaign by its ID")

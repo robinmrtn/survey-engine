@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-@Transactional(readOnly = true)
 public class CampaignService {
 
     private final CampaignRepository campaignRepository;
@@ -35,27 +34,31 @@ public class CampaignService {
         this.campaignHashids = campaignHashids;
     }
 
+    @Transactional(readOnly = true)
     public Campaign findCampaignById(long id) {
         return campaignRepository.findById(id).orElseThrow(SurveyNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
     public Campaign findCampaignById(String hashid) {
         long id = hashidToId(hashid);
         return findCampaignById(id);
     }
 
+    @Transactional(readOnly = true)
     public CampaignDto findCampaignDtoById(String hashid) {
         long id = hashidToId(hashid);
         Campaign campaignById = findCampaignById(id);
         return campaignDtoMapper.entityToDto(campaignById);
     }
 
+    @Transactional(readOnly = true)
     public boolean existsById(long id) {
         return campaignRepository.existsById(id);
     }
 
     @Transactional
-    public CampaignDto insertDto(CreateCampaignDto campaignDto) {
+    public CampaignDto create(CreateCampaignDto campaignDto) {
         Campaign campaign = campaignDtoMapper.dtoToEntity(campaignDto);
         Campaign savedCampaign = campaignRepository.save(campaign);
         return campaignDtoMapper.entityToDto(savedCampaign);
@@ -76,7 +79,7 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignDto updateCampaign(CampaignDto campaignDto, String hashid) {
+    public CampaignDto update(CampaignDto campaignDto, String hashid) {
         long id = hashidToId(hashid);
         return campaignRepository.findById(id)
             .map(campaign -> {
@@ -91,7 +94,7 @@ public class CampaignService {
     }
 
     @Transactional
-    public void deleteCampaign(String hashid) {
+    public void deleteCampaignById(String hashid) {
         long id = hashidToId(hashid);
         campaignRepository.deleteById(id);
     }

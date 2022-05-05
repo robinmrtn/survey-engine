@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-@Transactional(readOnly = true)
 public class ResponseService {
 
     private final ResponseDtoMapper responseDtoMapper;
@@ -40,7 +39,7 @@ public class ResponseService {
     }
 
     @Transactional
-    public SurveyResponseDto insertSurveyResponseDto(String campaignId, CreateSurveyResponseDto surveyResponseDto) {
+    public SurveyResponseDto create(String campaignId, CreateSurveyResponseDto surveyResponseDto) {
         Campaign campaign = campaignService.findCampaignById(campaignId);
         SurveyResponse surveyResponse =
             responseDtoMapper.dtoToEntity(campaign, surveyResponseDto);
@@ -48,10 +47,11 @@ public class ResponseService {
         return responseDtoMapper.entityToDto(savedSurveyResponse);
     }
 
+    @Transactional(readOnly = true)
     public Page<SurveyResponseDto> getResponsesByCampaignId(String hashid, Pageable pageable) {
         long id = hashidToId(hashid);
         Page<SurveyResponseDto> responseDtos = responseRepository.findAllByCampaignId(id, pageable)
-                .map(responseDtoMapper::entityToDto);
+            .map(responseDtoMapper::entityToDto);
 
         if (responseDtos.getTotalElements() == 0 && !campaignService.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Campaign with id " + id + " not found");
@@ -60,10 +60,11 @@ public class ResponseService {
         return responseDtos;
     }
 
+    @Transactional(readOnly = true)
     public SurveyResponseDto getResponseById(String hashid) {
         long id = hashidToId(hashid);
         SurveyResponse surveyResponse = responseRepository.findById(id)
-                .orElseThrow(() -> new ResponseNotFoundException(hashid));
+            .orElseThrow(() -> new ResponseNotFoundException(hashid));
         return responseDtoMapper.entityToDto(surveyResponse);
     }
 

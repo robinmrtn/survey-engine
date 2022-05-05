@@ -35,7 +35,7 @@ public class CampaignController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     CampaignDto createCampaign(@NotNull @Valid @RequestBody CreateCampaignDto campaignDto) {
-        return campaignService.insertDto(campaignDto);
+        return campaignService.create(campaignDto);
     }
 
     @Operation(summary = "Add Survey (referenced by ID) to Campaign by ID")
@@ -51,13 +51,13 @@ public class CampaignController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     CampaignDto put(@NotNull @Valid @RequestBody CampaignDto campaignDto,
                     @PathVariable @NotBlank String id) {
-        return campaignService.updateCampaign(campaignDto, id);
+        return campaignService.update(campaignDto, id);
     }
 
     @Operation(summary = "Delete Campaign by ID")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void delete(@PathVariable @NotBlank String id) {
-        campaignService.deleteCampaign(id);
+        campaignService.deleteCampaignById(id);
     }
 }

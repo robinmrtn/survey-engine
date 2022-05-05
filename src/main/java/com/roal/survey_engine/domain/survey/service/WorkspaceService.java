@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+
 public class WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
@@ -56,10 +56,11 @@ public class WorkspaceService {
         workspaceRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public Workspace getEntityByHashid(String hashid) {
         long id = hashidToId(hashid);
         return workspaceRepository.findById(id)
-                .orElseThrow(() -> new WorkspaceNotFoundException(hashid));
+            .orElseThrow(() -> new WorkspaceNotFoundException(hashid));
     }
 
     private long hashidToId(String hashid) {
@@ -99,20 +100,23 @@ public class WorkspaceService {
         workspace.removeUser(user);
     }
 
+    @Transactional(readOnly = true)
     public boolean currentUserCanModifyWorkspace(Workspace workspace) {
         String username = authenticationFacade.getUserDetails()
-                .getUsername();
+            .getUsername();
         return authenticationFacade.isAdmin() || workspace.containsUserByUsername(username);
     }
 
+    @Transactional(readOnly = true)
     public boolean currentUserCanModifyWorkspace(String hashid) {
         Workspace workspace = getEntityByHashid(hashid);
         return currentUserCanModifyWorkspace(workspace);
     }
 
+    @Transactional(readOnly = true)
     public List<Workspace> getWorkspacesForCurrentUser() {
         String username = authenticationFacade.getUserDetails()
-                .getUsername();
+            .getUsername();
 
         return workspaceRepository.findByUsername(username);
     }

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
@@ -41,12 +40,12 @@ public class SurveyService {
     }
 
     @Transactional
-    public Survey save(Survey survey) {
+    public Survey create(Survey survey) {
         return surveyRepository.save(survey);
     }
 
     @Transactional
-    public SurveyDto saveDto(CreateSurveyDto surveyDto, String workspaceId) {
+    public SurveyDto create(CreateSurveyDto surveyDto, String workspaceId) {
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspaceId)) {
             throw new ForbiddenException();
@@ -59,11 +58,13 @@ public class SurveyService {
         return surveyDtoMapper.entityToDto(survey);
     }
 
+    @Transactional(readOnly = true)
     public Survey findSurveyById(long id) {
         String hashid = surveyHashids.encode(id);
         return surveyRepository.findById(id).orElseThrow(() -> new SurveyNotFoundException(hashid));
     }
 
+    @Transactional(readOnly = true)
     public Survey findSurveyById(String hashid) {
         long id = hashidToId(hashid);
         return findSurveyById(id);
@@ -100,7 +101,6 @@ public class SurveyService {
         if (!workspaceService.currentUserCanModifyWorkspace(workspace)) {
             throw new ForbiddenException();
         }
-
         campaignRepository.deleteById(id);
     }
 
@@ -111,5 +111,4 @@ public class SurveyService {
         }
         return decode[0];
     }
-
 }

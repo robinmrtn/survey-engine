@@ -53,7 +53,7 @@ public class SurveyController {
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyDto postSurvey(@PathVariable @NotBlank String workspaceId,
                                 @NotNull @Valid @RequestBody CreateSurveyDto survey) {
-        return surveyService.saveDto(survey, workspaceId);
+        return surveyService.create(survey, workspaceId);
     }
 
     @Operation(summary = "Find all surveys")
