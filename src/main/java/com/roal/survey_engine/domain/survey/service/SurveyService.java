@@ -70,7 +70,7 @@ public class SurveyService {
         var campaign = campaignRepository
                 .findById(campaignId).orElseThrow(() -> new CampaignNotFoundException(hashid));
         if (campaign.getSurvey() == null) {
-            throw new SurveyNotFoundException(hashid);
+            throw new SurveyNotFoundException();
         }
         return surveyDtoMapper.entityToDto(campaign.getSurvey());
     }
