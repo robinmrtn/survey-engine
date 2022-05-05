@@ -67,20 +67,6 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignDto addSurveyToCampaign(String surveyHashid, String campaignHashid) {
-        long campaignId = hashidToId(campaignHashid);
-        Survey surveyById = surveyService.findSurveyById(surveyHashid);
-        Campaign campaign = campaignRepository.findById(campaignId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Campaign with id '" + campaignId + "' not found"));
-
-        campaign.setSurvey(surveyById);
-        campaignRepository.save(campaign);
-
-        return campaignDtoMapper.entityToDto(campaign);
-    }
-
-    @Transactional
     public CampaignDto update(CampaignDto campaignDto, String hashid) {
         long id = hashidToId(hashid);
         return campaignRepository.findById(id)

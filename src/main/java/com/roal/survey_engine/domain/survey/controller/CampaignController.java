@@ -39,14 +39,6 @@ public class CampaignController {
         return campaignService.create(campaignDto, surveyId);
     }
 
-    @Operation(summary = "Add Survey (referenced by ID) to Campaign by ID")
-    @PostMapping(value = "campaigns/{campaignId}/surveys/{surveyId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    CampaignDto createSurveyToCampaign(@PathVariable @NotBlank String surveyId,
-                                       @PathVariable @NotBlank String campaignId) {
-        return campaignService.addSurveyToCampaign(surveyId, campaignId);
-    }
-
     @Operation(summary = "Update Campaign by ID")
     @PutMapping(value = "campaigns/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE)
