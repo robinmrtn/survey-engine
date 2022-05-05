@@ -13,12 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 public class CampaignServiceTest {
 
     @Autowired
@@ -96,6 +98,5 @@ public class CampaignServiceTest {
         assertEquals(createCampaignDto.to(), campaignDto.to());
         assertEquals(createCampaignDto.hidden(), campaignDto.hidden());
         assertEquals(createCampaignDto.title(), campaignDto.title());
-
     }
 }
