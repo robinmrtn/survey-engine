@@ -40,11 +40,6 @@ public class SurveyService {
     }
 
     @Transactional
-    public Survey create(Survey survey) {
-        return surveyRepository.save(survey);
-    }
-
-    @Transactional
     public SurveyDto create(CreateSurveyDto surveyDto, String workspaceId) {
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspaceId)) {
