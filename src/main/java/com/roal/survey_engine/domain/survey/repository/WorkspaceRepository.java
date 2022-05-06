@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
 
@@ -16,4 +17,8 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
 
     @Query("select w from Workspace w join w.users u where u.username =:username")
     List<Workspace> findByUsername(String username);
+
+    @Override
+    @Query("select w from Workspace w where w.id =:id and w.deleted=false")
+    Optional<Workspace> findById(Long id);
 }
