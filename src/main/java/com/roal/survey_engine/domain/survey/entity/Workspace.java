@@ -105,4 +105,12 @@ public class Workspace {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 }
