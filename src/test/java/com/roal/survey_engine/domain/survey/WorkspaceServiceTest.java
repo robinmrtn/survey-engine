@@ -8,16 +8,20 @@ import com.roal.survey_engine.domain.survey.service.WorkspaceService;
 import com.roal.survey_engine.domain.user.entity.User;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
 import com.roal.survey_engine.security.AuthenticationFacade;
+import org.hashids.Hashids;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"spring.jpa.show-sql=true"})
 @Transactional
 public class WorkspaceServiceTest {
 
@@ -37,6 +41,13 @@ public class WorkspaceServiceTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    @Qualifier("workspaceHashids")
+    Hashids workspaceHashid;
+
+    @Autowired
+    private EntityManager testEntityManager;
 
     @MockBean
     AuthenticationFacade authenticationFacade;
@@ -115,5 +126,23 @@ public class WorkspaceServiceTest {
 
         assertEquals(createWorkspaceDto.title(), workspaceDto.title());
 
+    }
+
+    @Test
+    void deleteById() {
+
+        Workspace workspace = workspaceRepository.save(new Workspace("Title"));
+        String hashid = workspaceHashid.encode(workspace.getId());
+
+        given(authenticationFacade.isAdmin()).willReturn(true);
+
+        workspaceService.deleteById(hashid);
+
+        testEntityManager.flush();
+        testEntityManager.clear();
+
+        Optional<Workspace> byId = workspaceRepository.findById(workspace.getId());
+
+        assertTrue(byId.isEmpty());
     }
 }
