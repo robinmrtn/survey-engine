@@ -1,5 +1,7 @@
 package com.roal.survey_engine.domain.survey;
 
+import com.roal.survey_engine.domain.survey.dto.workspace.CreateWorkspaceDto;
+import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
 import com.roal.survey_engine.domain.survey.service.WorkspaceService;
@@ -103,4 +105,15 @@ public class WorkspaceServiceTest {
         assertEquals("second workspace", workspacesForCurrentUser.get(1).getTitle());
     }
 
+    @Test
+    void create() {
+        var createWorkspaceDto = new CreateWorkspaceDto("Title", Collections.emptyList());
+
+        given(authenticationFacade.isAdmin()).willReturn(true);
+
+        WorkspaceDto workspaceDto = workspaceService.create(createWorkspaceDto);
+
+        assertEquals(createWorkspaceDto.title(), workspaceDto.title());
+
+    }
 }
