@@ -5,8 +5,8 @@ import com.roal.survey_engine.domain.survey.entity.Workspace;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -25,17 +25,17 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+        name = "user_role",
+        joinColumns = @JoinColumn(
+            name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(
+            name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
 
     @ManyToMany(mappedBy = "users")
     private Collection<Workspace> workspaces;
 
-    public User(String username, String password, List<Role> roles) {
+    public User(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -72,11 +72,11 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

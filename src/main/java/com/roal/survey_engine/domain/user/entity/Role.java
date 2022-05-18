@@ -44,7 +44,7 @@ public class Role {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (this.id == null) return false;
         Role role = (Role) o;
 
         return Objects.equals(id, role.id);
@@ -52,6 +52,6 @@ public class Role {
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return getClass().hashCode();
     }
 }

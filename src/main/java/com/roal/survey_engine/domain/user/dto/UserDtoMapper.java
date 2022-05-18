@@ -7,7 +7,6 @@ import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,10 +22,10 @@ public class UserDtoMapper {
     }
 
     public User dtoToEntity(UserRegistrationDto userDto) {
-        List<Role> roles = userDto.roles()
+        Set<Role> roles = userDto.roles()
             .stream()
             .map(Role::new)
-            .toList();
+            .collect(Collectors.toSet());
         return new User(userDto.username(), userDto.password(), roles);
     }
 
