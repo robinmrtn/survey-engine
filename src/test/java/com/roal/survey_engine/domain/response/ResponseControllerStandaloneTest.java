@@ -13,6 +13,7 @@ import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
+import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -42,6 +42,9 @@ class ResponseControllerStandaloneTest {
 
     @MockBean
     private ResponseService responseService;
+
+    @MockBean
+    TokenProvider tokenProvider;
 
     @MockBean
     private CampaignService campaignService;
@@ -75,7 +78,7 @@ class ResponseControllerStandaloneTest {
 
     @Test
     @DisplayName("POST responses/surveys/{id} - failed")
-    @WithMockUser
+//    @WithMockUser
     void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
 
         given(campaignService.findCampaignById("abcd123")).willThrow(new SurveyNotFoundException());

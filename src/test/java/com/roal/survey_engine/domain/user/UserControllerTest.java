@@ -3,6 +3,7 @@ package com.roal.survey_engine.domain.user;
 import com.roal.survey_engine.domain.user.controller.UserController;
 import com.roal.survey_engine.domain.user.dto.UserDto;
 import com.roal.survey_engine.domain.user.service.UserService;
+import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,9 +36,13 @@ public class UserControllerTest {
     private UserService userService;
 
     @MockBean
+    private TokenProvider tokenProvider;
+
+    @MockBean
     private UserDetailsService userDetailsService;
 
     @Test
+    @WithAnonymousUser
     public void forbiddenAsAnonymous() throws Exception {
         MockHttpServletResponse response = mvc.perform(get("/api/users/me"))
             .andReturn()
