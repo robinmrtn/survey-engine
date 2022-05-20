@@ -4,7 +4,6 @@ import com.roal.survey_engine.domain.survey.entity.Workspace;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,7 +32,7 @@ public class UserEntity {
     private Set<Role> roles;
 
     @ManyToMany(mappedBy = "users")
-    private Collection<Workspace> workspaces;
+    private Set<Workspace> workspaces;
 
     public UserEntity(String username, String password, Set<Role> roles) {
         this.username = username;
