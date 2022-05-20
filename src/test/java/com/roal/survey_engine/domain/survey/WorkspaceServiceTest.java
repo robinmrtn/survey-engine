@@ -5,7 +5,7 @@ import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDto;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
 import com.roal.survey_engine.domain.survey.service.WorkspaceService;
-import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
 import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
@@ -54,7 +54,7 @@ public class WorkspaceServiceTest {
 
     @Test
     public void testUserIsPartOfWorkspace() {
-        Workspace workspace = new Workspace().addUser(new User("user1"));
+        Workspace workspace = new Workspace().addUser(new UserEntity("user1"));
         var loggedInUser = new org.springframework.security.core.userdetails.User("user1", "pw",
                 Set.of(new SimpleGrantedAuthority("USER")));
 
@@ -68,9 +68,9 @@ public class WorkspaceServiceTest {
 
     @Test
     public void testUserIsNotPartOfWorkspace() {
-        Workspace workspace = new Workspace().addUser(new User("user1"));
+        Workspace workspace = new Workspace().addUser(new UserEntity("user1"));
         var loggedInUser = new org.springframework.security.core.userdetails.User("user2", "pw",
-            Set.of(new SimpleGrantedAuthority("USER")));
+                Set.of(new SimpleGrantedAuthority("USER")));
 
         given(authenticationFacade.getUserDetails()).willReturn(loggedInUser);
 
@@ -82,9 +82,9 @@ public class WorkspaceServiceTest {
 
     @Test
     public void testAdminCanEditWorkspace() {
-        Workspace workspace = new Workspace().addUser(new User("user1"));
+        Workspace workspace = new Workspace().addUser(new UserEntity("user1"));
         var loggedInUser = new org.springframework.security.core.userdetails.User("user2", "pw",
-            Set.of(new SimpleGrantedAuthority("ADMIN")));
+                Set.of(new SimpleGrantedAuthority("ADMIN")));
 
         var loggedInAuth = new UsernamePasswordAuthenticationToken(loggedInUser, null);
 
@@ -99,8 +99,8 @@ public class WorkspaceServiceTest {
 
     @Test
     public void testGetWorkspacesForCurrentUser() {
-        User user = new User("user1", "password", Collections.emptySet());
-        User savedUser = userRepository.save(user);
+        UserEntity user = new UserEntity("user1", "password", Collections.emptySet());
+        UserEntity savedUser = userRepository.save(user);
         Workspace firstWorkspace = new Workspace("first workspace").addUser(savedUser);
         Workspace secondWorkspace = new Workspace("second workspace").addUser(savedUser);
         workspaceRepository.save(firstWorkspace);

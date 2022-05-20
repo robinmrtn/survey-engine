@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
     @SequenceGenerator(name = "seq_user")
@@ -35,16 +35,16 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Collection<Workspace> workspaces;
 
-    public User(String username, String password, Set<Role> roles) {
+    public UserEntity(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
     }
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String username) {
+    public UserEntity(String username) {
         this.username = username;
     }
 
@@ -84,14 +84,14 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
+        if (id == null) return false;
+        UserEntity user = (UserEntity) o;
 
         return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return getClass().hashCode();
     }
 }

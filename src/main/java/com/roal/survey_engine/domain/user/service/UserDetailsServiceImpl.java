@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.user.service;
 
 import com.roal.survey_engine.domain.user.entity.Role;
-import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username)
+        UserEntity user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User +'" + username + "' not found"));
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), mapRolesToAuthorities(user.getRoles()));
