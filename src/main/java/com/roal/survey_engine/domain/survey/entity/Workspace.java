@@ -1,6 +1,6 @@
 package com.roal.survey_engine.domain.survey.entity;
 
-import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.entity.UserEntity;
 
 import javax.persistence.*;
 import java.util.*;
@@ -27,7 +27,7 @@ public class Workspace {
                     name = "workspace_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"))
-    private Collection<User> users = new ArrayList<>();
+    private Collection<UserEntity> users = new ArrayList<>();
 
     public Workspace(String title) {
         this.title = title;
@@ -70,16 +70,16 @@ public class Workspace {
         return this;
     }
 
-    public Collection<User> getUsers() {
+    public Collection<UserEntity> getUsers() {
         return Collections.unmodifiableCollection(users);
     }
 
-    public Workspace addUser(User user) {
+    public Workspace addUser(UserEntity user) {
         users.add(user);
         return this;
     }
 
-    public Workspace removeUser(User user) {
+    public Workspace removeUser(UserEntity user) {
         users.remove(user);
         return this;
     }

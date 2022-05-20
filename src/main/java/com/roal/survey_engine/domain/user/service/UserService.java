@@ -6,7 +6,7 @@ import com.roal.survey_engine.domain.user.dto.UserDto;
 import com.roal.survey_engine.domain.user.dto.UserDtoMapper;
 import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
-import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.exception.RoleNotFoundException;
 import com.roal.survey_engine.domain.user.exception.UserNotFoundException;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
@@ -47,11 +47,11 @@ public class UserService {
     @Transactional
     public UserDto create(UserRegistrationDto userDto) {
 
-        User user = userDtoMapper.dtoToEntity(userDto);
+        UserEntity user = userDtoMapper.dtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> foundRoles = getRoles(user);
         user.setRoles(foundRoles);
-        User saved = userRepository.save(user);
+        UserEntity saved = userRepository.save(user);
 
         /*
             Add default Workspace for new users
@@ -61,7 +61,7 @@ public class UserService {
         return userDtoMapper.entityToDto(saved);
     }
 
-    private Set<Role> getRoles(User user) {
+    private Set<Role> getRoles(UserEntity user) {
         return user
                 .getRoles()
                 .stream()
@@ -70,19 +70,19 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
-    private void createDefaultWorkspace(User user) {
+    private void createDefaultWorkspace(UserEntity user) {
         var workspace = new Workspace(user.getUsername() + " Workspace");
         workspace.addUser(user);
         workspaceRepository.save(workspace);
     }
 
     public UserDto findByUsername(String username) {
-        User user = userRepository.findUserByUsername(username)
+        UserEntity user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
         return userDtoMapper.entityToDto(user);
     }
 
-    public User findById(String hashid) {
+    public UserEntity findById(String hashid) {
         long id = hashidToId(hashid);
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(hashid));

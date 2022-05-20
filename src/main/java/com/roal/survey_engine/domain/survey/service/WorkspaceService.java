@@ -6,7 +6,7 @@ import com.roal.survey_engine.domain.survey.dto.workspace.WorkspaceDtoMapper;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
 import com.roal.survey_engine.domain.survey.exception.WorkspaceNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
-import com.roal.survey_engine.domain.user.entity.User;
+import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.exception.ForbiddenUserActionException;
 import com.roal.survey_engine.domain.user.service.UserService;
 import com.roal.survey_engine.security.AuthenticationFacade;
@@ -84,8 +84,8 @@ public class WorkspaceService {
 
         long id = hashidToId(hashid);
         Workspace workspace = workspaceRepository.findById(id)
-            .orElseThrow(() -> new WorkspaceNotFoundException(hashid));
-        User user = userService.findById(userId);
+                .orElseThrow(() -> new WorkspaceNotFoundException(hashid));
+        UserEntity user = userService.findById(userId);
         workspace.addUser(user);
 
         return workspaceDtoMapper.entityToDto(workspace);
@@ -95,8 +95,8 @@ public class WorkspaceService {
     public void deleteUserFromWorkspace(String hashid, String userId) {
         long id = hashidToId(hashid);
         Workspace workspace = workspaceRepository.findById(id)
-            .orElseThrow(() -> new WorkspaceNotFoundException(hashid));
-        User user = userService.findById(userId);
+                .orElseThrow(() -> new WorkspaceNotFoundException(hashid));
+        UserEntity user = userService.findById(userId);
         workspace.removeUser(user);
     }
 
