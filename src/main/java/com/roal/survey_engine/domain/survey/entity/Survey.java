@@ -19,6 +19,9 @@ public class Survey {
 
     private String title;
 
+    @Version
+    private Integer version;
+
     private String description;
 
     private boolean deleted = Boolean.FALSE;
@@ -98,12 +101,13 @@ public class Survey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (id == null) return false;
         Survey survey = (Survey) o;
         return Objects.equals(id, survey.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return getClass().hashCode();
     }
 }

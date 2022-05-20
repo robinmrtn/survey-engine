@@ -100,7 +100,7 @@ public class Campaign {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (id == null) return false;
         Campaign campaign = (Campaign) o;
 
         return id.equals(campaign.id);
@@ -108,6 +108,6 @@ public class Campaign {
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return getClass().hashCode();
     }
 }

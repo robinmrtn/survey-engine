@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 @Entity
 public class Workspace {
@@ -95,15 +96,15 @@ public class Workspace {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (id == null) return false;
         Workspace workspace = (Workspace) o;
 
-        return id != null ? id.equals(workspace.id) : workspace.id == null;
+        return Objects.equals(id, workspace.id);
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return getClass().hashCode();
     }
 
     public Boolean isDeleted() {

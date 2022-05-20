@@ -73,7 +73,7 @@ public class ClosedQuestionAnswer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (id == null) return false;
         ClosedQuestionAnswer that = (ClosedQuestionAnswer) o;
 
         return Objects.equals(id, that.id);
@@ -81,6 +81,6 @@ public class ClosedQuestionAnswer {
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return getClass().hashCode();
     }
 }
