@@ -37,11 +37,11 @@ public class Workspace {
                     name = "workspace_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"))
-    private Collection<UserEntity> users = new ArrayList<>();
+    private Set<UserEntity> users = new HashSet<>();
 
     public Workspace(String title) {
         this.title = title;
-        users = new ArrayList<>();
+        users = new HashSet<>();
         surveys = new HashSet<>();
     }
 
