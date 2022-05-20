@@ -1,7 +1,7 @@
 package com.roal.survey_engine.domain.user.controller;
 
-import com.roal.survey_engine.domain.user.dto.AuthenticationDto;
-import com.roal.survey_engine.domain.user.dto.TokenDto;
+import com.roal.survey_engine.domain.user.dto.AuthenticationRequest;
+import com.roal.survey_engine.domain.user.dto.TokenResponse;
 import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,22 +23,24 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthenticationController(TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
+    public AuthenticationController(TokenProvider tokenProvider,
+                                    AuthenticationManager authenticationManager) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/api/authentication")
-    public ResponseEntity<?> authentication(@RequestBody @Valid AuthenticationDto authenticationDto) {
-        String password = authenticationDto.password();
-        String username = authenticationDto.username();
+    public ResponseEntity<TokenResponse> authentication(
+            @RequestBody @Valid AuthenticationRequest authenticationRequest) {
+        String password = authenticationRequest.password();
+        String username = authenticationRequest.username();
 
         Authentication authenticate = authenticationManager
-            .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = tokenProvider.generateToken(username);
-        var jwt = new TokenDto(token);
+        var jwt = new TokenResponse(token);
         var httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer " + token);
 
