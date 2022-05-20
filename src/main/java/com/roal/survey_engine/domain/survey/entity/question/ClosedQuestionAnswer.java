@@ -1,9 +1,9 @@
 package com.roal.survey_engine.domain.survey.entity.question;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class ClosedQuestionAnswer {
@@ -49,13 +49,13 @@ public class ClosedQuestionAnswer {
 
         private ClosedQuestion.ClosedQuestionBuilder closedQuestionBuilder;
 
-        private List<ClosedQuestionAnswer> answers = new ArrayList<>();
+        private Set<ClosedQuestionAnswer> answers = new HashSet<>();
 
         public ClosedQuestionAnswerBuilder(ClosedQuestion.ClosedQuestionBuilder closedQuestionBuilder) {
             this.closedQuestionBuilder = closedQuestionBuilder;
         }
 
-        public List<ClosedQuestionAnswer> getAnswers() {
+        public Set<ClosedQuestionAnswer> getAnswers() {
             return answers;
         }
 

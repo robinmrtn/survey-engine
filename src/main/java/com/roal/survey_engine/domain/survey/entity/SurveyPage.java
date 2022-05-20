@@ -6,9 +6,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class SurveyPage {
@@ -22,7 +22,7 @@ public class SurveyPage {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("position")
-    private List<AbstractSurveyElement> surveyPageElements = new ArrayList<>();
+    private Set<AbstractSurveyElement> surveyPageElements = new HashSet<>();
 
     public SurveyPage() {
         // needed by Hibernate
@@ -42,7 +42,7 @@ public class SurveyPage {
         this.id = id;
     }
 
-    public List<AbstractSurveyElement> getSurveyPageElements() {
+    public Set<AbstractSurveyElement> getSurveyPageElements() {
         return surveyPageElements;
     }
 

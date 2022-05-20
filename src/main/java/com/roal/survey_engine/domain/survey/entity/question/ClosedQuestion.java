@@ -1,22 +1,21 @@
 package com.roal.survey_engine.domain.survey.entity.question;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class ClosedQuestion extends AbstractSurveyElement {
 
     private String question;
 
-    public ClosedQuestion setAnswers(List<ClosedQuestionAnswer> answers) {
-        this.answers = answers;
-        return this;
-    }
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "closed_question_id")
-    private List<ClosedQuestionAnswer> answers = new ArrayList<>();
+    private Set<ClosedQuestionAnswer> answers = new HashSet<>();
+
+    public Set<ClosedQuestionAnswer> getAnswers() {
+        return answers;
+    }
 
     public ClosedQuestion() {
         // needed by hibernate
@@ -39,8 +38,9 @@ public class ClosedQuestion extends AbstractSurveyElement {
         this.question = question;
     }
 
-    public List<ClosedQuestionAnswer> getAnswers() {
-        return answers;
+    public ClosedQuestion setAnswers(Set<ClosedQuestionAnswer> answers) {
+        this.answers = answers;
+        return this;
     }
 
     public ClosedQuestion addAnswer(ClosedQuestionAnswer answer) {
@@ -81,7 +81,7 @@ public class ClosedQuestion extends AbstractSurveyElement {
             ClosedQuestion closedQuestion = new ClosedQuestion();
             closedQuestion.setQuestion(question);
             closedQuestion.setId(id);
-            List<ClosedQuestionAnswer> answers = this.answerBuilder.getAnswers();
+            Set<ClosedQuestionAnswer> answers = this.answerBuilder.getAnswers();
             for (ClosedQuestionAnswer answer : answers) {
                 closedQuestion.addAnswer(answer);
             }

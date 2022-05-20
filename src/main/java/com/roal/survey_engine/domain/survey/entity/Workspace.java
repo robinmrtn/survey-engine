@@ -3,10 +3,7 @@ package com.roal.survey_engine.domain.survey.entity;
 import com.roal.survey_engine.domain.user.entity.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Workspace {
@@ -20,7 +17,7 @@ public class Workspace {
     private Boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "workspace")
-    private Collection<Survey> surveys = new ArrayList<>();
+    private Set<Survey> surveys = new HashSet<>();
 
 
     @ManyToMany
@@ -35,7 +32,7 @@ public class Workspace {
     public Workspace(String title) {
         this.title = title;
         users = new ArrayList<>();
-        surveys = new ArrayList<>();
+        surveys = new HashSet<>();
     }
 
     public Workspace() {
@@ -59,11 +56,11 @@ public class Workspace {
         return this;
     }
 
-    public Collection<Survey> getSurveys() {
+    public Set<Survey> getSurveys() {
         return surveys;
     }
 
-    public Workspace setSurveys(Collection<Survey> surveys) {
+    public Workspace setSurveys(Set<Survey> surveys) {
         this.surveys = surveys;
         return this;
     }
