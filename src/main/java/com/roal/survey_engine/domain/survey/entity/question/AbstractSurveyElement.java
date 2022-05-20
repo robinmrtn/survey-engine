@@ -47,12 +47,13 @@ public abstract class AbstractSurveyElement implements Comparable<AbstractSurvey
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (id == null) return false;
         OpenTextQuestion that = (OpenTextQuestion) o;
         return Objects.equals(id, that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return getClass().hashCode();
     }
 }
