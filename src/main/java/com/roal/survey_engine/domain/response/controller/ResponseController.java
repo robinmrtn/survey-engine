@@ -71,6 +71,10 @@ public class ResponseController {
         return responseService.getResponseById(responseId);
     }
 
+    @Operation(summary = "Delete response by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successful"),
+            @ApiResponse(responseCode = "404", description = "Response not found")})
     @DeleteMapping(value = "/{responseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSurveyResponse(@PathVariable @NotBlank String responseId) {
