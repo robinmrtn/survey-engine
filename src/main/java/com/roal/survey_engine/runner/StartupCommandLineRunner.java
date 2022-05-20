@@ -91,7 +91,6 @@ class StartupCommandLineRunner implements CommandLineRunner {
                 .addSurveyElement(new OpenNumericQuestion("This is a numeric question")));
         var campaign = new Campaign()
             .setSurvey(survey)
-            .setId(1)
             .setActive(true)
             .setHidden(false);
 
