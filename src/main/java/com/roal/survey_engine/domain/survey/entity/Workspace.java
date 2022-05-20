@@ -1,8 +1,11 @@
 package com.roal.survey_engine.domain.survey.entity;
 
 import com.roal.survey_engine.domain.user.entity.UserEntity;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -19,7 +22,14 @@ public class Workspace {
     @OneToMany(mappedBy = "workspace")
     private Set<Survey> surveys = new HashSet<>();
 
+    @Version
+    private Integer version;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     @ManyToMany
     @JoinTable(
             name = "workspace_user",

@@ -34,6 +34,9 @@ public class Campaign {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Version
+    private Integer version;
+
     public Campaign() {
         // needed by hibernate
     }
