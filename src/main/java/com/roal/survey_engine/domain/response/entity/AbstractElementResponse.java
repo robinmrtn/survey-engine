@@ -39,6 +39,7 @@ public abstract class AbstractElementResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (id == null) return false;
 
         AbstractElementResponse that = (AbstractElementResponse) o;
 
@@ -47,6 +48,6 @@ public abstract class AbstractElementResponse {
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return getClass().hashCode();
     }
 }

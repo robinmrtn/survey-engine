@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +59,7 @@ class SurveyResponseJpaRepositoryTest {
         response.setSurvey(receivedSurvey.get());
         var elementResponse1 = new OpenTextQuestionResponse();
         elementResponse1.setAnswer("This is an answer!");
-        response.setElementResponses(List.of(elementResponse1));
+        response.setElementResponses(Set.of(elementResponse1));
 
         responseRepository.save(response);
 

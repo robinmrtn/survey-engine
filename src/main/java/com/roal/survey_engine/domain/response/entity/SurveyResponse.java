@@ -7,9 +7,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class SurveyResponse {
@@ -36,7 +36,7 @@ public class SurveyResponse {
     private Boolean deleted = Boolean.FALSE;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyResponse", fetch = FetchType.EAGER)
-    private List<AbstractElementResponse> elementResponses = new ArrayList<>();
+    private Set<AbstractElementResponse> elementResponses = new HashSet<>();
 
     public SurveyResponse() {
         // needed by hibernate
@@ -59,11 +59,11 @@ public class SurveyResponse {
         return this;
     }
 
-    public List<AbstractElementResponse> getElementResponses() {
+    public Set<AbstractElementResponse> getElementResponses() {
         return elementResponses;
     }
 
-    public void setElementResponses(List<AbstractElementResponse> elementResponses) {
+    public void setElementResponses(Set<AbstractElementResponse> elementResponses) {
         elementResponses.forEach(e -> e.setSurveyResponse(this));
         this.elementResponses = elementResponses;
     }

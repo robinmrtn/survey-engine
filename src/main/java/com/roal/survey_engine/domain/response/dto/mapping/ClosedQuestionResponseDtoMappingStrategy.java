@@ -10,7 +10,6 @@ import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ClosedQuestionResponseDtoMappingStrategy implements ResponseDtoMappingStrategy {
     @Override
@@ -39,13 +38,13 @@ public class ClosedQuestionResponseDtoMappingStrategy implements ResponseDtoMapp
         Set<Long> answerIds = elementResponseDto.getAnswers();
 
         return survey.getSurveyPages()
-                .stream()
-                .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
-                .filter(ClosedQuestion.class::isInstance)
-                .filter(e -> e.getId() == elementResponseDto.getElementId())
-                .flatMap(e -> ((ClosedQuestion) e).getAnswers().stream())
-                .filter(closedQuestionAnswer -> answerIds.contains(closedQuestionAnswer.getId()))
-                .collect(Collectors.toList());
+            .stream()
+            .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
+            .filter(ClosedQuestion.class::isInstance)
+            .filter(e -> e.getId() == elementResponseDto.getElementId())
+            .flatMap(e -> ((ClosedQuestion) e).getAnswers().stream())
+            .filter(closedQuestionAnswer -> answerIds.contains(closedQuestionAnswer.getId()))
+            .toList();
     }
 
 
