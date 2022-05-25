@@ -35,7 +35,7 @@ public class SurveyDtoMapper {
 
         for (SurveyPage surveyPage : survey.getSurveyPages()) {
 
-            Set<AbstractSurveyElement> surveyPageElements = surveyPage.getSurveyPageElements();
+            List<AbstractSurveyElement> surveyPageElements = surveyPage.getSurveyPageElements();
             List<AbstractElementDto> elementDtos = getElementDtos(surveyPageElements);
             surveyPageDtos.add(new SurveyPageDto(surveyPage.getPosition(), elementDtos));
         }
@@ -43,7 +43,7 @@ public class SurveyDtoMapper {
                 survey.getDescription(), workspaceService.idToHashid(survey.getWorkspace().getId()), surveyPageDtos);
     }
 
-    private List<AbstractElementDto> getElementDtos(Set<AbstractSurveyElement> surveyPageElements) {
+    private List<AbstractElementDto> getElementDtos(List<AbstractSurveyElement> surveyPageElements) {
 
         List<AbstractElementDto> elementDtos = new ArrayList<>();
 
@@ -135,10 +135,10 @@ public class SurveyDtoMapper {
         });
     }
 
-    private Set<ClosedQuestionAnswer> dtoAnswersToEntity(Collection<ClosedQuestionAnswerDto> answerDtos) {
+    private List<ClosedQuestionAnswer> dtoAnswersToEntity(Collection<ClosedQuestionAnswerDto> answerDtos) {
         return answerDtos.stream()
-                .map((e) -> new ClosedQuestionAnswer(e.id(), e.answer()))
-                .collect(Collectors.toSet());
+            .map((e) -> new ClosedQuestionAnswer(e.id(), e.answer()))
+            .toList();
     }
 
     private long wrapperToPrimitive(Long value) {

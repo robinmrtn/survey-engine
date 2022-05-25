@@ -5,9 +5,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Survey {
@@ -35,7 +35,7 @@ public class Survey {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
     @OrderBy("position")
-    private Set<SurveyPage> surveyPages = new HashSet<>();
+    private List<SurveyPage> surveyPages = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Workspace workspace;
@@ -70,7 +70,7 @@ public class Survey {
         return this;
     }
 
-    public Set<SurveyPage> getSurveyPages() {
+    public List<SurveyPage> getSurveyPages() {
         return surveyPages;
     }
 
