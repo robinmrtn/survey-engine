@@ -1,7 +1,8 @@
 package com.roal.survey_engine.domain.survey.entity.question;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -9,11 +10,13 @@ public class ClosedQuestion extends AbstractSurveyElement {
 
     private String question;
 
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "closed_question_id")
-    private Set<ClosedQuestionAnswer> answers = new HashSet<>();
+    @OrderBy("position")
+    private List<ClosedQuestionAnswer> answers = new ArrayList<ClosedQuestionAnswer>();
 
-    public Set<ClosedQuestionAnswer> getAnswers() {
+    public List<ClosedQuestionAnswer> getAnswers() {
         return answers;
     }
 
@@ -38,7 +41,7 @@ public class ClosedQuestion extends AbstractSurveyElement {
         this.question = question;
     }
 
-    public ClosedQuestion setAnswers(Set<ClosedQuestionAnswer> answers) {
+    public ClosedQuestion setAnswers(List<ClosedQuestionAnswer> answers) {
         this.answers = answers;
         return this;
     }

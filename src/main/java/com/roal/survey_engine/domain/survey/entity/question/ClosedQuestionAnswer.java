@@ -13,6 +13,8 @@ public class ClosedQuestionAnswer {
     @SequenceGenerator(name = "seq_closed_question_answer")
     private Long id;
 
+    private int position;
+
     private String value;
 
     public ClosedQuestionAnswer() {
@@ -43,6 +45,14 @@ public class ClosedQuestionAnswer {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public static final class ClosedQuestionAnswerBuilder {
