@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -61,6 +60,7 @@ public class UserService {
         return userDtoMapper.entityToDto(saved);
     }
 
+    @Transactional(readOnly = true)
     private Set<Role> getRoles(UserEntity user) {
         return user
                 .getRoles()
@@ -76,12 +76,14 @@ public class UserService {
         workspaceRepository.save(workspace);
     }
 
+    @Transactional(readOnly = true)
     public UserDto findByUsername(String username) {
         UserEntity user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
         return userDtoMapper.entityToDto(user);
     }
 
+    @Transactional(readOnly = true)
     public UserEntity findById(String hashid) {
         long id = hashidToId(hashid);
         return userRepository.findById(id)
