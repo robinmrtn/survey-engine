@@ -1,8 +1,10 @@
 package com.roal.survey_engine.config.security;
 
+import com.roal.survey_engine.domain.user.service.UserService;
 import com.roal.survey_engine.security.DefaultAccessDeniedHandler;
 import com.roal.survey_engine.security.RestAuthenticationFailureHandler;
 import com.roal.survey_engine.security.RestAuthenticationSuccessHandler;
+import com.roal.survey_engine.security.RestUsernamePasswordAuthenticationFilter;
 import com.roal.survey_engine.security.jwt.JwtRequestFilter;
 import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -31,10 +34,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     private final TokenProvider tokenProvider;
+    private final RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+    private final UserService userService;
 
-    public WebSecurityConfig(UserDetailsService userDetailsService, TokenProvider tokenProvider) {
+    public WebSecurityConfig(UserDetailsService userDetailsService, TokenProvider tokenProvider,
+                             RestAuthenticationSuccessHandler restAuthenticationSuccessHandler, UserService userService) {
         this.userDetailsService = userDetailsService;
         this.tokenProvider = tokenProvider;
+        this.restAuthenticationSuccessHandler = restAuthenticationSuccessHandler;
+        this.userService = userService;
     }
 
 //    @Override
@@ -87,15 +95,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/authentication").permitAll()
+//            .antMatchers(HttpMethod.POST, "/api/authentication").permitAll()
             .antMatchers(HttpMethod.GET, "/api/surveys/**").permitAll()
             .antMatchers(HttpMethod.POST, "/api/responses/campaigns/**").permitAll()
             .antMatchers("/swagger-ui/**").permitAll()
             .antMatchers("/v3/api-docs/**").permitAll()
             .anyRequest().authenticated();
 
-        http.addFilterAfter(new JwtRequestFilter("/**", tokenProvider, userDetailsService),
+        http.addFilterBefore(new JwtRequestFilter("/**", tokenProvider, userDetailsService),
             UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(restUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         // @formatter:on
     }
 
@@ -111,12 +120,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new RestAuthenticationSuccessHandler();
+        return new RestAuthenticationSuccessHandler(userService, tokenProvider);
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public RestUsernamePasswordAuthenticationFilter restUsernamePasswordAuthenticationFilter() throws Exception {
+        var filter = new RestUsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(restAuthenticationSuccessHandler);
+        filter.setRequiresAuthenticationRequestMatcher(
+            new AntPathRequestMatcher("/api/authentication", HttpMethod.POST.name()));
+
+        return filter;
+
     }
 }

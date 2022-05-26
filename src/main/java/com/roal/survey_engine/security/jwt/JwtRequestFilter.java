@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 public class JwtRequestFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
