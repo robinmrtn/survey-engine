@@ -1,5 +1,6 @@
 package com.roal.survey_engine.domain.user.dto;
 
+import com.roal.survey_engine.domain.user.UserAuthority;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.security.AuthenticationFacade;
@@ -31,11 +32,16 @@ public class UserDtoMapper {
 
     public UserDto entityToDto(UserEntity user) {
         Set<String> roles = user.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(Collectors.toSet());
+            .stream()
+            .map(Role::getName)
+            .collect(Collectors.toSet());
 
         return new UserDto(userHashids.encode(user.getId()),
-                user.getUsername(), roles, authenticationFacade.isAdmin());
+            user.getUsername(), roles, isAdmin(user.getRoles()));
+    }
+
+    private boolean isAdmin(Set<Role> roles) {
+        return roles.stream()
+            .anyMatch(role -> role.getName().equals(UserAuthority.ROLE_ADMIN.getRole()));
     }
 }
