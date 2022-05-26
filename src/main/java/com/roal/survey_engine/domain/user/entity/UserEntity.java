@@ -1,9 +1,11 @@
 package com.roal.survey_engine.domain.user.entity;
 
 import com.roal.survey_engine.domain.survey.entity.Workspace;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,6 +23,13 @@ public class UserEntity {
 
     @NotBlank
     private String password;
+
+    @CreationTimestamp
+    private LocalDateTime creationTime;
+
+    private LocalDateTime lastLogin;
+
+    private String lastLoginIp;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -92,5 +101,10 @@ public class UserEntity {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void updateLastLogin(String ip) {
+        lastLogin = LocalDateTime.now();
+        lastLoginIp = ip;
     }
 }
