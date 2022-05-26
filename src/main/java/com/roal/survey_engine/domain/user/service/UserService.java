@@ -13,6 +13,7 @@ import com.roal.survey_engine.domain.user.repository.RoleRepository;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class UserService {
 
     public UserService(UserRepository userRepository, UserDtoMapper userDtoMapper,
                        RoleRepository roleRepository, WorkspaceRepository workspaceRepository,
-                       PasswordEncoder passwordEncoder,
+                       @Lazy PasswordEncoder passwordEncoder,
                        @Qualifier("userHashids") Hashids userHashids) {
         this.userRepository = userRepository;
         this.userDtoMapper = userDtoMapper;
@@ -79,15 +80,23 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDto findByUsername(String username) {
         UserEntity user = userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
+            .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
         return userDtoMapper.entityToDto(user);
+    }
+
+    @Transactional
+    public void updateLastLoginByUsername(String username, String ip) {
+        UserEntity user = userRepository.findUserByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
+
+        user.updateLastLogin(ip);
     }
 
     @Transactional(readOnly = true)
     public UserEntity findById(String hashid) {
         long id = hashidToId(hashid);
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(hashid));
+            .orElseThrow(() -> new UserNotFoundException(hashid));
     }
 
     private long hashidToId(String hashid) {
