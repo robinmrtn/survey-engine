@@ -42,6 +42,6 @@ public class UserDtoMapper {
 
     private boolean isAdmin(Set<Role> roles) {
         return roles.stream()
-            .anyMatch(role -> role.getName().equals(UserAuthority.ROLE_ADMIN.getRole()));
+            .anyMatch(role -> role.getName().equals(UserAuthority.ROLE_ADMIN.toString()));
     }
 }
