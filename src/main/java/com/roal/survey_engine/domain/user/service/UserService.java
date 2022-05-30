@@ -8,6 +8,7 @@ import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.exception.RoleNotFoundException;
+import com.roal.survey_engine.domain.user.exception.UserAlreadyExistsException;
 import com.roal.survey_engine.domain.user.exception.UserNotFoundException;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
@@ -47,6 +48,11 @@ public class UserService {
     @Transactional
     public UserDto create(UserRegistrationDto userDto) {
 
+        userRepository.findUserByUsername(userDto.username())
+            .ifPresent((s) -> {
+                throw new UserAlreadyExistsException(userDto.username());
+            });
+
         UserEntity user = userDtoMapper.dtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> foundRoles = getRoles(user);
@@ -61,7 +67,6 @@ public class UserService {
         return userDtoMapper.entityToDto(saved);
     }
 
-    @Transactional(readOnly = true)
     private Set<Role> getRoles(UserEntity user) {
         return user
                 .getRoles()
