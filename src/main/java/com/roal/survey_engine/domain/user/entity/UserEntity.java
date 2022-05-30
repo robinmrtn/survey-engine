@@ -21,15 +21,17 @@ public class UserEntity {
     @NotBlank
     private String username;
 
+    @Version
+    private Integer version;
+
     @NotBlank
     private String password;
 
     @CreationTimestamp
     private LocalDateTime creationTime;
 
-    private LocalDateTime lastLogin;
-
-    private String lastLoginIp;
+    @Embedded
+    private UserLogin userLogin;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -88,6 +90,10 @@ public class UserEntity {
         this.roles = roles;
     }
 
+    public void updateLastLogin(String ip) {
+        this.userLogin = new UserLogin(LocalDateTime.now(), ip);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,8 +109,4 @@ public class UserEntity {
         return getClass().hashCode();
     }
 
-    public void updateLastLogin(String ip) {
-        lastLogin = LocalDateTime.now();
-        lastLoginIp = ip;
-    }
 }
