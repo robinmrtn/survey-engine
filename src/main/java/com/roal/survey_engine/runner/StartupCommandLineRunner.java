@@ -61,9 +61,12 @@ class StartupCommandLineRunner implements CommandLineRunner {
     private void addUsers() {
         if (userRepository.findAll().isEmpty()) {
 
-            UserRegistrationDto user1 = new UserRegistrationDto("user1", "user1", Set.of("ROLE_USER"));
-            UserRegistrationDto user2 = new UserRegistrationDto("user2", "user2", Set.of("ROLE_USER"));
-            UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", Set.of("ROLE_USER", "ROLE_ADMIN"));
+            UserRegistrationDto user1 = new UserRegistrationDto("user1", "user1", "user1",
+                "user1@example.de", Set.of("ROLE_USER"));
+            UserRegistrationDto user2 = new UserRegistrationDto("user2", "user2", "user2",
+                "user2@example.de", Set.of("ROLE_USER"));
+            UserRegistrationDto admin = new UserRegistrationDto("admin", "admin", "admin",
+                "admin@example.de", Set.of("ROLE_USER", "ROLE_ADMIN"));
 
             userService.create(user1);
             userService.create(user2);

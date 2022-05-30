@@ -21,17 +21,22 @@ public class UserEntity {
     @NotBlank
     private String username;
 
-    @Version
-    private Integer version;
+    @Column(unique = true)
+    @NotBlank
+    private String email;
 
     @NotBlank
     private String password;
 
+    @Embedded
+    private UserLogin userLogin;
+
+    @Version
+    private Integer version;
+
     @CreationTimestamp
     private LocalDateTime creationTime;
 
-    @Embedded
-    private UserLogin userLogin;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
