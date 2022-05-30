@@ -13,4 +13,9 @@ public enum UserAuthority {
     public String getRole() {
         return role;
     }
+
+    public static class Constants {
+        public static final String ADMIN_VALUE = "ROLE_ADMIN";
+        public static final String USER_VALUE = "ROLE_USER";
+    }
 }
