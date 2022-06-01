@@ -1,5 +1,10 @@
 package com.roal.survey_engine.runner;
 
+import com.roal.survey_engine.domain.response.entity.ClosedQuestionResponse;
+import com.roal.survey_engine.domain.response.entity.OpenNumericQuestionResponse;
+import com.roal.survey_engine.domain.response.entity.OpenTextQuestionResponse;
+import com.roal.survey_engine.domain.response.entity.SurveyResponse;
+import com.roal.survey_engine.domain.response.repository.ResponseRepository;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
@@ -31,6 +36,8 @@ import java.util.Set;
 class StartupCommandLineRunner implements CommandLineRunner {
 
     private final SurveyRepository surveyRepository;
+
+    private final ResponseRepository responseRepository;
     private final CampaignRepository campaignRepository;
     private final UserService userService;
     private final RoleRepository roleRepository;
@@ -38,12 +45,14 @@ class StartupCommandLineRunner implements CommandLineRunner {
     private final WorkspaceRepository workspaceRepository;
 
     StartupCommandLineRunner(SurveyRepository surveyRepository,
+                             ResponseRepository responseRepository,
                              CampaignRepository campaignRepository,
                              UserService userService,
                              RoleRepository roleRepository,
                              UserRepository userRepository,
                              WorkspaceRepository workspaceRepository) {
         this.surveyRepository = surveyRepository;
+        this.responseRepository = responseRepository;
         this.campaignRepository = campaignRepository;
         this.userService = userService;
         this.roleRepository = roleRepository;
@@ -79,26 +88,84 @@ class StartupCommandLineRunner implements CommandLineRunner {
         var workspace = new Workspace("default Workspace");
 
         workspaceRepository.save(workspace);
-
         var survey = new Survey()
-            .setDescription("This is a Survey Description")
-            .setTitle("This is a Survey Title")
-            .setWorkspace(workspace)
-            .addSurveyPage(new SurveyPage()
-                .addSurveyElement(new OpenTextQuestion("This is an open question?"))
-                .addSurveyElement(new ClosedQuestion("This is an closed question")
-                    .addAnswer(new ClosedQuestionAnswer("First answer"))
-                    .addAnswer(new ClosedQuestionAnswer("Second answer"))))
-            .addSurveyPage(new SurveyPage()
-                .addSurveyElement(new OpenTextQuestion("This is another open question"))
-                .addSurveyElement(new OpenNumericQuestion("This is a numeric question")));
+                .setDescription("This is a Survey Description")
+                .setTitle("This is a Survey Title")
+                .setWorkspace(workspace)
+                .addSurveyPage(new SurveyPage()
+                        .addSurveyElement(new OpenTextQuestion("This is an open question?"))
+                        .addSurveyElement(new ClosedQuestion("This is an closed question")
+                                .addAnswer(new ClosedQuestionAnswer("First answer"))
+                                .addAnswer(new ClosedQuestionAnswer("Second answer"))))
+                .addSurveyPage(new SurveyPage()
+                        .addSurveyElement(new OpenTextQuestion("This is another open question"))
+                        .addSurveyElement(new OpenNumericQuestion("This is a numeric question"))
+                        .addSurveyElement(new OpenNumericQuestion("This is a another numeric question")));
         var campaign = new Campaign()
-            .setSurvey(survey)
-            .setActive(true)
-            .setHidden(false);
+                .setSurvey(survey)
+                .setActive(true)
+                .setHidden(false);
 
         surveyRepository.save(survey);
         campaignRepository.save(campaign);
+
+        addResponse(survey, campaign);
+
+
+    }
+
+    private void addResponse(Survey survey, Campaign campaign) {
+        ClosedQuestion closedQuestion = (ClosedQuestion) survey.getSurveyPages()
+                .stream()
+                .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
+                .filter(element -> element instanceof ClosedQuestion)
+                .findFirst().get();
+
+        OpenTextQuestion openTextQuestion = (OpenTextQuestion) survey.getSurveyPages()
+                .stream()
+                .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
+                .filter(element -> element instanceof OpenTextQuestion)
+                .findFirst().get();
+
+        OpenTextQuestion openTextQuestion2 = (OpenTextQuestion) survey.getSurveyPages()
+                .stream()
+                .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
+                .filter(element -> element instanceof OpenTextQuestion)
+                .skip(1)
+                .findFirst().get();
+
+
+        OpenNumericQuestion openNumericQuestion = (OpenNumericQuestion) survey.getSurveyPages()
+                .stream()
+                .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
+                .filter(element -> element instanceof OpenNumericQuestion)
+                .findFirst().get();
+
+        OpenNumericQuestion openNumericQuestion2 = (OpenNumericQuestion) survey.getSurveyPages()
+                .stream()
+                .flatMap(surveyPage -> surveyPage.getSurveyPageElements().stream())
+                .filter(element -> element instanceof OpenNumericQuestion)
+                .skip(1)
+                .findFirst().get();
+
+        var response = new SurveyResponse()
+                .setCampaign(campaign)
+                .addElement(new ClosedQuestionResponse().setClosedQuestion(closedQuestion).setAnswers(Set.of(1)))
+                .addElement(new OpenTextQuestionResponse().setOpenQuestion(openTextQuestion).setAnswer("answer"))
+                .addElement(new OpenTextQuestionResponse().setOpenQuestion(openTextQuestion2).setAnswer("answer2"))
+                .addElement(new OpenNumericQuestionResponse().setOpenNumericQuestion(openNumericQuestion).setAnswer(2))
+                .addElement(new OpenNumericQuestionResponse().setOpenNumericQuestion(openNumericQuestion2).setAnswer(9));
+
+        var response2 = new SurveyResponse()
+                .setCampaign(campaign)
+                .addElement(new ClosedQuestionResponse().setClosedQuestion(closedQuestion).setAnswers(Set.of(1)))
+                .addElement(new OpenTextQuestionResponse().setOpenQuestion(openTextQuestion).setAnswer("answer"))
+                .addElement(new OpenTextQuestionResponse().setOpenQuestion(openTextQuestion2).setAnswer("answer2"))
+                .addElement(new OpenNumericQuestionResponse().setOpenNumericQuestion(openNumericQuestion).setAnswer(1))
+                .addElement(new OpenNumericQuestionResponse().setOpenNumericQuestion(openNumericQuestion2).setAnswer(7));
+
+        responseRepository.save(response);
+        responseRepository.save(response2);
     }
 
     private void addRoles() {
