@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class ClosedQuestionResponse extends AbstractElementResponse{
@@ -28,6 +29,14 @@ public class ClosedQuestionResponse extends AbstractElementResponse{
 
     public ClosedQuestionResponse setAnswers(List<ClosedQuestionAnswer> answers) {
         this.answers = answers;
+        return this;
+    }
+
+    public ClosedQuestionResponse setAnswers(Set<Integer> positions) {
+        List<ClosedQuestionAnswer> closedQuestionAnswers = positions.stream()
+                .map(p -> closedQuestion.getAnswers().get(p - 1))
+                .toList();
+        this.answers = closedQuestionAnswers;
         return this;
     }
 
