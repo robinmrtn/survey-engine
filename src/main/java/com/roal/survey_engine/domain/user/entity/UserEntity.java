@@ -50,10 +50,11 @@ public class UserEntity {
     @ManyToMany(mappedBy = "users")
     private Set<Workspace> workspaces;
 
-    public UserEntity(String username, String password, Set<Role> roles) {
+    public UserEntity(String username, String password, String email, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.email = email;
     }
 
     public UserEntity() {
@@ -114,4 +115,11 @@ public class UserEntity {
         return getClass().hashCode();
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -99,7 +99,7 @@ public class WorkspaceServiceTest {
 
     @Test
     public void testGetWorkspacesForCurrentUser() {
-        UserEntity user = new UserEntity("user1", "password", Collections.emptySet());
+        UserEntity user = new UserEntity("user1", "password", "email@test.de", Collections.emptySet());
         UserEntity savedUser = userRepository.save(user);
         Workspace firstWorkspace = new Workspace("first workspace").addUser(savedUser);
         Workspace secondWorkspace = new Workspace("second workspace").addUser(savedUser);

@@ -27,7 +27,7 @@ public class UserDtoMapper {
                 .stream()
                 .map(Role::new)
                 .collect(Collectors.toSet());
-        return new UserEntity(userDto.username(), userDto.password(), roles);
+        return new UserEntity(userDto.username(), userDto.password(), userDto.email(), roles);
     }
 
     public UserDto entityToDto(UserEntity user) {
@@ -37,7 +37,7 @@ public class UserDtoMapper {
             .collect(Collectors.toSet());
 
         return new UserDto(userHashids.encode(user.getId()),
-            user.getUsername(), roles, isAdmin(user.getRoles()));
+                user.getUsername(), user.getEmail(), roles, isAdmin(user.getRoles()));
     }
 
     private boolean isAdmin(Set<Role> roles) {
