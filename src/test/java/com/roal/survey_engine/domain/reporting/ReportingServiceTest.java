@@ -110,7 +110,7 @@ public class ReportingServiceTest {
         Assertions.assertEquals(3, reportsByCampaignId.get(1).count());
         Assertions.assertEquals(3, reportsByCampaignId.get(2).count());
         Assertions.assertEquals("num", reportsByCampaignId.get(2).type());
-        Assertions.assertEquals(2.0, ((NumericReportingDto) reportsByCampaignId.get(2)).median());
+        Assertions.assertEquals(2.0, ((NumericReportingDto) reportsByCampaignId.get(2)).percentiles().percentile50());
     }
 
     @Test
