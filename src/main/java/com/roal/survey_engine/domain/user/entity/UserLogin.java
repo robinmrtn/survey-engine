@@ -20,4 +20,12 @@ public class UserLogin {
     public UserLogin() {
 
     }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public String getIp() {
+        return ip;
+    }
 }

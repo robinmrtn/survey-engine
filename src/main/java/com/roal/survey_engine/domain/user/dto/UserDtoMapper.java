@@ -3,7 +3,6 @@ package com.roal.survey_engine.domain.user.dto;
 import com.roal.survey_engine.domain.user.UserAuthority;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.entity.UserEntity;
-import com.roal.survey_engine.security.AuthenticationFacade;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -15,11 +14,9 @@ import java.util.stream.Collectors;
 public class UserDtoMapper {
 
     private final Hashids userHashids;
-    private final AuthenticationFacade authenticationFacade;
 
-    public UserDtoMapper(@Qualifier("userHashids") Hashids userHashids, AuthenticationFacade authenticationFacade) {
+    public UserDtoMapper(@Qualifier("userHashids") Hashids userHashids) {
         this.userHashids = userHashids;
-        this.authenticationFacade = authenticationFacade;
     }
 
     public UserEntity dtoToEntity(UserRegistrationDto userDto) {

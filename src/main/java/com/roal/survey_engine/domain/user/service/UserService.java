@@ -10,18 +10,19 @@ import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.exception.RoleNotFoundException;
 import com.roal.survey_engine.domain.user.exception.UserAlreadyExistsException;
 import com.roal.survey_engine.domain.user.exception.UserNotFoundException;
+import com.roal.survey_engine.domain.user.exception.UserRegistrationValidationException;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
 import com.roal.survey_engine.domain.user.repository.UserRepository;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -48,6 +49,10 @@ public class UserService {
     @Transactional
     public UserDto create(UserRegistrationDto userDto) {
 
+        if (!userDto.password().equals(userDto.passwordRepeated())) {
+            throw new UserRegistrationValidationException("Supplied passwords are not identical");
+        }
+
         userRepository.findUserByUsername(userDto.username())
             .ifPresent((s) -> {
                 throw new UserAlreadyExistsException(userDto.username());
@@ -62,18 +67,23 @@ public class UserService {
         /*
             Add default Workspace for new users
          */
-        createDefaultWorkspace(user);
+        createDefaultWorkspace(saved);
 
         return userDtoMapper.entityToDto(saved);
     }
 
     private Set<Role> getRoles(UserEntity user) {
-        return user
-                .getRoles()
-                .stream()
-                .map((r) -> roleRepository.findByName(r.getName())
-                        .orElseThrow(() -> new RoleNotFoundException(r.getName())))
-                .collect(Collectors.toSet());
+
+        List<String> allRoles = roleRepository.findAll().stream().map(Role::getName).toList();
+        Set<Role> result = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            if (!allRoles.contains(role.getName())) {
+                throw new RoleNotFoundException(role.getName());
+            }
+            result.add(role);
+
+        }
+        return result;
     }
 
     private void createDefaultWorkspace(UserEntity user) {
@@ -85,14 +95,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDto findByUsername(String username) {
         UserEntity user = userRepository.findUserByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
+            .orElseThrow(() -> new UserNotFoundException("Username '" + username + "' not found"));
         return userDtoMapper.entityToDto(user);
     }
 
     @Transactional
     public void updateLastLoginByUsername(String username, String ip) {
         UserEntity user = userRepository.findUserByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Username '" + username + "' not found"));
+            .orElseThrow(() -> new UserNotFoundException("Username '" + username + "' not found"));
 
         user.updateLastLogin(ip);
     }
