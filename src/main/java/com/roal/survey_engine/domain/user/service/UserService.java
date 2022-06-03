@@ -74,13 +74,16 @@ public class UserService {
 
     private Set<Role> getRoles(UserEntity user) {
 
-        List<String> allRoles = roleRepository.findAll().stream().map(Role::getName).toList();
+        List<Role> allRoles = roleRepository.findAll();
+
         Set<Role> result = new HashSet<>();
+
         for (Role role : user.getRoles()) {
-            if (!allRoles.contains(role.getName())) {
-                throw new RoleNotFoundException(role.getName());
-            }
-            result.add(role);
+            Role foundRole = allRoles.stream()
+                    .filter(r -> r.getName().equals(role.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new RoleNotFoundException(role.getName()));
+            result.add(foundRole);
 
         }
         return result;

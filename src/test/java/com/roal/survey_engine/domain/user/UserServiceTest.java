@@ -7,6 +7,7 @@ import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.entity.UserEntity;
 import com.roal.survey_engine.domain.user.entity.UserLogin;
+import com.roal.survey_engine.domain.user.exception.RoleNotFoundException;
 import com.roal.survey_engine.domain.user.exception.UserAlreadyExistsException;
 import com.roal.survey_engine.domain.user.exception.UserNotFoundException;
 import com.roal.survey_engine.domain.user.exception.UserRegistrationValidationException;
@@ -108,6 +109,22 @@ public class UserServiceTest {
     }
 
     @Test
+    void testCreateRoleInUserNotFound() {
+
+        UserRegistrationDto registrationDto = new UserRegistrationDto("username",
+                "password1", "password1",
+                "email@example.de", Set.of(UserAuthority.Constants.USER_VALUE, "ROLE_UNKNOWN"));
+
+        var role = new Role(UserAuthority.Constants.USER_VALUE);
+
+        given(roleRepository.findAll())
+                .willReturn(List.of(role));
+
+        assertThrows(RoleNotFoundException.class, () -> userService.create(registrationDto));
+
+    }
+
+    @Test
     void findByUsernameSuccess() {
 
         var user = new UserEntity("username");
@@ -172,10 +189,6 @@ public class UserServiceTest {
     @Test
     void findByIdNotFound() {
         String hashid = userHashids.encode(1L);
-
-        var user = new UserEntity("username");
-        user.setRoles(Collections.EMPTY_SET);
-        user.setId(1L);
 
         given(userRepository.findById(1L)).willReturn(Optional.empty());
 
