@@ -3,6 +3,7 @@ package com.roal.survey_engine.domain.survey.service;
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDto;
 import com.roal.survey_engine.domain.survey.dto.campaign.CampaignDtoMapper;
 import com.roal.survey_engine.domain.survey.dto.campaign.CreateCampaignDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.DateRange;
 import com.roal.survey_engine.domain.survey.entity.Survey;
@@ -10,6 +11,8 @@ import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,13 +78,19 @@ public class CampaignService {
                 campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
                 return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
             })
-            .orElseThrow(() -> new CampaignNotFoundException(hashid));
+                .orElseThrow(() -> new CampaignNotFoundException(hashid));
     }
 
     @Transactional
     public void deleteCampaignById(String hashid) {
         long id = hashidToId(hashid);
         campaignRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SurveyListElementDto> findPublicCampaigns(Pageable pageable) {
+        Page<Campaign> publicCampaigns = campaignRepository.findPublicCampaigns(pageable);
+        return campaignDtoMapper.campaignsToListDto(publicCampaigns);
     }
 
     private long hashidToId(String hashid) {
