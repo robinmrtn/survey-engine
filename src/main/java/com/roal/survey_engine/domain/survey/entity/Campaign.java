@@ -14,7 +14,7 @@ public class Campaign {
     @SequenceGenerator(name = "seq_campaign")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Survey survey;
 
     @Embedded
