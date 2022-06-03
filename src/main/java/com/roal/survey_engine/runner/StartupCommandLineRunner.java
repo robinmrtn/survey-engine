@@ -5,10 +5,7 @@ import com.roal.survey_engine.domain.response.entity.OpenNumericQuestionResponse
 import com.roal.survey_engine.domain.response.entity.OpenTextQuestionResponse;
 import com.roal.survey_engine.domain.response.entity.SurveyResponse;
 import com.roal.survey_engine.domain.response.repository.ResponseRepository;
-import com.roal.survey_engine.domain.survey.entity.Campaign;
-import com.roal.survey_engine.domain.survey.entity.Survey;
-import com.roal.survey_engine.domain.survey.entity.SurveyPage;
-import com.roal.survey_engine.domain.survey.entity.Workspace;
+import com.roal.survey_engine.domain.survey.entity.*;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
@@ -25,6 +22,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -103,6 +102,7 @@ class StartupCommandLineRunner implements CommandLineRunner {
                         .addSurveyElement(new OpenNumericQuestion("This is a another numeric question")));
         var campaign = new Campaign()
                 .setSurvey(survey)
+                .setDateRange(new DateRange(LocalDateTime.now(), LocalDateTime.now().plus(1, ChronoUnit.YEARS)))
                 .setActive(true)
                 .setHidden(false);
 
