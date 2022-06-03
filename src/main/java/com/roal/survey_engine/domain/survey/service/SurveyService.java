@@ -7,9 +7,7 @@ import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
-import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
-import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.user.exception.ForbiddenUserActionException;
 import org.hashids.Hashids;
@@ -24,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
-    private final CampaignRepository campaignRepository;
     private final SurveyDtoMapper surveyDtoMapper;
     private final Hashids surveyHashids;
     private final WorkspaceService workspaceService;
@@ -32,13 +29,11 @@ public class SurveyService {
     private final CampaignService campaignService;
 
     public SurveyService(SurveyRepository surveyRepository,
-                         CampaignRepository campaignRepository,
                          SurveyDtoMapper surveyDtoMapper,
                          @Qualifier("surveyHashids") Hashids surveyHashids,
                          WorkspaceService workspaceService,
                          @Lazy CampaignService campaignService) {
         this.surveyRepository = surveyRepository;
-        this.campaignRepository = campaignRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
         this.workspaceService = workspaceService;
@@ -92,7 +87,7 @@ public class SurveyService {
 
     @Transactional(readOnly = true)
     public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
-        return getSurveysFromCampaigns(campaignRepository.findPublicCampaigns(pageable));
+        return campaignService.findPublicCampaigns(pageable);
     }
 
     private Page<SurveyListElementDto> getSurveysFromCampaigns(Page<Campaign> campaigns) {
@@ -103,16 +98,14 @@ public class SurveyService {
 
     @Transactional
     public void deleteSurveyById(String hashid) {
-        long id = hashidToId(hashid);
-        Campaign campaign = campaignRepository.findById(id)
-            .orElseThrow(() -> new CampaignNotFoundException(hashid));
 
+        Campaign campaign = campaignService.findCampaignById(hashid);
         Workspace workspace = campaign.getWorkspace();
 
         if (!workspaceService.currentUserCanModifyWorkspace(workspace)) {
             throw new ForbiddenUserActionException();
         }
-        campaignRepository.deleteById(id);
+        campaignService.deleteCampaignById(hashid);
     }
 
     private long hashidToId(String hashid) {
