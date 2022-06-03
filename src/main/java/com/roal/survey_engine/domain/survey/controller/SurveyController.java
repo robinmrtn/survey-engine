@@ -33,22 +33,34 @@ public class SurveyController {
 
     @Operation(summary = "Find survey by ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successful",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = SurveyDto.class))),
-        @ApiResponse(responseCode = "404", description = "Survey not found")
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyDto.class))),
+            @ApiResponse(responseCode = "404", description = "Survey not found")
     })
     @GetMapping(value = "/surveys/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public SurveyDto getSurveyById(@PathVariable @NotBlank String id) {
+        return surveyService.findSurveyDtoById(id);
+    }
+
+    @Operation(summary = "Find survey by Campaign ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyDto.class))),
+            @ApiResponse(responseCode = "404", description = "Survey not found")
+    })
+    @GetMapping(value = "campaigns/{id}/survey", produces = MediaType.APPLICATION_JSON_VALUE)
+    public SurveyDto getSurveyByCampaignId(@PathVariable @NotBlank String id) {
         return surveyService.findSurveyByCampaignId(id);
     }
 
     @Operation(summary = "Create new survey")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Success",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = SurveyDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid Input")})
+            @ApiResponse(responseCode = "201", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SurveyDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Input")})
     @PostMapping(value = "/workspaces/{workspaceId}/surveys", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SurveyDto postSurvey(@PathVariable @NotBlank String workspaceId,

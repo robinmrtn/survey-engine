@@ -14,6 +14,7 @@ import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.user.exception.ForbiddenUserActionException;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,15 +29,20 @@ public class SurveyService {
     private final Hashids surveyHashids;
     private final WorkspaceService workspaceService;
 
+    private final CampaignService campaignService;
+
     public SurveyService(SurveyRepository surveyRepository,
                          CampaignRepository campaignRepository,
                          SurveyDtoMapper surveyDtoMapper,
-                         @Qualifier("surveyHashids") Hashids surveyHashids, WorkspaceService workspaceService) {
+                         @Qualifier("surveyHashids") Hashids surveyHashids,
+                         WorkspaceService workspaceService,
+                         @Lazy CampaignService campaignService) {
         this.surveyRepository = surveyRepository;
         this.campaignRepository = campaignRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
         this.workspaceService = workspaceService;
+        this.campaignService = campaignService;
     }
 
     @Transactional
@@ -56,7 +62,8 @@ public class SurveyService {
     @Transactional(readOnly = true)
     public Survey findSurveyById(long id) {
         String hashid = surveyHashids.encode(id);
-        return surveyRepository.findById(id).orElseThrow(() -> new SurveyNotFoundException(hashid));
+        return surveyRepository.findById(id)
+                .orElseThrow(() -> new SurveyNotFoundException(hashid));
     }
 
     @Transactional(readOnly = true)
@@ -65,16 +72,25 @@ public class SurveyService {
         return findSurveyById(id);
     }
 
+    @Transactional(readOnly = true)
     public SurveyDto findSurveyByCampaignId(String hashid) {
-        long campaignId = hashidToId(hashid);
-        var campaign = campaignRepository
-                .findById(campaignId).orElseThrow(() -> new CampaignNotFoundException(hashid));
-        if (campaign.getSurvey() == null) {
+        Campaign campaignById = campaignService.findCampaignById(hashid);
+        if (campaignById.getSurvey() == null) {
             throw new SurveyNotFoundException();
         }
-        return surveyDtoMapper.entityToDto(campaign.getSurvey());
+        return surveyDtoMapper.entityToDto(campaignById.getSurvey());
     }
 
+    @Transactional(readOnly = true)
+    public SurveyDto findSurveyDtoById(String hashid) {
+        long surveyId = hashidToId(hashid);
+        Survey survey = surveyRepository.findById(surveyId)
+                .orElseThrow(() -> new SurveyNotFoundException(hashid));
+
+        return surveyDtoMapper.entityToDto(survey);
+    }
+
+    @Transactional(readOnly = true)
     public Page<SurveyListElementDto> getPublicSurveys(Pageable pageable) {
         return getSurveysFromCampaigns(campaignRepository.findPublicCampaigns(pageable));
     }
