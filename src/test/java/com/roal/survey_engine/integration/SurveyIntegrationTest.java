@@ -9,10 +9,14 @@ import com.roal.survey_engine.domain.survey.entity.Campaign;
 import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.Workspace;
+import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
+import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
+import com.roal.survey_engine.domain.user.UserAuthority;
+import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.hashids.Hashids;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,24 +24,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@ActiveProfiles({"test"})
 @Transactional
+@Sql({"/survey_json.sql"})
 public class SurveyIntegrationTest {
 
     @Autowired
@@ -69,6 +83,12 @@ public class SurveyIntegrationTest {
     @Qualifier("workspaceHashids")
     Hashids workspaceHashids;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
+
     @Test
     void getSurvey() throws Exception {
 
@@ -94,14 +114,21 @@ public class SurveyIntegrationTest {
 
     @Test
     @DisplayName("should return 201 when new Survey is submitted")
-    @WithMockUser(authorities = {"ROLE_ADMIN"})
     void postNewSurvey() throws Exception {
+
+        String username = "user";
+        String token = tokenProvider.generateToken(username);
+
+        given(userDetailsService.loadUserByUsername("user")).willReturn(new User("user", "password",
+                Set.of(new SimpleGrantedAuthority(UserAuthority.Constants.ADMIN_VALUE))));
+
         Long id = createWorkspace().getId();
         String hashid = workspaceHashids.encode(id);
         SurveyDto surveyDto = mapper.entityToDto(createSurvey());
         String json = objectMapper.writeValueAsString(surveyDto);
         MvcResult mvcResult = mvc.perform(post("/api/workspaces/" + hashid + "/surveys/")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(json))
                 .andReturn();
 
@@ -121,6 +148,11 @@ public class SurveyIntegrationTest {
                 .setTitle("Title")
                 .addSurveyPage(new SurveyPage()
                         .addSurveyElement(new OpenTextQuestion("This is a closed question")))
+                .addSurveyPage(new SurveyPage()
+                        .addSurveyElement(new ClosedQuestion("This is a closed question")
+                                .addAnswer(new ClosedQuestionAnswer("answer1"))
+                                .addAnswer(new ClosedQuestionAnswer("answer2"))))
+
                 .setWorkspace(createWorkspace());
     }
 
