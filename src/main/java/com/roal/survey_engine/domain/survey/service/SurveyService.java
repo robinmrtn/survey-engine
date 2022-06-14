@@ -26,17 +26,21 @@ public class SurveyService {
     private final Hashids surveyHashids;
     private final WorkspaceService workspaceService;
 
+    private final SurveyQuery surveyQuery;
+
     private final CampaignService campaignService;
 
     public SurveyService(SurveyRepository surveyRepository,
                          SurveyDtoMapper surveyDtoMapper,
                          @Qualifier("surveyHashids") Hashids surveyHashids,
                          WorkspaceService workspaceService,
+                         SurveyQuery surveyQuery,
                          @Lazy CampaignService campaignService) {
         this.surveyRepository = surveyRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
         this.workspaceService = workspaceService;
+        this.surveyQuery = surveyQuery;
         this.campaignService = campaignService;
     }
 
@@ -51,7 +55,12 @@ public class SurveyService {
         Workspace workspace = workspaceService.getEntityByHashid(workspaceId);
         survey.setWorkspace(workspace);
         surveyRepository.save(survey);
+        addToQuery(survey);
         return surveyDtoMapper.entityToDto(survey);
+    }
+
+    private void addToQuery(Survey survey) {
+        surveyQuery.addSurvey(survey);
     }
 
     @Transactional(readOnly = true)

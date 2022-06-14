@@ -3,6 +3,8 @@ package com.roal.survey_engine.domain.survey.controller;
 import com.roal.survey_engine.domain.survey.dto.survey.CreateSurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyListElementDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyQueryDto;
+import com.roal.survey_engine.domain.survey.service.SurveyQuery;
 import com.roal.survey_engine.domain.survey.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,20 +29,23 @@ public class SurveyController {
 
     private final SurveyService surveyService;
 
-    public SurveyController(SurveyService surveyService) {
+    private final SurveyQuery surveyQuery;
+
+    public SurveyController(SurveyService surveyService, SurveyQuery surveyQuery) {
         this.surveyService = surveyService;
+        this.surveyQuery = surveyQuery;
     }
 
     @Operation(summary = "Find survey by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = SurveyDto.class))),
+                            schema = @Schema(implementation = SurveyQueryDto.class))),
             @ApiResponse(responseCode = "404", description = "Survey not found")
     })
     @GetMapping(value = "/surveys/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public SurveyDto getSurveyById(@PathVariable @NotBlank String id) {
-        return surveyService.findSurveyDtoById(id);
+    public SurveyQueryDto getSurveyById(@PathVariable @NotBlank String id) {
+        return surveyQuery.findSurveyById(id);
     }
 
     @Operation(summary = "Find survey by Campaign ID")

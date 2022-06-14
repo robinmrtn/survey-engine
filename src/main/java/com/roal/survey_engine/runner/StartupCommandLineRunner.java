@@ -5,6 +5,9 @@ import com.roal.survey_engine.domain.response.entity.OpenNumericQuestionResponse
 import com.roal.survey_engine.domain.response.entity.OpenTextQuestionResponse;
 import com.roal.survey_engine.domain.response.entity.SurveyResponse;
 import com.roal.survey_engine.domain.response.repository.ResponseRepository;
+import com.roal.survey_engine.domain.survey.dto.survey.CreateSurveyDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
+import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
 import com.roal.survey_engine.domain.survey.entity.*;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.ClosedQuestionAnswer;
@@ -13,6 +16,8 @@ import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
 import com.roal.survey_engine.domain.survey.repository.CampaignRepository;
 import com.roal.survey_engine.domain.survey.repository.SurveyRepository;
 import com.roal.survey_engine.domain.survey.repository.WorkspaceRepository;
+import com.roal.survey_engine.domain.survey.service.SurveyService;
+import com.roal.survey_engine.domain.user.UserAuthority;
 import com.roal.survey_engine.domain.user.dto.UserRegistrationDto;
 import com.roal.survey_engine.domain.user.entity.Role;
 import com.roal.survey_engine.domain.user.repository.RoleRepository;
@@ -20,7 +25,11 @@ import com.roal.survey_engine.domain.user.repository.UserRepository;
 import com.roal.survey_engine.domain.user.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -36,6 +45,10 @@ class StartupCommandLineRunner implements CommandLineRunner {
 
     private final SurveyRepository surveyRepository;
 
+    private final SurveyService surveyService;
+
+    private final SurveyDtoMapper surveyDtoMapper;
+
     private final ResponseRepository responseRepository;
     private final CampaignRepository campaignRepository;
     private final UserService userService;
@@ -44,13 +57,15 @@ class StartupCommandLineRunner implements CommandLineRunner {
     private final WorkspaceRepository workspaceRepository;
 
     StartupCommandLineRunner(SurveyRepository surveyRepository,
-                             ResponseRepository responseRepository,
+                             SurveyService surveyService, SurveyDtoMapper surveyDtoMapper, ResponseRepository responseRepository,
                              CampaignRepository campaignRepository,
                              UserService userService,
                              RoleRepository roleRepository,
                              UserRepository userRepository,
                              WorkspaceRepository workspaceRepository) {
         this.surveyRepository = surveyRepository;
+        this.surveyService = surveyService;
+        this.surveyDtoMapper = surveyDtoMapper;
         this.responseRepository = responseRepository;
         this.campaignRepository = campaignRepository;
         this.userService = userService;
@@ -60,6 +75,7 @@ class StartupCommandLineRunner implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
         addRoles();
         addUsers();
@@ -84,6 +100,9 @@ class StartupCommandLineRunner implements CommandLineRunner {
 
     private void addSurvey() {
 
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin", ""
+                , Set.of(new SimpleGrantedAuthority(UserAuthority.Constants.ADMIN_VALUE))));
+
         var workspace = new Workspace("default Workspace");
 
         workspaceRepository.save(workspace);
@@ -101,15 +120,21 @@ class StartupCommandLineRunner implements CommandLineRunner {
                         .addSurveyElement(new OpenNumericQuestion("This is a numeric question"))
                         .addSurveyElement(new OpenNumericQuestion("This is a another numeric question")));
         var campaign = new Campaign()
-                .setSurvey(survey)
                 .setDateRange(new DateRange(LocalDateTime.now(), LocalDateTime.now().plus(1, ChronoUnit.YEARS)))
                 .setActive(true)
                 .setHidden(false);
 
-        surveyRepository.save(survey);
-        campaignRepository.save(campaign);
+        SurveyDto surveyDto = surveyDtoMapper.entityToDto(survey);
+        var createSurveyDto = new CreateSurveyDto(surveyDto.title(),
+                surveyDto.description(),
+                surveyDto.workspaceId(),
+                surveyDto.surveyPages());
+        surveyDto = surveyService.create(createSurveyDto, surveyDto.workspaceId());
+        Survey surveyById = surveyService.findSurveyById(surveyDto.id());
+//        surveyRepository.save(survey);
+        campaignRepository.save(campaign.setSurvey(surveyById));
 
-        addResponse(survey, campaign);
+        addResponse(surveyById, campaign);
 
 
     }

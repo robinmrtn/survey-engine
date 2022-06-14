@@ -24,14 +24,18 @@ public class CampaignService {
     private final SurveyService surveyService;
     private final Hashids campaignHashids;
 
+    private final SurveyQuery surveyQuery;
+
     public CampaignService(CampaignRepository campaignRepository,
                            CampaignDtoMapper campaignDtoMapper,
                            SurveyService surveyService,
-                           @Qualifier("campaignHashids") Hashids campaignHashids) {
+                           @Qualifier("campaignHashids") Hashids campaignHashids,
+                           SurveyQuery surveyQuery) {
         this.campaignRepository = campaignRepository;
         this.campaignDtoMapper = campaignDtoMapper;
         this.surveyService = surveyService;
         this.campaignHashids = campaignHashids;
+        this.surveyQuery = surveyQuery;
     }
 
     @Transactional(readOnly = true)
@@ -62,20 +66,26 @@ public class CampaignService {
         Survey surveyById = surveyService.findSurveyById(surveyId);
         Campaign campaign = campaignDtoMapper.dtoToEntity(campaignDto);
         campaign.setSurvey(surveyById);
-
         Campaign savedCampaign = campaignRepository.save(campaign);
+
+        addCampaignToQuery(savedCampaign);
+
         return campaignDtoMapper.entityToDto(savedCampaign);
+    }
+
+    private void addCampaignToQuery(Campaign campaign) {
+        surveyQuery.addCampaign(campaign, campaignHashids.encode(campaign.getId()));
     }
 
     @Transactional
     public CampaignDto update(CampaignDto campaignDto, String hashid) {
         long id = hashidToId(hashid);
         return campaignRepository.findById(id)
-            .map(campaign -> {
-                campaign.setTitle(campaignDto.title());
-                campaign.setHidden(campaignDto.hidden());
-                campaign.setActive(campaignDto.active());
-                campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
+                .map(campaign -> {
+                    campaign.setTitle(campaignDto.title());
+                    campaign.setHidden(campaignDto.hidden());
+                    campaign.setActive(campaignDto.active());
+                    campaign.setDateRange(new DateRange(campaignDto.from(), campaignDto.to()));
                 return campaignDtoMapper.entityToDto(campaignRepository.save(campaign));
             })
                 .orElseThrow(() -> new CampaignNotFoundException(hashid));
