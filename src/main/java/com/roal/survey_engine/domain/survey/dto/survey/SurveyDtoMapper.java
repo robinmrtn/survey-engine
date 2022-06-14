@@ -86,11 +86,13 @@ public class SurveyDtoMapper {
 
         for (SurveyPageDto surveyPageDto : surveyDto.surveyPages()) {
             var surveyPage = new SurveyPage()
-                .setPosition(surveyPageDto.position());
+                    .setPosition(surveyPageDto.position());
 
             parseElements(surveyPageDto, surveyPage);
             survey.addSurveyPage(surveyPage);
         }
+        survey.setDescription(surveyDto.description());
+        survey.setTitle(surveyDto.title());
         return survey;
     }
 
@@ -104,20 +106,17 @@ public class SurveyDtoMapper {
         switch (elementDto.type()) {
             case "opq" -> {
                 var element = new OpenTextQuestion(((OpenQuestionDto) elementDto).question());
-                element.setId(primitiveToWrapper(elementDto.id()));
                 element.setPosition(elementDto.position());
                 surveyPage.addSurveyElement(element);
             }
             case "opnq" -> {
                 var element = new OpenNumericQuestion(((OpenNumericQuestionDto) elementDto).question());
-                element.setId(primitiveToWrapper(elementDto.id()));
                 element.setPosition(elementDto.position());
                 surveyPage.addSurveyElement(element);
             }
             case "clq" -> {
                 Set<ClosedQuestionAnswerDto> answers = ((ClosedQuestionDto) elementDto).answers();
                 ClosedQuestion element = new ClosedQuestion(((ClosedQuestionDto) elementDto).question());
-                element.setId(primitiveToWrapper(elementDto.id()));
                 element.setPosition(elementDto.position());
                 element.setAnswers(dtoAnswersToEntity(answers));
                 surveyPage.addSurveyElement(element);
@@ -137,7 +136,7 @@ public class SurveyDtoMapper {
 
     private List<ClosedQuestionAnswer> dtoAnswersToEntity(Collection<ClosedQuestionAnswerDto> answerDtos) {
         return answerDtos.stream()
-            .map((e) -> new ClosedQuestionAnswer(e.id(), e.answer()))
+                .map((e) -> new ClosedQuestionAnswer(null, e.answer()))
             .toList();
     }
 
