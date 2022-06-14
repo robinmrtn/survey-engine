@@ -26,7 +26,7 @@ public class SurveyService {
     private final Hashids surveyHashids;
     private final WorkspaceService workspaceService;
 
-    private final SurveyQuery surveyQuery;
+    private final SurveyQueryService surveyQueryService;
 
     private final CampaignService campaignService;
 
@@ -34,13 +34,13 @@ public class SurveyService {
                          SurveyDtoMapper surveyDtoMapper,
                          @Qualifier("surveyHashids") Hashids surveyHashids,
                          WorkspaceService workspaceService,
-                         SurveyQuery surveyQuery,
+                         SurveyQueryService surveyQueryService,
                          @Lazy CampaignService campaignService) {
         this.surveyRepository = surveyRepository;
         this.surveyDtoMapper = surveyDtoMapper;
         this.surveyHashids = surveyHashids;
         this.workspaceService = workspaceService;
-        this.surveyQuery = surveyQuery;
+        this.surveyQueryService = surveyQueryService;
         this.campaignService = campaignService;
     }
 
@@ -60,7 +60,7 @@ public class SurveyService {
     }
 
     private void addToQuery(Survey survey) {
-        surveyQuery.addSurvey(survey);
+        surveyQueryService.addSurvey(survey);
     }
 
     @Transactional(readOnly = true)

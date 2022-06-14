@@ -13,7 +13,7 @@ import com.roal.survey_engine.domain.survey.repository.SurveyQueryRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SurveyQuery {
+public class SurveyQueryService {
 
     private final ObjectMapper objectmapper = new ObjectMapper();
 
@@ -22,8 +22,8 @@ public class SurveyQuery {
     private final SurveyDtoMapper surveyDtoMapper;
 
 
-    public SurveyQuery(SurveyQueryRepository surveyQueryRepository,
-                       SurveyDtoMapper surveyDtoMapper) {
+    public SurveyQueryService(SurveyQueryRepository surveyQueryRepository,
+                              SurveyDtoMapper surveyDtoMapper) {
         this.surveyQueryRepository = surveyQueryRepository;
         this.surveyDtoMapper = surveyDtoMapper;
     }

@@ -24,18 +24,18 @@ public class CampaignService {
     private final SurveyService surveyService;
     private final Hashids campaignHashids;
 
-    private final SurveyQuery surveyQuery;
+    private final SurveyQueryService surveyQueryService;
 
     public CampaignService(CampaignRepository campaignRepository,
                            CampaignDtoMapper campaignDtoMapper,
                            SurveyService surveyService,
                            @Qualifier("campaignHashids") Hashids campaignHashids,
-                           SurveyQuery surveyQuery) {
+                           SurveyQueryService surveyQueryService) {
         this.campaignRepository = campaignRepository;
         this.campaignDtoMapper = campaignDtoMapper;
         this.surveyService = surveyService;
         this.campaignHashids = campaignHashids;
-        this.surveyQuery = surveyQuery;
+        this.surveyQueryService = surveyQueryService;
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +74,7 @@ public class CampaignService {
     }
 
     private void addCampaignToQuery(Campaign campaign) {
-        surveyQuery.addCampaign(campaign, campaignHashids.encode(campaign.getId()));
+        surveyQueryService.addCampaign(campaign, campaignHashids.encode(campaign.getId()));
     }
 
     @Transactional
