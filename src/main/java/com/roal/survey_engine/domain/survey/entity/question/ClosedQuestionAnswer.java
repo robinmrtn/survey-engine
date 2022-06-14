@@ -17,6 +17,17 @@ public class ClosedQuestionAnswer {
 
     private String value;
 
+    @ManyToOne
+    private ClosedQuestion closedQuestion;
+
+    public ClosedQuestion getClosedQuestion() {
+        return closedQuestion;
+    }
+
+    public void setClosedQuestion(ClosedQuestion closedQuestion) {
+        this.closedQuestion = closedQuestion;
+    }
+
     public ClosedQuestionAnswer() {
         // needed by hibernate
     }

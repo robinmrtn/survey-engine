@@ -11,10 +11,9 @@ public class ClosedQuestion extends AbstractSurveyElement {
     private String question;
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "closed_question_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "closedQuestion")
     @OrderBy("position")
-    private List<ClosedQuestionAnswer> answers = new ArrayList<ClosedQuestionAnswer>();
+    private List<ClosedQuestionAnswer> answers = new ArrayList<>();
 
     public List<ClosedQuestionAnswer> getAnswers() {
         return answers;
@@ -43,12 +42,13 @@ public class ClosedQuestion extends AbstractSurveyElement {
 
     public ClosedQuestion setAnswers(List<ClosedQuestionAnswer> answers) {
         this.answers = answers;
+        answers.forEach(a -> a.setClosedQuestion(this));
         return this;
     }
 
     public ClosedQuestion addAnswer(ClosedQuestionAnswer answer) {
+        answer.setClosedQuestion(this);
         answers.add(answer);
-//        answer.setClosedQuestion(this);
         return this;
     }
 
