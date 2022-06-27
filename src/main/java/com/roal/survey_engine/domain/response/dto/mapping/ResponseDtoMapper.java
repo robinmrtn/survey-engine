@@ -48,7 +48,12 @@ public final class ResponseDtoMapper {
                 .collect(Collectors.toList());
 
         var surveyResponseDto = new SurveyResponseDto();
-        surveyResponseDto.setId(responseHashids.encode(surveyResponse.getId()));
+
+        if (surveyResponse.getId() == null) {
+            surveyResponseDto.setId(null);
+        } else {
+            surveyResponseDto.setId(responseHashids.encode(surveyResponse.getId()));
+        }
         surveyResponseDto.setElementResponseDtos(elementResponseDtos);
 
         return surveyResponseDto;
