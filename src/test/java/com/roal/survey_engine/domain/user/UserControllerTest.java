@@ -3,22 +3,21 @@ package com.roal.survey_engine.domain.user;
 import com.roal.survey_engine.domain.user.controller.UserController;
 import com.roal.survey_engine.domain.user.dto.UserDto;
 import com.roal.survey_engine.domain.user.service.UserService;
+import com.roal.survey_engine.security.RestAuthenticationSuccessHandler;
 import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
+@ActiveProfiles({"test"})
 public class UserControllerTest {
 
     @Autowired
@@ -41,14 +41,14 @@ public class UserControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
+    @MockBean
+    private RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+
     @Test
     @WithAnonymousUser
     public void forbiddenAsAnonymous() throws Exception {
-        MockHttpServletResponse response = mvc.perform(get("/api/users/me"))
-            .andReturn()
-            .getResponse();
-
-        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+        mvc.perform(get("/api/users/me"))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
