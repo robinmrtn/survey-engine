@@ -67,7 +67,7 @@ class SurveyControllerStandaloneTest {
                 .willReturn(getSurveyDto());
 
         MockHttpServletResponse response = mvc.perform(
-                        get("/api/surveys/abcd123")
+                        get("/api/campaigns/abcd123/survey")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -84,7 +84,7 @@ class SurveyControllerStandaloneTest {
                 .willThrow(new SurveyNotFoundException());
 
         MockHttpServletResponse response = mvc.perform(
-                        get("/api/surveys/abcd123")
+                        get("/api/campaigns/abcd123/survey")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 

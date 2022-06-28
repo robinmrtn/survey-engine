@@ -11,29 +11,35 @@ import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.entity.SurveyPage;
 import com.roal.survey_engine.domain.survey.entity.question.OpenNumericQuestion;
 import com.roal.survey_engine.domain.survey.entity.question.OpenTextQuestion;
-import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
+import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.service.CampaignService;
+import com.roal.survey_engine.domain.user.service.UserService;
+import com.roal.survey_engine.security.RestAuthenticationSuccessHandler;
 import com.roal.survey_engine.security.jwt.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureJsonTesters
+@AutoConfigureMockMvc
+@ActiveProfiles({"test"})
 @WebMvcTest(ResponseController.class)
 class ResponseControllerStandaloneTest {
 
@@ -44,13 +50,19 @@ class ResponseControllerStandaloneTest {
     private ResponseService responseService;
 
     @MockBean
-    TokenProvider tokenProvider;
+    private TokenProvider tokenProvider;
 
     @MockBean
     private CampaignService campaignService;
 
     @MockBean
     private UserDetailsService userDetailsService;
+
+    @MockBean
+    private RestAuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @MockBean
+    private UserService userService;
 
     @Autowired
     private JacksonTester<SurveyResponseDto> jsonSurveyResponseDto;
@@ -68,27 +80,24 @@ class ResponseControllerStandaloneTest {
 
         given(campaignService.findCampaignById(2)).willReturn(campaign);
         String json = jsonSurveyResponseDto.write(responseDto).getJson();
-        MockHttpServletResponse response = mvc.perform(post("/api/responses/campaigns/2")
+        mvc.perform(post("/api/responses/campaigns/2")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonSurveyResponseDto.write(responseDto).getJson()))
-                .andReturn().getResponse();
+                        .content(json))
+                .andExpect(status().isCreated());
 
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
     }
 
     @Test
     @DisplayName("POST responses/surveys/{id} - failed")
-//    @WithMockUser
     void canNotCreateNewSurveyResponseForNonExistingSurvey() throws Exception {
 
-        given(campaignService.findCampaignById("abcd123")).willThrow(new SurveyNotFoundException());
+        given(responseService.create(eq("abcd123"), any())).willThrow(new CampaignNotFoundException());
 
-        MockHttpServletResponse response = mvc.perform(post("/api/responses/surveys/abcd123")
+        mvc.perform(post("/api/responses/campaigns/abcd123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonSurveyResponseDto.write(getSurveyResponseDto()).getJson()))
-                .andReturn().getResponse();
+                .andExpect(status().isNotFound());
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
     }
 
     private SurveyResponseDto getSurveyResponseDto() {
