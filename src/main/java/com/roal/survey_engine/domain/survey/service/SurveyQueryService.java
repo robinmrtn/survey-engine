@@ -6,7 +6,6 @@ import com.roal.survey_engine.domain.survey.dto.survey.SurveyDto;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyDtoMapper;
 import com.roal.survey_engine.domain.survey.dto.survey.SurveyQueryDto;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
-import com.roal.survey_engine.domain.survey.entity.Survey;
 import com.roal.survey_engine.domain.survey.exception.CampaignNotFoundException;
 import com.roal.survey_engine.domain.survey.exception.SurveyNotFoundException;
 import com.roal.survey_engine.domain.survey.repository.SurveyQueryRepository;
@@ -61,10 +60,9 @@ public class SurveyQueryService {
         surveyQueryRepository.addSurvey(queryDto);
     }
 
-    public void addSurvey(Survey survey) {
-        SurveyDto surveyDto = surveyDtoMapper.entityToDto(survey);
-        SurveyQueryDto from = SurveyQueryDto.from(surveyDto);
-        addSurvey(from);
+    public void addSurvey(SurveyDto surveyDto) {
+        SurveyQueryDto surveyQueryDto = SurveyQueryDto.from(surveyDto);
+        addSurvey(surveyQueryDto);
     }
 
     private SurveyQueryDto fromString(String s) throws JsonProcessingException {
