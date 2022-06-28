@@ -28,7 +28,12 @@ public class SurveyQueryRepository {
 
     @Transactional
     public void addSurvey(SurveyQueryDto surveyQueryDto, String campaignHashid) {
-        String sql = "INSERT INTO survey_json (survey_hashid, campaign_hashid, json) values (:hashid, :campaignHashid :json); ";
+        String sql = "INSERT INTO survey_json (survey_hashid, campaign_hashid, json) " +
+                "values (:hashid, :campaignHashid, :json) " +
+                "on conflict (survey_hashid, campaign_hashid) do update " +
+                "set survey_hashid = excluded.survey_hashid," +
+                "   campaign_hashid = excluded.campaign_hashid," +
+                "   created_at = current_timestamp; ";
 
         String json = null;
         try {
@@ -46,7 +51,11 @@ public class SurveyQueryRepository {
 
     @Transactional
     public void addSurvey(SurveyQueryDto surveyQueryDto) {
-        String sql = "INSERT INTO survey_json (survey_hashid, json) values (:hashid, :json); ";
+        String sql = "INSERT INTO survey_json (survey_hashid, json) " +
+                "values (:hashid, :json) " +
+                "on conflict (survey_hashid, campaign_hashid) do update " +
+                "set survey_hashid = excluded.survey_hashid," +
+                " created_at = current_timestamp; ";
 
 
         String json = null;
