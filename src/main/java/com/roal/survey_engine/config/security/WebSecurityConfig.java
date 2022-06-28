@@ -80,13 +80,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // @formatter:off
         http
-//            .formLogin()
-//            .loginProcessingUrl("/api/authentication")
-//            .failureHandler(authenticationFailureHandler())
-//            .successHandler(authenticationSuccessHandler())
-//            .permitAll()
-//
-//            .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .accessDeniedHandler(accessDeniedHandler())
@@ -95,11 +88,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//            .antMatchers(HttpMethod.POST, "/api/authentication").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/surveys/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/campaigns/**").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/responses/campaigns/**").permitAll()
-            .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/responses/campaigns/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
             .antMatchers("/v3/api-docs/**").permitAll()
             .anyRequest().authenticated();
 
