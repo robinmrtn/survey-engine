@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -35,12 +34,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,9 +50,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Sql({"/survey_json.sql"})
 public class SurveyIntegrationTest {
-
-    @Autowired
-    TestRestTemplate restTemplate;
 
     @Autowired
     MockMvc mvc;
@@ -94,12 +88,9 @@ public class SurveyIntegrationTest {
 
         Campaign campaign = createCampaign();
         String id = surveyHashids.encode(campaign.getId());
-        MockHttpServletResponse response = mvc.perform(get("/api/surveys/" + id)
+        mvc.perform(get("/api/surveys/" + id)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse();
-        assertAll(() -> assertEquals(HttpStatus.OK.value(), response.getStatus()));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -126,14 +117,11 @@ public class SurveyIntegrationTest {
         String hashid = workspaceHashids.encode(id);
         SurveyDto surveyDto = mapper.entityToDto(createSurvey());
         String json = objectMapper.writeValueAsString(surveyDto);
-        MvcResult mvcResult = mvc.perform(post("/api/workspaces/" + hashid + "/surveys/")
+        mvc.perform(post("/api/workspaces/" + hashid + "/surveys/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token)
                         .content(json))
-                .andReturn();
-
-        assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus());
-
+                .andExpect(status().isCreated());
     }
 
     private Workspace createWorkspace() {

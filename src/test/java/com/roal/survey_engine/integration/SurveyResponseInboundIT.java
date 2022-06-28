@@ -1,5 +1,6 @@
 package com.roal.survey_engine.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roal.survey_engine.domain.response.dto.*;
 import com.roal.survey_engine.domain.response.repository.ResponseRepository;
 import com.roal.survey_engine.domain.survey.entity.Campaign;
@@ -13,26 +14,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 class SurveyResponseInboundIT {
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    ObjectMapper objectMapper;
+    @Autowired
+    private MockMvc mvc;
 
     @Autowired
     private SurveyRepository surveyRepository;
@@ -55,47 +62,50 @@ class SurveyResponseInboundIT {
     }
 
     @Test
-    void testPostResponseDto_Success() {
+    void testPostResponseDto_Success() throws Exception {
 
         Survey survey = createSurvey();
         Campaign campaign = createCampaign(survey);
         String id = campaignHashids.encode(campaign.getId());
-        ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + id,
-                        createSurveyResponseDto(survey), SurveyResponseDto.class);
-        SurveyResponseDto receivedDto = responseEntity.getBody();
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertNotNull(receivedDto);
-        assertEquals(3, receivedDto.getElementResponseDtos().size());
+        String json = objectMapper.writeValueAsString(createSurveyResponseDto(survey));
+
+        mvc.perform(post("/api/responses/campaigns/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.elementResponseDtos", hasSize(3)));
     }
 
     @Test
-    void testPostResponseDto_WrongFormat() {
+    void testPostResponseDto_WrongFormat() throws Exception {
 
         Survey survey = createSurvey();
         Campaign campaign = createCampaign(survey);
         String id = campaignHashids.encode(campaign.getId());
 
-        ResponseEntity<SurveyResponseDto> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/" + id,
-                        makeDtoInvalid(createSurveyResponseDto(survey)), SurveyResponseDto.class);
+        String json = objectMapper.writeValueAsString(makeDtoInvalid(createSurveyResponseDto(survey)));
 
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertNull(responseEntity.getBody());
+        mvc.perform(post("/api/responses/campaigns/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test
-    void testPostResponseDto_SurveyNoTFound() {
+    void testPostResponseDto_SurveyNoTFound() throws Exception {
 
         Survey survey = createSurvey();
         Campaign campaign = createCampaign(survey);
-        String id = campaignHashids.encode(campaign.getId());
         SurveyResponseDto dto = createSurveyResponseDto(survey);
-        ResponseEntity<String> responseEntity =
-                restTemplate.postForEntity("/api/responses/campaigns/abcd",
-                        dto, String.class);
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        mvc.perform(post("/api/responses/campaigns/abcd")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
 
